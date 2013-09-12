@@ -1,0 +1,19 @@
+<xml version="1.0" encoding="UTF-8">
+	<zone id="0" title="water" regionWidth="0" regionHeight="0"/>
+  
+	<resources>
+		<image texture="textures/tiles/normal.png" width="512" height="512"/>
+    
+    <objects>
+      <object id="0" title="boat" texture=".\textures\objects\boat.png"/>
+    </objects>
+	</resources>
+  
+  <objects>
+		<object type="0" x="50" y="50"/>
+	</objects>
+  
+	<map>
+    <infinite gid="2" />
+	</map>
+</xml>

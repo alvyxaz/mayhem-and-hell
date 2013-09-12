@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<achievements>
+   
+    <achievement
+        id="test_something"
+        title="Test something"
+        description="Test something"
+        googleid="5415"
+        />
+    
+    <achievement
+        id="incremental_test"
+        title="Incremental test"
+        description="Kazkas Kitas"
+        googleid="5415"
+        steps="100"
+        />
+	
+</achievements>
