@@ -26,8 +26,8 @@ public class Map {
 	
 	private static int [][] tiles;
 	
-	public static final int TILE_WIDTH = 96;
-	public static final int TILE_HEIGHT = 48;
+	public static final int TILE_WIDTH = 16;
+	public static final int TILE_HEIGHT = 16;
 	
 	private OrthographicCamera worldCam;
 	private Vector3 camPos;
@@ -36,16 +36,14 @@ public class Map {
 	
 	private GameWorld world;
 	
-	private static boolean infinite;
-	
 	public Map() {
 		/*
 		 * Loading main assets. 
 		 * TODO Either load it at loading screen or load() method to be loaded for each level separately 
 		 */
-		Assets.manager.load("textures/tiles/normal.png", Texture.class);
+		Assets.manager.load("textures/tiles/tiles.png", Texture.class);
 		Assets.manager.finishLoading();
-		texture = Assets.manager.get("textures/tiles/normal.png", Texture.class);
+		texture = Assets.manager.get("textures/tiles/tiles.png", Texture.class);
 		/*
 		 * Loading all textureRegions
 		 */
@@ -55,34 +53,22 @@ public class Map {
 		tileTextures = new TextureRegion[xTextureCount*yTextureCount];
 		
 		for (int i = 0; i < tileTextures.length; i++){
-			tileTextures[i] = new TextureRegion(texture, (i%xTextureCount)*96, (i/yTextureCount)*48, 96, 48);
-		}
-		
-		
-		
+			tileTextures[i] = new TextureRegion(texture, (i%xTextureCount)*TILE_WIDTH, (i/yTextureCount)*TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
+		}	
 	}
 	
 	public void draw(SpriteBatch spriteBatch) {
 		
 		// Calculating bounds
 		int startX = Math.max((int)((camPos.x - MyGame.SCREEN_HALF_WIDTH)/TILE_WIDTH)-1, 0);
-		int startY = Math.max((int)((camPos.y - MyGame.SCREEN_HALF_HEIGHT)/(TILE_HEIGHT/2)-1), 0);
+		int startY = Math.max((int)((camPos.y - MyGame.SCREEN_HALF_HEIGHT)/(TILE_HEIGHT)-1), 0);
 		int endX = Math.min(startX + MyGame.SCREEN_WIDTH/TILE_WIDTH+3, tiles[0].length);
-		int endY = Math.min(startY + MyGame.SCREEN_HEIGHT/(TILE_HEIGHT/2)+2, tiles.length);
+		int endY = Math.min(startY + MyGame.SCREEN_HEIGHT/TILE_HEIGHT+3, tiles.length);
 		
-		if (!infinite) {
-			for (int y = startY; y < endY; y++){
-				for(int x = startX; x < endX; x++){
-					if (y < tiles.length && y >= 0 && x < tiles[y].length && x >= 0)
-						spriteBatch.draw(tileTextures[tiles[y][x]], x*TILE_WIDTH + y%2 * TILE_WIDTH/2, y * TILE_HEIGHT/2);
-				}
-			}
-		} else {
-			for (int y = startY; y < endY; y++){
-				for(int x = startX; x < endX; x++){
-					if (y < tiles.length && y >= 0 && x < tiles[y].length && x >= 0)
-						spriteBatch.draw(tileTextures[tiles[0][0]], x*TILE_WIDTH + y%2 * TILE_WIDTH/2, y * TILE_HEIGHT/2);
-				}
+		for (int y = startY; y < endY; y++){
+			for(int x = startX; x < endX; x++){
+				if (y < tiles.length && y >= 0 && x < tiles[y].length && x >= 0)
+					spriteBatch.draw(tileTextures[tiles[y][x]], x*TILE_WIDTH, y * TILE_HEIGHT);
 			}
 		}
 
@@ -133,25 +119,10 @@ public class Map {
 		int worldX = (int)(Input.getX()*worldCam.zoom + camPos.x-MyGame.SCREEN_HALF_WIDTH);
 		int worldY = (int)(Input.getY()*worldCam.zoom + camPos.y-MyGame.SCREEN_HALF_HEIGHT);
 		
+
 		// Preliminary values
-		tileTarget.x = ((worldY / (TILE_HEIGHT/2))%2 * TILE_WIDTH/2 - worldX)/-TILE_WIDTH;
-		tileTarget.y = worldY/(TILE_HEIGHT/2);
-		
-		// Offsets from middle bottom of a preliminary tile
-		int diffX = worldX - (int)tileTarget.x*TILE_WIDTH - (TILE_WIDTH/2) * ((int)tileTarget.y %2) - TILE_WIDTH/2;
-		int diffY = worldY - (int)tileTarget.y *(TILE_HEIGHT/2);
-		
-		if (diffY*2 < Math.abs(diffX)) {
-			if(diffX < 0){
-				tileTarget.x += (tileTarget.y%2) == 0? -1 : 0;
-			} else {
-				tileTarget.x += (tileTarget.y%2) == 0? 0 : 1;
-			}
-			tileTarget.y--;
-		}
-		
-		tileTarget.x = Math.max(Math.min(tileTarget.x, tiles[0].length-1), 0);
-		tileTarget.y = Math.max(Math.min(tileTarget.y, tiles.length-1), 0);
+		tileTarget.x = worldX / TILE_WIDTH;
+		tileTarget.y = worldY / TILE_HEIGHT;
 	}
 	
 	public void setWorld(GameWorld gameWorld) {
@@ -166,16 +137,12 @@ public class Map {
 		this.worldCam = worldCam;
 		camPos = worldCam.position;
 		
-		tiles = new int[100][50];
+		tiles = new int[50][50];
 
 	}
 	
 	public static void load(int[][] map) {
 		tiles = map;
-	}
-	
-	public static void setInfinite(boolean value) {
-		infinite = value;
 	}
 	
 	public static int[][] getTiles() {

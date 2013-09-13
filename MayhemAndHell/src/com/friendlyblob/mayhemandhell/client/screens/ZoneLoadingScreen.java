@@ -63,7 +63,7 @@ public class ZoneLoadingScreen extends BaseScreen{
 		  
 		  Map.load(tempMap);
 		  if (regionHeight == 0 || regionWidth == 0) {
-			  Map.setInfinite(true);
+
 		  }
 
 		  // map loaded

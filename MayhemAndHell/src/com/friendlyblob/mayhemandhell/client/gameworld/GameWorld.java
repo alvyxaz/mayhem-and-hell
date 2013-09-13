@@ -76,9 +76,9 @@ public class GameWorld {
 	}
 	
 	public void update(float deltaTime) {
-		if (Input.isReleasing()) {
-			game.setScreen(new ZoneLoadingScreen(game, "water"));
-		}
+//		if (Input.isReleasing()) {
+//			game.setScreen(new ZoneLoadingScreen(game, "mainIsland"));
+//		}
 		
 		player.update(deltaTime);
 		
@@ -125,10 +125,6 @@ public class GameWorld {
 		}
 		
 		worldCam.update();
-	}
-	
-	public void loadZone(String title) {
-		
 	}
 	
 	public void setGame(MyGame game) {

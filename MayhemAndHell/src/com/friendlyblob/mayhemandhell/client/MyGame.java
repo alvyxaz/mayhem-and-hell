@@ -19,8 +19,8 @@ import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 import com.friendlyblob.mayhemandhell.client.screens.LoadingScreen;
 
 public class MyGame extends Game implements ApplicationListener {
-	public static int SCREEN_WIDTH = 800;
-	public static int SCREEN_HEIGHT = 480;
+	public static int SCREEN_WIDTH = 200;
+	public static int SCREEN_HEIGHT = 120;
 	public static int SCREEN_HALF_WIDTH;
 	public static int SCREEN_HALF_HEIGHT;
 	public static Rectangle SCREEN_RECTANGLE;
