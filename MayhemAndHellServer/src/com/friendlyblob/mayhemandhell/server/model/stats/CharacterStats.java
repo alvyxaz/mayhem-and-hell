@@ -5,7 +5,10 @@ import com.friendlyblob.mayhemandhell.server.model.stats.StatModifier.StatModifi
 
 /**
  * 
- * TODO possible optimization by caching calculations
+ * TODO possible optimization by caching calculations.
+ * Calculations are based on a fact that every instance of an item has
+ * a different StatModifier, even though it's logically the same. This
+ * way we prevent duplicate stats from one item, but we waste some memory.
  * 
  * @author Alvys
  *
@@ -49,6 +52,10 @@ public class CharacterStats {
 	 * @param modifier Modifier to be added
 	 */
 	public synchronized void addStatModifier(StatModifier modifier) {
+		if (modifier == null || modifierExists(modifier)) {
+			return;
+		}
+		
 		final int statId = modifier.getStat().ordinal();
 		
 		StatModifier [] modifiers = this.modifiers[statId];
@@ -70,16 +77,62 @@ public class CharacterStats {
 		this.modifiers[statId] = temp;
 	}
 	
+	/**
+	 * Checks whether a given modifier already exists
+	 * @param modifier
+	 * @return 
+	 */
+	public boolean modifierExists(StatModifier modifier) {
+		StatModifier [] modifiers = this.modifiers[modifier.getStat().ordinal()];
+		for (int i = 0; i < modifiers.length; i++) {
+			if (modifiers[i].equals(modifier)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Adds multiple stat modifiers from a given array
+	 * @param modifiers
+	 */
+	public void addStatModifiers(StatModifier [] modifiers) {
+		if (modifiers == null) {
+			return;
+		}
+		for (int i = 0; i < modifiers.length; i++) {
+			addStatModifier(modifiers[i]);
+		}
+	}
+	
+	/**
+	 * Removes multiple stats that are given in an array
+	 * @param modifiers
+	 */
+	public void removeStatModifiers(StatModifier [] modifiers) {
+		if (modifiers == null) {
+			return;
+		}
+		
+		for (int i = 0; i < modifiers.length; i++) {
+			removeStatModifier(modifiers[i]);
+		}
+	}
+	
 
 	/**
 	 * Removes modifier from modifiers list
 	 * @param modifier Modifier to be removed
 	 */
 	public synchronized void removeStatModifier (StatModifier modifier) {
+		if (modifier == null || !modifierExists(modifier)) {
+			return;
+		}
+		
 		final int statId = modifier.getStat().ordinal();
 		
 		StatModifier [] modifiers = this.modifiers[statId];
-		StatModifier [] temp = new StatModifier[modifiers.length +1];
+		StatModifier [] temp = new StatModifier[modifiers.length -1];
 		
 		int i;
 		
@@ -104,7 +157,7 @@ public class CharacterStats {
 	}
 
 	public int getWalkingSpeed() {
-		return calculateInt(Stat.WALKING_SPEED, activeCharacter.getBaseStats().baseWalkingSpeed);
+		return calculateInt(Stat.MOVEMENT_SPEED, activeCharacter.getBaseStats().baseMovementSpeed);
 	}
 	
 }

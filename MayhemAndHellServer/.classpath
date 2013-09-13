@@ -12,7 +12,7 @@
 	<classpathentry kind="lib" path="libs/mail-1.4.6.jar"/>
 	<classpathentry kind="lib" path="libs/mailapi-1.4.6.jar"/>
 	<classpathentry kind="lib" path="libs/mchange-commons-java-0.2.3.3.jar"/>
-	<classpathentry kind="lib" path="libs/mmocore.jar"/>
+	<classpathentry kind="lib" path="libs/mmocore.jar" sourcepath="/MMOCore"/>
 	<classpathentry kind="lib" path="libs/mysql-connector-java-5.1.23-bin.jar"/>
 	<classpathentry kind="lib" path="libs/netcon-1.7.jar"/>
 	<classpathentry kind="lib" path="libs/smtp-1.4.6.jar"/>
