@@ -160,4 +160,8 @@ public class CharacterStats {
 		return calculateInt(Stat.MOVEMENT_SPEED, activeCharacter.getBaseStats().baseMovementSpeed);
 	}
 	
+	public int getMaxHealth() {
+		return calculateInt(Stat.MAX_HP, activeCharacter.getBaseStats().baseMaxHealth);
+	}
+	
 }

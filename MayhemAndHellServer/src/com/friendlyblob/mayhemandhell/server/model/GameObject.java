@@ -112,6 +112,10 @@ public class GameObject {
 		return position;
 	}
 	
+	public void setPosition(int x, int y) {
+		position.set(x, y);
+	}
+	
 	public int getObjectId() {
 		return objectId;
 	}

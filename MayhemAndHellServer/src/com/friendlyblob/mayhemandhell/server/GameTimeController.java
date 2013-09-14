@@ -3,6 +3,7 @@ package com.friendlyblob.mayhemandhell.server;
 import java.util.Calendar;
 
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
+import com.friendlyblob.mayhemandhell.server.model.actors.Mob;
 
 import javolution.util.FastMap;
 
@@ -16,6 +17,9 @@ public class GameTimeController extends Thread{
 
 	// Collection of all characters that are moving this instance
 	private final FastMap<Integer, GameCharacter> movingObjects = new FastMap<Integer, GameCharacter>().shared();
+	
+	// Collection of all characters that are about to respawn 
+	private final FastMap<Integer, Mob> respawningMobs = new FastMap<Integer, Mob>().shared();
 	
 	private final long referenceTime;
 	
@@ -61,6 +65,18 @@ public class GameTimeController extends Thread{
 	}
 	
 	/**
+	 * Registers mob that is dead to be respawned
+	 * @param mob
+	 */
+	public final void registerRespawningMob(Mob mob) {
+		if (mob == null) {
+			return;
+		}
+		
+		respawningMobs.putIfAbsent(mob.getObjectId(), mob);
+	}
+	
+	/**
 	 * Registers characters that are moving 
 	 */
 	public final void registerMovingObject(GameCharacter object) {
@@ -71,6 +87,18 @@ public class GameTimeController extends Thread{
 		movingObjects.putIfAbsent(object.getObjectId(), object);
 	}
 	
+	public void respawnMobs() {
+		Mob mob;
+		for (FastMap.Entry<Integer, Mob> e = respawningMobs.head(), 
+				tail = respawningMobs.tail(); (e = e.getNext()) != tail;) {
+			mob = e.getValue();
+			
+			if (mob.updateRespawn(getGameTicks())){
+				respawningMobs.remove(e.getKey());
+			}
+		}
+	}
+	
 	public final void run() {
 		long nextTickTime, sleepTime;
 		
@@ -79,6 +107,7 @@ public class GameTimeController extends Thread{
 			
 			// Heavy stuff goes here
 			moveCharacters();
+			respawnMobs();
 			
 			sleepTime = nextTickTime - System.currentTimeMillis();
 			

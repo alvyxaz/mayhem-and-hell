@@ -100,10 +100,10 @@ textures5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-tiles/normal
+tiles/tiles
   rotate: false
   xy: 2, 2
-  size: 512, 512
-  orig: 512, 512
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: -1

@@ -11,7 +11,8 @@ public class GameActions {
 	public static enum GameAction {
 		ATTACK("Attack"),
 		TRADE("Trade"),
-		WHISPER("Whisper");
+		WHISPER("Whisper"),
+		USE_SKILL("UseSkill");
 		
 		private String title;
 		

@@ -16,6 +16,59 @@ import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
  */
 public class GameCharacter extends GameObject{
 
+	private int health;
+	/**
+	 * @return the health
+	 */
+	public int getHealth() {
+		return health;
+	}
+
+	/**
+	 * Restores health to maximum amount
+	 */
+	public void restoreHealth() {
+		this.health = getMaxHealth();
+	}
+	
+	/**
+	 * @param health the health to set
+	 */
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
+	/**
+	 * @return the energy
+	 */
+	public int getEnergy() {
+		return energy;
+	}
+
+	/**
+	 * @param energy the energy to set
+	 */
+	public void setEnergy(int energy) {
+		this.energy = energy;
+	}
+
+	/**
+	 * @return the mana
+	 */
+	public int getMana() {
+		return mana;
+	}
+
+	/**
+	 * @param mana the mana to set
+	 */
+	public void setMana(int mana) {
+		this.mana = mana;
+	}
+
+	private int energy;
+	private int mana;
+	
 	private BaseStats baseStats;
 	private CharacterStats stats;
 	
@@ -118,11 +171,16 @@ public class GameCharacter extends GameObject{
 		return getWalkingSpeed();
 	}
 	
+	private int getMaxHealth() {
+		return stats.getMaxHealth();
+	}
+	
 	private int getWalkingSpeed() {
 		return stats.getWalkingSpeed();
 	}
 
 	public void sendPacket(ServerPacket packet) {
+		
 	}
 	
 }
