@@ -18,11 +18,11 @@ public class TilePanel extends JPanel implements MouseListener {
 	private BufferedImage tileSheet;
 
 	public TilePanel() {
-		setPreferredSize(new Dimension(96*5, 48*8));
+		setPreferredSize(new Dimension(16*16, 16*20));
 		addMouseListener(this);
 		
 		try {
-			tileSheet = ImageIO.read(new File("./textures/tiles/normal.png"));
+			tileSheet = ImageIO.read(new File("./textures/tiles/tiles.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,14 +38,14 @@ public class TilePanel extends JPanel implements MouseListener {
 		g2d.drawImage(tileSheet, 0, 0, null);
 		
 		g2d.setColor(new Color(1, 1, 1, .5f));
-		g2d.fillRect(MapEditor.selectedTileTexture % 5 * 96, MapEditor.selectedTileTexture/5 * 48, 96, 48);
+		g2d.fillRect(MapEditor.selectedTileTexture % 8 * 16, MapEditor.selectedTileTexture/8 * 16, 16, 16);
 		
 		repaint();
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
-		MapEditor.selectedTileTexture = me.getX() / 96 + me.getY() / 48 * 5;
+		MapEditor.selectedTileTexture = me.getX() / 16 + me.getY() / 16 * 8;
 	}
 
 	@Override

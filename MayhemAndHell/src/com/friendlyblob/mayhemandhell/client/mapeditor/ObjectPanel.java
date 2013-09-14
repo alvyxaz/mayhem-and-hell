@@ -49,53 +49,53 @@ public class ObjectPanel extends JPanel implements ActionListener, MouseListener
 	 */
 	public ObjectPanel(MapEditorWindow parent) {
 		this.parent = parent;
-		
-	      XmlReader xmlReader = new XmlReader();
-	      XmlReader.Element root = null;
-	      
-			try {
-				root = xmlReader.parse(Gdx.files.internal("data/objects.xml"));
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			
-		  XmlReader.Element objects = root.getChildByName("objects");
-		  
-		  XmlReader.Element tmp = null;
-		  int childCount = objects.getChildCount();
-		  
-		  Object[][] data = new Object[childCount][];
-		  for (int i = 0; i < childCount; i++) {
-			tmp = objects.getChild(i);
-			  
-			data[i] = new Object[] { tmp.getAttribute("id"), tmp.getAttribute("title"), tmp.getAttribute("collision"), tmp.getAttribute("width"), tmp.getAttribute("height"), tmp.getAttribute("centerpoint"), tmp.getAttribute("texture")};
-		  }
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
-		JToolBar toolBar = new JToolBar();
-		toolBar.setFloatable(false);
-		toolBar.setAlignmentX(Component.LEFT_ALIGNMENT);
-		add(toolBar);
-		
-		loadObjects = new JButton(new ImageIcon("./textures/gui/MapEditor/load.png"));
-		toolBar.add(loadObjects);
-		loadObjects.addActionListener(this);
-		
-	    saveObjects = new JButton(new ImageIcon("./textures/gui/MapEditor/save.png"));
-		toolBar.add(saveObjects);
-		saveObjects.addActionListener(this);
-		  
-		
-		objectTable = new JTable();
-	    objectTable.setModel(new DefaultTableModel(data, columnNames));
-		objectTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		objectTable.addMouseListener(this);
 
-		
-		JScrollPane scrollPane = new JScrollPane(objectTable);
-		scrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
-		scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-		add(scrollPane);
+//	      XmlReader xmlReader = new XmlReader();
+//	      XmlReader.Element root = null;
+//	      
+//			try {
+//				root = xmlReader.parse(Gdx.files.internal("data/objects.xml"));
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+//			
+//		  XmlReader.Element objects = root.getChildByName("objects");
+//		  
+//		  XmlReader.Element tmp = null;
+//		  int childCount = objects.getChildCount();
+//		  
+//		  Object[][] data = new Object[childCount][];
+//		  for (int i = 0; i < childCount; i++) {
+//			tmp = objects.getChild(i);
+//			  
+//			data[i] = new Object[] { tmp.getAttribute("id"), tmp.getAttribute("title"), tmp.getAttribute("collision"), tmp.getAttribute("width"), tmp.getAttribute("height"), tmp.getAttribute("centerpoint"), tmp.getAttribute("texture")};
+//		  }
+//		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+//		
+//		JToolBar toolBar = new JToolBar();
+//		toolBar.setFloatable(false);
+//		toolBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+//		add(toolBar);
+//		
+//		loadObjects = new JButton(new ImageIcon("./textures/gui/MapEditor/load.png"));
+//		toolBar.add(loadObjects);
+//		loadObjects.addActionListener(this);
+//		
+//	    saveObjects = new JButton(new ImageIcon("./textures/gui/MapEditor/save.png"));
+//		toolBar.add(saveObjects);
+//		saveObjects.addActionListener(this);
+//		  
+//		
+//		objectTable = new JTable();
+//	    objectTable.setModel(new DefaultTableModel(data, columnNames));
+//		objectTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+//		objectTable.addMouseListener(this);
+//
+//		
+//		JScrollPane scrollPane = new JScrollPane(objectTable);
+//		scrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
+//		scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+//		add(scrollPane);
 
 	}
 
