@@ -25,9 +25,13 @@ public class Map {
 	private Texture tree;
 	
 	private static int [][] tiles;
+	private static int [][] collisions;
 	
 	public static final int TILE_WIDTH = 16;
 	public static final int TILE_HEIGHT = 16;
+	
+	public static final int DEFAULT_MAP_WIDTH = 50;
+	public static final int DEFAULT_MAP_HEIGHT = 50;
 	
 	private OrthographicCamera worldCam;
 	private Vector3 camPos;
@@ -69,6 +73,10 @@ public class Map {
 			for(int x = startX; x < endX; x++){
 				if (y < tiles.length && y >= 0 && x < tiles[y].length && x >= 0)
 					spriteBatch.draw(tileTextures[tiles[y][x]], x*TILE_WIDTH, y * TILE_HEIGHT);
+					
+					if (collisions[y][x] == 1) {
+						Assets.defaultFont.draw(spriteBatch, "c", x*TILE_WIDTH + TILE_WIDTH /3, y * TILE_HEIGHT + TILE_HEIGHT);
+					}
 			}
 		}
 
@@ -101,8 +109,16 @@ public class Map {
 			
 			switch (MapEditor.editorWindow.tabbedPane.getSelectedIndex()) {
 				case 1:
+					if (Input.isReleasing()) {
+						if (MapEditor.editorWindow.collisionModeButton.isSelected()) {
+							collisions[(int)tileTarget.y][(int)tileTarget.x] = Math.abs(collisions[(int)tileTarget.y][(int)tileTarget.x] - 1);
+						}
+					}
+					
 					if (Gdx.input.isTouched()) {
-						tiles[(int)tileTarget.y][(int)tileTarget.x] = MapEditor.selectedTileTexture;
+						if (!MapEditor.editorWindow.collisionModeButton.isSelected()) {
+							tiles[(int)tileTarget.y][(int)tileTarget.x] = MapEditor.selectedTileTexture;
+						} 
 					}
 					break;
 				case 2:
@@ -137,16 +153,21 @@ public class Map {
 		this.worldCam = worldCam;
 		camPos = worldCam.position;
 		
-		tiles = new int[50][50];
-
+		tiles = new int[DEFAULT_MAP_HEIGHT][DEFAULT_MAP_WIDTH];
+		collisions = new int[DEFAULT_MAP_HEIGHT][DEFAULT_MAP_WIDTH];
 	}
 	
-	public static void load(int[][] map) {
+	public static void load(int[][] map, int[][] c) {
 		tiles = map;
+		collisions = c;
 	}
 	
-	public static int[][] getTiles() {
+	public static int[][] getTileMap() {
 		return tiles;
+	}
+	
+	public static int[][] getCollisionMap() {
+		return collisions;
 	}
 	
 	public static Map getInstance() {

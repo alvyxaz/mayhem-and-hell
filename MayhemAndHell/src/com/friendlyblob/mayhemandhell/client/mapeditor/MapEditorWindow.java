@@ -31,6 +31,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
@@ -43,6 +44,7 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.BoxLayout;
 import java.awt.Component;
+import javax.swing.JToggleButton;
 
 public class MapEditorWindow extends JFrame implements WindowListener, ActionListener, MouseListener {
 
@@ -56,6 +58,9 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 	public JTabbedPane tabbedPane;
 
 	private Object[] columnNames = {"id", "title", "regionsX", "regionsY", "regionWidth", "regionHeight"};
+	private JPanel panel;
+	private JToolBar toolBar;
+	public JToggleButton collisionModeButton;
 
 	
 	/**
@@ -79,10 +84,6 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
-		TilePanel tp = new TilePanel();
-		getContentPane().setPreferredSize(tp.getPreferredSize());
 		getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
 		tabbedPane = new JTabbedPane();
@@ -126,10 +127,24 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 		scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		zonesPanel.add(scrollPane);
 		
-		tabbedPane.addTab("Tiles", null, tp, null);
+		panel = new JPanel();
+		tabbedPane.addTab("Tiles", null, panel, null);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
-		ObjectPanel op = new ObjectPanel(this);
-		tabbedPane.addTab("Objects", null, op, null);
+		toolBar = new JToolBar();
+		toolBar.setFloatable(false);
+		toolBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panel.add(toolBar);
+		
+		collisionModeButton = new JToggleButton("Collision mode");
+		toolBar.add(collisionModeButton);
+		
+
+		TilePanel tp = new TilePanel();
+		tp.setAlignmentY(Component.TOP_ALIGNMENT);
+		tp.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panel.add(tp);
+		getContentPane().setPreferredSize(tp.getPreferredSize());
 		
 		Object[][] data = {};
 		DefaultTableModel dtm = new DefaultTableModel();
@@ -208,22 +223,23 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 					}
 					
 				  XmlReader.Element zone = root.getChildByName("zone");
-				  int id = Integer.parseInt(zone.getAttribute("id"));
-				  int regionsX = Integer.parseInt(zone.getAttribute("regionsX"));
-				  int regionsY = Integer.parseInt(zone.getAttribute("regionsY"));
-				  int regionWidth = Integer.parseInt(zone.getAttribute("regionWidth"));
-				  int regionHeight = Integer.parseInt(zone.getAttribute("regionHeight"));
+				  int id = zone.getIntAttribute("id");
+				  int regionWidth = zone.getIntAttribute("regionWidth");
+				  int regionHeight = zone.getIntAttribute("regionHeight");
 		    	
-				data[i] = new Object[] { id, zoneList[i].getName().replace(".xml", ""), regionsX, regionsY, regionWidth, regionHeight };
+				data[i] = new Object[] { id, zoneList[i].getName().replace(".xml", ""), 0, 0, regionWidth, regionHeight };
 			}
 		    zoneTable.setModel(new DefaultTableModel(data, columnNames));
 		} else if (source == saveZone) {
 			if (zoneTable.getSelectedRow() == -1) {
+				JOptionPane.showMessageDialog(this, "Couldn't save the map, please select a zone");
 				return;
 			}
 			
-			int[][] tempMap = null;
-			tempMap = Map.getTiles();
+			int[][] tempMap;
+			int[][] tempCollisionMap;
+			tempMap = Map.getTileMap();
+			tempCollisionMap = Map.getCollisionMap();
 			
 			String id = zoneTable.getModel().getValueAt(zoneTable.getSelectedRow(), 0).toString();
 			String title = zoneTable.getModel().getValueAt(zoneTable.getSelectedRow(), 1).toString();
@@ -252,12 +268,13 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 		                			.attribute("height", "512")
 	                			.pop()
             			.pop()
-    					.element("data");
+    					.element("map");
 				
 				for (int i = 0; i < tempMap.length; i++) {
 					for (int j = 0; j < tempMap[i].length; j++) {
 						xml.element("tile")
 							.attribute("gid", tempMap[i][j])
+							.attribute("collision", tempCollisionMap[i][j])
 							.pop();
 					}
 				}
@@ -387,6 +404,8 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() == 1) {
 			int[][] tempMap = null;
+			int[][] tempCollisionMap = null;
+			
 		      XmlReader xmlReader = new XmlReader();
 		      
 		      String title = zoneTable.getModel().getValueAt(zoneTable.getSelectedRow(), 1).toString();
@@ -404,15 +423,25 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 					}
 					
 				  XmlReader.Element zone = root.getChildByName("zone");
-				  int regionWidth = Integer.parseInt(zone.getAttribute("regionWidth"));
-				  int regionHeight = Integer.parseInt(zone.getAttribute("regionHeight"));
+				  int regionWidth = zone.getIntAttribute("regionWidth");
+				  int regionHeight = zone.getIntAttribute("regionHeight");
 
 				  tempMap = new int[regionWidth][regionHeight];
-			      XmlReader.Element data = root.getChildByName("data");
+				  tempCollisionMap = new int[regionWidth][regionHeight];
+			      XmlReader.Element map = root.getChildByName("map");
 			      
 			      for (int i = 0; i < regionWidth; i++) {
 					for (int j = 0; j < regionHeight; j++) {
-						tempMap[i][j] = Integer.parseInt(data.getChild(i*regionHeight+j).getAttribute("gid"));
+						XmlReader.Element tmpChild = map.getChild(i*regionHeight+j);
+						
+						tempMap[i][j] = tmpChild.getIntAttribute("gid");
+
+						try {
+							tempCollisionMap[i][j] = tmpChild.getIntAttribute("collision");
+
+						} catch (GdxRuntimeException e1) {
+							// dont exist
+						}
 					}
 				  }
 
@@ -421,9 +450,10 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 				  int regionHeight = Integer.parseInt(zoneTable.getModel().getValueAt(zoneTable.getSelectedRow(), 5).toString());
 
 		    	  tempMap = new int[regionWidth][regionHeight];
+		    	  tempCollisionMap = new int[regionWidth][regionHeight];
 		      }
 		      
-		      Map.load(tempMap); 
+		      Map.load(tempMap, tempCollisionMap); 
 		}
 		
 	}
