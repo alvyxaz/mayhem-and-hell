@@ -18,8 +18,8 @@ import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
 
 public class Player extends GameCharacter{
 	
-	public Player (int id, int x, int y){
-		super(id, x, y);
+	public Player (int id, int x, int y, int[][] collisionLayer){
+		super(id, x, y, collisionLayer);
 	}
 
 	public void regenerate(int x, int y){
@@ -39,7 +39,9 @@ public class Player extends GameCharacter{
 	
 	public void requestMovementDestination(int x, int y) {
 		// TODO Wait for response before moving
-		MyGame.connection.sendPacket(new RequestMove(x, y));
+//		MyGame.connection.sendPacket(new RequestMove(x, y));
+
+		moveTo(x, y,50);
 	}
 	
 }

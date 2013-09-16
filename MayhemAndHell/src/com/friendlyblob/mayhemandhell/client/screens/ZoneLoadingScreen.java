@@ -23,7 +23,10 @@ public class ZoneLoadingScreen extends BaseScreen{
 	public ZoneLoadingScreen(MyGame game, String title) {
 		super(game);
 		
+		Assets.manager.load("textures/debugging/px.png", Texture.class);
+		
 		int[][] tempMap = null;
+		int[][] tempCollisionMap = null;
 	    XmlReader xmlReader = new XmlReader();
 	      
 	      
@@ -39,62 +42,67 @@ public class ZoneLoadingScreen extends BaseScreen{
 			}
 			
 		  XmlReader.Element zone = root.getChildByName("zone");
-		  int regionWidth = Integer.parseInt(zone.getAttribute("regionWidth"));
-		  int regionHeight = Integer.parseInt(zone.getAttribute("regionHeight"));
+		  int regionWidth = zone.getIntAttribute("regionWidth");
+		  int regionHeight = zone.getIntAttribute("regionHeight");
 
 	      XmlReader.Element data = root.getChildByName("map");
 		  if (regionWidth != 0 || regionHeight != 0) {
-			  tempMap = new int[regionWidth][regionHeight];
+		      XmlReader.Element tmpChild = null;
+			  
+			  tempMap = new int[regionHeight][regionWidth];
+			  tempCollisionMap = new int[regionHeight][regionWidth];
 		      
-		      for (int i = 0; i < regionWidth; i++) {
-				for (int j = 0; j < regionHeight; j++) {
-					tempMap[i][j] = Integer.parseInt(data.getChild(i*regionHeight+j).getAttribute("gid"));
+		      for (int i = 0; i < regionHeight; i++) {
+				for (int j = 0; j < regionWidth; j++) {
+					tmpChild = data.getChild(i*regionHeight+j);
+					
+					tempMap[i][j] = tmpChild.getIntAttribute("gid");
+					tempCollisionMap[i][j] = tmpChild.getIntAttribute("collision");
 				}
 			  }  
 		  } else {
 			  tempMap = new int[100][50];
+			  tempCollisionMap = new int[100][50];
 			  
 			  for (int i = 0; i < tempMap.length; i++) {
 				for (int j = 0; j < tempMap[i].length; j++) {
-					tempMap[i][j] = Integer.parseInt(data.getChild(0).getAttribute("gid"));
+					tempMap[i][j] = data.getChild(0).getIntAttribute("gid");
 				}
 			}
 		  }
 		  
-		  Map.load(tempMap);
-		  if (regionHeight == 0 || regionWidth == 0) {
-
-		  }
+		  Map.load(tempMap, tempCollisionMap);
 
 		  // map loaded
-
-		  XmlReader.Element objects = root.getChildByName("objects");
-		 
-		 ArrayList<EnvironmentObject> objs = GameWorld.getInstance().getObjects();
-		 objs.clear();
-
-		  for (int i = 0; i < objects.getChildCount(); i++) {
-			  XmlReader.Element object = objects.getChild(i);
-			  
-			  objs.add(new EnvironmentObject(Integer.parseInt(object.getAttribute("x")), Integer.parseInt(object.getAttribute("y")), Integer.parseInt(object.getAttribute("type"))));
-		  }
+//
+//		  XmlReader.Element objects = root.getChildByName("objects");
+//		 
+//		 ArrayList<EnvironmentObject> objs = GameWorld.getInstance().getObjects();
+//		 objs.clear();
+//
+//		  for (int i = 0; i < objects.getChildCount(); i++) {
+//			  XmlReader.Element object = objects.getChild(i);
+//			  
+//			  objs.add(new EnvironmentObject(object.getIntAttribute("x"), object.getIntAttribute("y"), object.getIntAttribute("type")));
+//		  }
 		  
 		  // objects loaded
-		  XmlReader.Element resources = root.getChildByName("resources");
-		  XmlReader.Element tileSheet = resources.getChildByName("image");
-		  XmlReader.Element objectTypes = resources.getChildByName("objects");
+//		  XmlReader.Element resources = root.getChildByName("resources");
+//		  XmlReader.Element tileSheet = resources.getChildByName("image");
+//		  XmlReader.Element objectTypes = resources.getChildByName("objects");
+//		  
+//		  HashMap<String, String> environmentObjects = new HashMap<String, String>();
+//		  
+//		  Assets.manager.load(tileSheet.getAttribute("texture"), Texture.class);
+//		  for (int i = 0; i < objectTypes.getChildCount(); i++) {
+//			  XmlReader.Element o = objectTypes.getChild(i);
+//			  
+//			environmentObjects.put(o.getAttribute("id"), o.getAttribute("texture"));
+//			  
+//			Assets.manager.load(o.getAttribute("texture"), Texture.class);
+//		  }
 		  
-		  HashMap<String, String> environmentObjects = new HashMap<String, String>();
-		  
-		  Assets.manager.load(tileSheet.getAttribute("texture"), Texture.class);
-		  for (int i = 0; i < objectTypes.getChildCount(); i++) {
-			  XmlReader.Element o = objectTypes.getChild(i);
-			  
-			environmentObjects.put(o.getAttribute("id"), o.getAttribute("texture"));
-			  
-			Assets.manager.load(o.getAttribute("texture"), Texture.class);
-		  }
-		  
+		  System.out.println("mainIsland loaded");
 		  
 	}
 

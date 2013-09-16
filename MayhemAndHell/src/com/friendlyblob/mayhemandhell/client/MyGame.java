@@ -17,6 +17,7 @@ import com.friendlyblob.mayhemandhell.client.network.PacketHandler;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientVersion;
 import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 import com.friendlyblob.mayhemandhell.client.screens.LoadingScreen;
+import com.friendlyblob.mayhemandhell.client.screens.ZoneLoadingScreen;
 
 public class MyGame extends Game implements ApplicationListener {
 	public static int SCREEN_WIDTH = 200;
@@ -26,6 +27,8 @@ public class MyGame extends Game implements ApplicationListener {
 	public static Rectangle SCREEN_RECTANGLE;
 	public static boolean isAndroid;
 	public static Random random;
+	
+	public static boolean DEBUG = false;
 	
 	public static Preferences preferences;
 	
@@ -37,7 +40,7 @@ public class MyGame extends Game implements ApplicationListener {
 	public ActionResolver actionResolver;
 	
 	// Screens
-	public LoadingScreen screenLoading;
+	public ZoneLoadingScreen screenLoading;
 	public GameScreen screenGame;
 	
 	public static Connection connection;
@@ -65,7 +68,7 @@ public class MyGame extends Game implements ApplicationListener {
 		isAndroid = Gdx.app.getType() == ApplicationType.Android;
 		
 		// Initializing screens;
-		screenLoading = new LoadingScreen(this);
+		screenLoading = new ZoneLoadingScreen(this, "mainIsland");
 		
 		// Setting first screen to render
 		setScreen(screenLoading);
@@ -73,10 +76,10 @@ public class MyGame extends Game implements ApplicationListener {
 
     public void connectToServer() {
     	try {
-			MyGame.connection = new Connection(new PacketHandler(), "localhost", 7777);
-			MyGame.connection.game = this;
-			MyGame.connection.start();
-			MyGame.connection.sendPacket(new ClientVersion(5));
+//			MyGame.connection = new Connection(new PacketHandler(), "localhost", 7777);
+//			MyGame.connection.game = this;
+//			MyGame.connection.start();
+//			MyGame.connection.sendPacket(new ClientVersion(5));
 		} catch (Exception e){
 			System.out.println();
 		}

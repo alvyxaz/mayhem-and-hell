@@ -2,6 +2,7 @@ package com.friendlyblob.mayhemandhell.client.network.packets.server;
 
 import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
+import com.friendlyblob.mayhemandhell.client.gameworld.Map;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 
 public class CharactersInRegion extends ReceivablePacket {
@@ -32,7 +33,7 @@ public class CharactersInRegion extends ReceivablePacket {
 					// TODO some sort of interpolation
 					// world.getCharacter(objectId).moveTo(x, y, speed);
 				} else {
-					world.putCharacter(new GameCharacter(objectId, x, y));
+					world.putCharacter(new GameCharacter(objectId, x, y, Map.getCollisionMap()));
 				}
 			}
 		} catch (Exception e) {

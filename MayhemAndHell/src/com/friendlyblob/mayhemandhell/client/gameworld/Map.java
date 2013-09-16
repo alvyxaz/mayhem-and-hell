@@ -6,8 +6,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.World;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.entities.EnvironmentObject;
@@ -72,9 +79,13 @@ public class Map {
 		for (int y = startY; y < endY; y++){
 			for(int x = startX; x < endX; x++){
 				if (y < tiles.length && y >= 0 && x < tiles[y].length && x >= 0)
-					spriteBatch.draw(tileTextures[tiles[y][x]], x*TILE_WIDTH, y * TILE_HEIGHT);
+					spriteBatch.draw(tileTextures[tiles[x][y]], x*TILE_WIDTH, y * TILE_HEIGHT);
 					
-					if (collisions[y][x] == 1) {
+					if (MyGame.DEBUG) {
+						Assets.defaultFont.draw(spriteBatch, x + ":" + y, x*TILE_WIDTH, y * TILE_HEIGHT + TILE_HEIGHT);
+					}
+					
+					if (collisions[x][y] == 1) {
 						Assets.defaultFont.draw(spriteBatch, "c", x*TILE_WIDTH + TILE_WIDTH /3, y * TILE_HEIGHT + TILE_HEIGHT);
 					}
 			}
@@ -111,19 +122,19 @@ public class Map {
 				case 1:
 					if (Input.isReleasing()) {
 						if (MapEditor.editorWindow.collisionModeButton.isSelected()) {
-							collisions[(int)tileTarget.y][(int)tileTarget.x] = Math.abs(collisions[(int)tileTarget.y][(int)tileTarget.x] - 1);
+							collisions[(int)tileTarget.x][(int)tileTarget.y] = Math.abs(collisions[(int)tileTarget.x][(int)tileTarget.y] - 1);
 						}
 					}
 					
 					if (Gdx.input.isTouched()) {
 						if (!MapEditor.editorWindow.collisionModeButton.isSelected()) {
-							tiles[(int)tileTarget.y][(int)tileTarget.x] = MapEditor.selectedTileTexture;
+							tiles[(int)tileTarget.x][(int)tileTarget.y] = MapEditor.selectedTileTexture;
 						} 
 					}
 					break;
 				case 2:
 					if (Input.isReleasing()) {
-					GameWorld.getObjects().add(new EnvironmentObject(world.toWorldX(Input.getX()), world.toWorldY(Input.getY()), MapEditor.selectedObject));
+						GameWorld.getObjects().add(new EnvironmentObject(world.toWorldX(Input.getX()), world.toWorldY(Input.getY()), MapEditor.selectedObject));
 					}
 					break;
 				default:
@@ -134,11 +145,10 @@ public class Map {
 	public void updateTileTarget() {
 		int worldX = (int)(Input.getX()*worldCam.zoom + camPos.x-MyGame.SCREEN_HALF_WIDTH);
 		int worldY = (int)(Input.getY()*worldCam.zoom + camPos.y-MyGame.SCREEN_HALF_HEIGHT);
-		
 
 		// Preliminary values
-		tileTarget.x = worldX / TILE_WIDTH;
-		tileTarget.y = worldY / TILE_HEIGHT;
+		tileTarget.x = Math.max(worldX / TILE_WIDTH, 0);
+		tileTarget.y = Math.max(worldY / TILE_HEIGHT, 0);
 	}
 	
 	public void setWorld(GameWorld gameWorld) {
@@ -152,9 +162,6 @@ public class Map {
 	public void load(OrthographicCamera worldCam) {
 		this.worldCam = worldCam;
 		camPos = worldCam.position;
-		
-		tiles = new int[DEFAULT_MAP_HEIGHT][DEFAULT_MAP_WIDTH];
-		collisions = new int[DEFAULT_MAP_HEIGHT][DEFAULT_MAP_WIDTH];
 	}
 	
 	public static void load(int[][] map, int[][] c) {
@@ -165,6 +172,7 @@ public class Map {
 	public static int[][] getTileMap() {
 		return tiles;
 	}
+
 	
 	public static int[][] getCollisionMap() {
 		return collisions;

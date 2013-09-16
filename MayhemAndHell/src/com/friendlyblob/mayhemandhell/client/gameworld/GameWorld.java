@@ -55,8 +55,8 @@ public class GameWorld {
 		map.setWorld(this);
 		map.load(worldCam);
 
-		player = new Player(0, 50, 50); // TODO do not initialize until login is successful
-		objects.add(new EnvironmentObject(50, 50, MapEditor.selectedObject));
+		player = new Player(0, 100, 100, Map.getCollisionMap()); // TODO do not initialize until login is successful
+//		objects.add(new EnvironmentObject(50, 50, MapEditor.selectedObject));
 	}
 	
 	public void putCharacter(GameCharacter character) {
