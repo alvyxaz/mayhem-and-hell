@@ -6,11 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
-import com.friendlyblob.mayhemandhell.client.entities.gui.GuiElement.GuiPriority;
-import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager;
-import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager.GuiPositionHorizontal;
-import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager.GuiPositionVertical;
-import com.friendlyblob.mayhemandhell.client.entities.gui.SkillBar;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
@@ -18,18 +13,8 @@ import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditor;
 
 public class GameScreen extends BaseScreen{
 	private GameWorld world;
-	
-	private GuiManager guiManager;
-	
 	public GameScreen(MyGame game) {
 		super(game);
-		
-		// Temporary GUI implementation 
-		guiManager = new GuiManager();
-		guiManager.addGuiElement(
-				new SkillBar(GuiPriority.LOW), 
-				GuiPositionHorizontal.RIGHT, 
-				GuiPositionVertical.MIDDLE);
 		
 		GameWorld.initialize();
 		world = GameWorld.getInstance();
@@ -39,7 +24,6 @@ public class GameScreen extends BaseScreen{
 
 	@Override
 	public void draw(float deltaTime) {
-		spriteBatch.begin();
 		/*---------------------------------------
 		 * World
 		 */
@@ -53,8 +37,14 @@ public class GameScreen extends BaseScreen{
 		if (MapEditor.enabled){
 			MapEditor.drawInfo(spriteBatch);
 		}
+<<<<<<< Updated upstream
+		spriteBatch.begin();
 
-		guiManager.draw(spriteBatch);
+		Assets.defaultFont.draw(spriteBatch, fpsText, 50, 50);
+=======
+//		
+//		Assets.defaultFont.draw(spriteBatch, fpsText, 5, 14);
+>>>>>>> Stashed changes
 		
 		spriteBatch.end();
 	}
@@ -63,14 +53,9 @@ public class GameScreen extends BaseScreen{
 	public void update(float deltaTime) {
 		world.update(deltaTime);
 		
-		// If GUI didn't catch touch input
-		if(!guiManager.update(deltaTime)) {
-			// Pass touch event to other entities
-			if (!MapEditor.enabled) {
-				updateGameplayInput();
-			}
+		if (!MapEditor.enabled) {
+			updateGameplayInput();
 		}
-		
 	}
 	
 	/*

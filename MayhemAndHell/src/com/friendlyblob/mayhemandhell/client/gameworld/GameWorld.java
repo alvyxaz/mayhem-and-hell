@@ -98,7 +98,7 @@ public class GameWorld {
 	public void draw(SpriteBatch spriteBatch) {
 		map.draw(spriteBatch);
 		
-		spriteBatch.begin();
+		
 		spriteBatch.setProjectionMatrix(worldCam.combined);
 
 		player.draw(spriteBatch);
@@ -111,7 +111,7 @@ public class GameWorld {
 		for (GameCharacter character : characters.values()) {
 			character.draw(spriteBatch);
 		}
-		spriteBatch.end();
+		
 	}
 	
 	public void cameraFollowPlayer(float deltaTime){

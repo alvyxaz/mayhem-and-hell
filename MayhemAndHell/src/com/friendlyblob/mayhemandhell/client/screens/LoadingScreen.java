@@ -12,6 +12,8 @@ public class LoadingScreen extends BaseScreen{
 	public LoadingScreen(MyGame game) {
 		super(game);
 		Assets.manager.load("textures/debugging/px.png", Texture.class);
+		Assets.manager.load("textures/textures.atlas", TextureAtlas.class);
+		
 	}
 
 	@Override
@@ -19,7 +21,7 @@ public class LoadingScreen extends BaseScreen{
 		if(Assets.manager.update()){
 			if(game.screenGame == null)
 				game.screenGame = new GameScreen(game);
-			game.setScreen(game.screenGame);
+			game.setScreen(game.screenZoneLoading);
 		}
 		
 		// Between 0 and 1

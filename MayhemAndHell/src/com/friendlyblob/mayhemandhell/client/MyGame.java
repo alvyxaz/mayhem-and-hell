@@ -38,7 +38,8 @@ public class MyGame extends Game implements ApplicationListener {
 	public ActionResolver actionResolver;
 	
 	// Screens
-	public ZoneLoadingScreen screenLoading;
+	public LoadingScreen screenLoading;
+	public ZoneLoadingScreen screenZoneLoading;
 	public GameScreen screenGame;
 	
 	public static Connection connection;
@@ -66,7 +67,8 @@ public class MyGame extends Game implements ApplicationListener {
 		isAndroid = Gdx.app.getType() == ApplicationType.Android;
 		
 		// Initializing screens;
-		screenLoading = new ZoneLoadingScreen(this, "mainIsland");
+		screenLoading = new LoadingScreen(this);
+		screenZoneLoading = new ZoneLoadingScreen(this, "mainIsland");
 		
 		// Setting first screen to render
 		setScreen(screenLoading);

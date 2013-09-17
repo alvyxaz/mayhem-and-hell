@@ -7,7 +7,7 @@ public class Skill {
 	private int xpToLevel;
 	
 	public enum SkillType {
-		Attack
+		ATTACK
 	}
 	
 }
