@@ -7,6 +7,7 @@ import javolution.util.FastMap;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.entities.EnvironmentObject;
@@ -55,7 +56,7 @@ public class GameWorld {
 		map.setWorld(this);
 		map.load(worldCam);
 
-		player = new Player(0, 100, 100, Map.getCollisionMap()); // TODO do not initialize until login is successful
+		player = new Player(0, 100, 100, (TiledMapTileLayer) map.getMap().getLayers().get(0)); // TODO do not initialize until login is successful
 //		objects.add(new EnvironmentObject(50, 50, MapEditor.selectedObject));
 	}
 	
@@ -95,8 +96,11 @@ public class GameWorld {
 	}
 	
 	public void draw(SpriteBatch spriteBatch) {
-		spriteBatch.setProjectionMatrix(worldCam.combined);
 		map.draw(spriteBatch);
+		
+		spriteBatch.begin();
+		spriteBatch.setProjectionMatrix(worldCam.combined);
+
 		player.draw(spriteBatch);
 		
 		for (GameObject go : objects) {
@@ -107,6 +111,7 @@ public class GameWorld {
 		for (GameCharacter character : characters.values()) {
 			character.draw(spriteBatch);
 		}
+		spriteBatch.end();
 	}
 	
 	public void cameraFollowPlayer(float deltaTime){

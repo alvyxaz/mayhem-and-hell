@@ -2,6 +2,7 @@ package com.friendlyblob.mayhemandhell.client.gameworld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
@@ -25,13 +27,7 @@ import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditorWindow;
 import com.friendlyblob.mayhemandhell.client.mapeditor.ObjectEditorWindow;
 
 public class Map {
-	
-	private Texture texture;
-	private TextureRegion [] tileTextures;
-	
-	private Texture tree;
-	
-	private static int [][] tiles;
+	private static TextureRegion[][] splitTiles;
 	private static int [][] collisions;
 	
 	public static final int TILE_WIDTH = 16;
@@ -46,54 +42,33 @@ public class Map {
 	private static Vector2 tileTarget = new Vector2(); 
 	
 	private GameWorld world;
+	private OrthogonalTiledMapRenderer renderer;
+	private TiledMap map;
+	
+	// Object editor window
+	ObjectEditorWindow objectEditor = null;
 	
 	public Map() {
 		/*
 		 * Loading main assets. 
 		 * TODO Either load it at loading screen or load() method to be loaded for each level separately 
 		 */
-		Assets.manager.load("textures/tiles/tiles.png", Texture.class);
+		
+		Assets.manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+		Assets.manager.load("./data/zones/mainIsland.tmx", TiledMap.class);
 		Assets.manager.finishLoading();
-		texture = Assets.manager.get("textures/tiles/tiles.png", Texture.class);
-		/*
-		 * Loading all textureRegions
-		 */
-		int xTextureCount = texture.getWidth()/TILE_WIDTH;
-		int yTextureCount = texture.getHeight()/TILE_HEIGHT;
 		
-		tileTextures = new TextureRegion[xTextureCount*yTextureCount];
-		
-		for (int i = 0; i < tileTextures.length; i++){
-			tileTextures[i] = new TextureRegion(texture, (i%xTextureCount)*TILE_WIDTH, (i/yTextureCount)*TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
-		}	
+		map = Assets.manager.get("./data/zones/mainIsland.tmx", TiledMap.class);
+		Texture tiles = Assets.manager.get("./textures/tiles/tiles.png", Texture.class);
+		splitTiles = TextureRegion.split(tiles, TILE_WIDTH, TILE_HEIGHT);
+
+		renderer = new OrthogonalTiledMapRenderer(map);
 	}
 	
 	public void draw(SpriteBatch spriteBatch) {
-		
-		// Calculating bounds
-		int startX = Math.max((int)((camPos.x - MyGame.SCREEN_HALF_WIDTH)/TILE_WIDTH)-1, 0);
-		int startY = Math.max((int)((camPos.y - MyGame.SCREEN_HALF_HEIGHT)/(TILE_HEIGHT)-1), 0);
-		int endX = Math.min(startX + MyGame.SCREEN_WIDTH/TILE_WIDTH+3, tiles[0].length);
-		int endY = Math.min(startY + MyGame.SCREEN_HEIGHT/TILE_HEIGHT+3, tiles.length);
-		
-		for (int y = startY; y < endY; y++){
-			for(int x = startX; x < endX; x++){
-				if (y < tiles.length && y >= 0 && x < tiles[y].length && x >= 0)
-					spriteBatch.draw(tileTextures[tiles[x][y]], x*TILE_WIDTH, y * TILE_HEIGHT);
-					
-					if (MyGame.DEBUG) {
-						Assets.defaultFont.draw(spriteBatch, x + ":" + y, x*TILE_WIDTH, y * TILE_HEIGHT + TILE_HEIGHT);
-					}
-					
-					if (collisions[x][y] == 1) {
-						Assets.defaultFont.draw(spriteBatch, "c", x*TILE_WIDTH + TILE_WIDTH /3, y * TILE_HEIGHT + TILE_HEIGHT);
-					}
-			}
-		}
-
+		renderer.setView(worldCam);
+		renderer.render();
 	}
-	
-	ObjectEditorWindow objectEditor = null;
 	
 	public void update(float deltaTime) {
 		if (Gdx.input.isTouched()) {
@@ -128,7 +103,7 @@ public class Map {
 					
 					if (Gdx.input.isTouched()) {
 						if (!MapEditor.editorWindow.collisionModeButton.isSelected()) {
-							tiles[(int)tileTarget.x][(int)tileTarget.y] = MapEditor.selectedTileTexture;
+//							tiles[(int)tileTarget.x][(int)tileTarget.y] = MapEditor.selectedTileTexture;
 						} 
 					}
 					break;
@@ -161,16 +136,17 @@ public class Map {
 	
 	public void load(OrthographicCamera worldCam) {
 		this.worldCam = worldCam;
+		
 		camPos = worldCam.position;
 	}
 	
 	public static void load(int[][] map, int[][] c) {
-		tiles = map;
+//		tiles = map;
 		collisions = c;
 	}
 	
-	public static int[][] getTileMap() {
-		return tiles;
+	public TiledMap getMap() {
+		return map;
 	}
 
 	

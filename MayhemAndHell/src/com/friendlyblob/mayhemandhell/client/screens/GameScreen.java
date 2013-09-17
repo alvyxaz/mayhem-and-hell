@@ -24,7 +24,6 @@ public class GameScreen extends BaseScreen{
 
 	@Override
 	public void draw(float deltaTime) {
-		spriteBatch.begin();
 		/*---------------------------------------
 		 * World
 		 */
@@ -38,7 +37,8 @@ public class GameScreen extends BaseScreen{
 		if (MapEditor.enabled){
 			MapEditor.drawInfo(spriteBatch);
 		}
-		
+		spriteBatch.begin();
+
 		Assets.defaultFont.draw(spriteBatch, fpsText, 50, 50);
 		
 		spriteBatch.end();

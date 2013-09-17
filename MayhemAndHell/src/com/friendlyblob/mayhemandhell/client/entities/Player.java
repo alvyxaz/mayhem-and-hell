@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -18,7 +19,7 @@ import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
 
 public class Player extends GameCharacter{
 	
-	public Player (int id, int x, int y, int[][] collisionLayer){
+	public Player (int id, int x, int y, TiledMapTileLayer collisionLayer){
 		super(id, x, y, collisionLayer);
 	}
 

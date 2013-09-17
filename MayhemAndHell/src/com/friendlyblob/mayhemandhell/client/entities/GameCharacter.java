@@ -2,6 +2,7 @@ package com.friendlyblob.mayhemandhell.client.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
@@ -24,9 +25,9 @@ public class GameCharacter extends GameObject {
 	
 	private float visibilityTimeOut;
 
-	private int[][] collisionLayer;
+	private TiledMapTileLayer collisionLayer;
 	
-	public GameCharacter(int id, int x, int y, int[][] collisionLayer){
+	public GameCharacter(int id, int x, int y, TiledMapTileLayer collisionLayer){
 		super(x, y);
 		this.objectId = id;
 		hitBox = new Rectangle(x, y, 15, 28);
@@ -54,7 +55,6 @@ public class GameCharacter extends GameObject {
 			hitBox.x += Math.cos(angle) * movementSpeed * deltaTime;
 			hitBox.y += Math.sin(angle) * movementSpeed * deltaTime;
 			
-			
 			if (MyGame.DEBUG) {
 				System.out.println("bottom left");
 				System.out.println((int) (hitBox.x / Map.TILE_WIDTH));
@@ -67,83 +67,63 @@ public class GameCharacter extends GameObject {
 			
 			if (hitBox.x - oldX > 0) {
 				// top right
-				collisionX =  (collisionLayer[(int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH)][(int) ((hitBox.y + hitBox.height) / Map.TILE_HEIGHT)] == 1);
+				collisionX =  collisionLayer.getCell((int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH), (int) ((hitBox.y + hitBox.height) / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 
 				// middle right
 				if (!collisionX) {
-					collisionX = (collisionLayer[(int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH)][(int) ((hitBox.y + hitBox.height/2) / Map.TILE_HEIGHT)] == 1);
-					
-					if (MyGame.DEBUG) {
-						System.out.println(collisionX);
-					}
+					collisionX =  collisionLayer.getCell((int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH), (int) ((hitBox.y + hitBox.height/2) / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 
 				}
 				// bottom right
 				if (!collisionX) {
-					collisionX = (collisionLayer[(int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH)][(int) (hitBox.y / Map.TILE_HEIGHT)] == 1);
-					
-					if (MyGame.DEBUG) {
-						System.out.println(collisionX);
-					}
-
+					collisionX =  collisionLayer.getCell((int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH), (int) (hitBox.y / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 				}
 			} else {
 				// top left
-				collisionX =  (collisionLayer[(int) (hitBox.x / Map.TILE_WIDTH)][(int) ((hitBox.y + hitBox.height) / Map.TILE_HEIGHT)] == 1);
+				collisionX =  collisionLayer.getCell((int) (hitBox.x / Map.TILE_WIDTH), (int) ((hitBox.y + hitBox.height) / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 
-				if (MyGame.DEBUG) {
-					System.out.println(collisionX);
-				}
 				// middle left
 				if (!collisionX) {
-					collisionX = (collisionLayer[(int) (hitBox.x / Map.TILE_WIDTH)][(int) ((hitBox.y + hitBox.height/2) / Map.TILE_HEIGHT)] == 1);
-					if (MyGame.DEBUG) {
-						System.out.println(collisionX);
-					}
+					collisionX =  collisionLayer.getCell((int) (hitBox.x / Map.TILE_WIDTH), (int) ((hitBox.y + hitBox.height/2) / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 				}
 				// bottom left
 				if (!collisionX) {
-					collisionX = (collisionLayer[(int) (hitBox.x / Map.TILE_WIDTH)][(int) (hitBox.y / Map.TILE_HEIGHT)] == 1);
-					if (MyGame.DEBUG) {
-						System.out.println(collisionX);
-					}
+					collisionX =  collisionLayer.getCell((int) (hitBox.x / Map.TILE_WIDTH), (int) (hitBox.y / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 				}
 			}
 			
 			if (collisionX) {
 				hitBox.x = oldX;
-				targetX = (int) oldX;
-				targetY = (int) oldY;
+				stop(oldX, oldY);
 			}
 			
 			if (hitBox.y - oldY > 0) {
 				// top left
-				collisionY = (collisionLayer[(int) (hitBox.x / Map.TILE_WIDTH)][(int) ((hitBox.y  + hitBox.height)/ Map.TILE_HEIGHT)] == 1);
+				collisionY =  collisionLayer.getCell((int) (hitBox.x / Map.TILE_WIDTH), (int) ((hitBox.y  + hitBox.height)/ Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 				//top middle
 				if (!collisionY) {
-					collisionY = (collisionLayer[(int) ((hitBox.x + hitBox.width/2) / Map.TILE_WIDTH)][(int) ((hitBox.y  + hitBox.height) / Map.TILE_HEIGHT)] == 1);
+					collisionY =  collisionLayer.getCell((int) ((hitBox.x + hitBox.width/2) / Map.TILE_WIDTH), (int) ((hitBox.y  + hitBox.height) / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 				}
 				//top right
 				if (!collisionY) {
-					collisionY = (collisionLayer[(int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH)][(int) ((hitBox.y  + hitBox.height) / Map.TILE_HEIGHT)] == 1);
+					collisionY =  collisionLayer.getCell((int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH), (int) ((hitBox.y  + hitBox.height) / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 				}
 			} else {
 				//bottom left
-				collisionY = (collisionLayer[(int) (hitBox.x / Map.TILE_WIDTH)][(int) (hitBox.y / Map.TILE_HEIGHT)] == 1);
+				collisionY =  collisionLayer.getCell((int) (hitBox.x / Map.TILE_WIDTH), (int) (hitBox.y / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 				// bottom middle
 				if (!collisionY) {
-					collisionY = (collisionLayer[(int) ((hitBox.x + hitBox.width/2) / Map.TILE_WIDTH)][(int) (hitBox.y / Map.TILE_HEIGHT)] == 1);
+					collisionY =  collisionLayer.getCell((int) ((hitBox.x + hitBox.width/2) / Map.TILE_WIDTH), (int) (hitBox.y / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 				}
 				// bottom right
 				if (!collisionY) {
-					collisionY = (collisionLayer[(int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH)][(int) (hitBox.y/ Map.TILE_HEIGHT)] == 1);
+					collisionY =  collisionLayer.getCell((int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH), (int) (hitBox.y/ Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");
 				}
 			}
 			
 			if (collisionY) {
 				hitBox.y = oldY;
-				targetY = (int) oldY;
-				targetX = (int) oldX;
+				stop(oldX, oldY);
 			}
 			
 			break;
@@ -171,5 +151,10 @@ public class GameCharacter extends GameObject {
 	public void moveTo (int x, int y, int speed) {
 		this.movementSpeed = speed;
 		moveTo(x, y);
+	}
+	
+	public void stop(float oldX, float oldY) {
+		targetX = (int) oldX;
+		targetY = (int) oldY;
 	}
 }

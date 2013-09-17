@@ -238,7 +238,8 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 			
 			int[][] tempMap;
 			int[][] tempCollisionMap;
-			tempMap = Map.getTileMap();
+//			tempMap = Map.getTileMap();
+			tempMap = null;
 			tempCollisionMap = Map.getCollisionMap();
 			
 			String id = zoneTable.getModel().getValueAt(zoneTable.getSelectedRow(), 0).toString();

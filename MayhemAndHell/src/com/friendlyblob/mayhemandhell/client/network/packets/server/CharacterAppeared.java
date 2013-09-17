@@ -1,5 +1,6 @@
 package com.friendlyblob.mayhemandhell.client.network.packets.server;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
@@ -28,7 +29,7 @@ public class CharacterAppeared extends ReceivablePacket {
 		}
 		
 		if (!world.characters.containsKey(characterId)) {
-			world.characters.put(characterId, new GameCharacter(characterId, x, y, Map.getCollisionMap()) );
+			world.characters.put(characterId, new GameCharacter(characterId, x, y, (TiledMapTileLayer) Map.getInstance().getMap().getLayers().get(0)) );
 		}
 	}
 
