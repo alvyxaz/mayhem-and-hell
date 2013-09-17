@@ -55,16 +55,29 @@ public class GameCharacter extends GameObject {
 			hitBox.x += Math.cos(angle) * movementSpeed * deltaTime;
 			hitBox.y += Math.sin(angle) * movementSpeed * deltaTime;
 			
-			if (MyGame.DEBUG) {
-				System.out.println("bottom left");
-				System.out.println((int) (hitBox.x / Map.TILE_WIDTH));
-				System.out.println((int) (hitBox.y / Map.TILE_HEIGHT));
-				System.out.println("top right");
-				System.out.println((int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH));
-				System.out.println((int) ((hitBox.y + hitBox.height) / Map.TILE_HEIGHT));
+			// map boundary checking
+			if (hitBox.x < 0) {
+				hitBox.x = 0;
+				stop(oldX, oldY);
 			}
-
 			
+			if (hitBox.x + hitBox.width > collisionLayer.getWidth() * collisionLayer.getTileWidth()) {
+				hitBox.x = oldX;
+				stop(oldX, oldY);
+			}
+			
+			if (hitBox.y < 0) {
+				hitBox.y = 0;
+				stop(oldX, oldY);
+			}
+			
+			if (hitBox.y + hitBox.height > collisionLayer.getHeight() * collisionLayer.getTileHeight()) {
+				hitBox.y = oldY;
+				stop(oldX, oldY);
+			}
+			
+			
+			// collision checking
 			if (hitBox.x - oldX > 0) {
 				// top right
 				collisionX =  collisionLayer.getCell((int) ((hitBox.x + hitBox.width) / Map.TILE_WIDTH), (int) ((hitBox.y + hitBox.height) / Map.TILE_HEIGHT)).getTile().getProperties().containsKey("collidable");

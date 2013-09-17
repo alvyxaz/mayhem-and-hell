@@ -28,8 +28,6 @@ public class MyGame extends Game implements ApplicationListener {
 	public static boolean isAndroid;
 	public static Random random;
 	
-	public static boolean DEBUG = false;
-	
 	public static Preferences preferences;
 	
 	public static boolean mute;
