@@ -45,9 +45,11 @@ public class GameScreen extends BaseScreen{
 		 */
 		world.draw(spriteBatch);
 		
+		spriteBatch.end();
 		/*---------------------------------------
 		 * GUI Elements
 		 */
+		spriteBatch.begin();
 		spriteBatch.setProjectionMatrix(guiCam.combined);
 		
 		if (MapEditor.enabled){

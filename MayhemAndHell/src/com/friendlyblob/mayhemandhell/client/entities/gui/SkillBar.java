@@ -18,21 +18,16 @@ public class SkillBar extends GuiElement {
 	
 	public SkillBar(GuiPriority priority) {
 		super(priority);
-//		slotTexture = new TextureRegion(new Texture(Gdx.files.internal("textures/gui/ingame/skill_slot.png")), 0, 0, 16, 16);
 		
-		// TODO fix textures
 		slotTexture = Assets.getTextureRegion("gui/ingame/skill_slot");
 		Assets.manager.load("textures/textures.atlas", TextureAtlas.class);
 	}
-
-	
 	
 	private TextureRegion slotIcon;
 
 	@Override
 	public void onRelease(float x, float y) {
 		int slotSelected = (int) (y / slotHeight);
-		System.out.println(slotSelected);
 	}
 
 	@Override

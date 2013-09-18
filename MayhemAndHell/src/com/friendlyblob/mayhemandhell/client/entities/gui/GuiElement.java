@@ -14,15 +14,13 @@ import com.friendlyblob.mayhemandhell.client.controls.Touch;
 public abstract class GuiElement implements Comparable<GuiElement>{
 	/**
 	 * Represents a priority of GuiElement.
-	 * The higher the priority, the lower the ordinal, because
-	 * highest priority element has to be displayed last (on top of everything)
 	 * @author Alvys
 	 *
 	 */
 	public enum GuiPriority {
-		HIGH,
+		LOW,
 		MEDIUM,
-		LOW
+		HIGH
 	}
 	
 	public GuiManager manager;

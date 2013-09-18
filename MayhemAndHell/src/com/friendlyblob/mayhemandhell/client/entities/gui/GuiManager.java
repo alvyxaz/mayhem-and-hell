@@ -3,8 +3,10 @@ package com.friendlyblob.mayhemandhell.client.entities.gui;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.friendlyblob.mayhemandhell.client.MyGame;
+import com.friendlyblob.mayhemandhell.client.controls.Input;
 
 /**
  * Takes care of GuiElement placement on screen
@@ -73,7 +75,8 @@ public class GuiManager {
 	}
 	
 	public void draw(SpriteBatch spriteBatch) {
-		for (int i = 0; i < guiElements.length; i++) {
+		// Going backwards, because highest priority has to be drawn last
+		for (int i = guiElements.length-1; i >= 0; i--) {
 			guiElements[i].draw(spriteBatch);
 		}
 	}
@@ -84,6 +87,21 @@ public class GuiManager {
 	 * @return true if any of the GUI elements were clicked 
 	 */
 	public boolean update(float deltaTime) {
+		if (!Gdx.input.justTouched() && !Input.isReleasing()) {
+			// We can pretend that gui was clicked so that
+			// we don't have to analyse click input in gameplay logic.
+			return true;
+		}
+		
+		for (int i = 0; i < guiElements.length; i++) {
+			if (Input.isTouching(guiElements[i].box)) {
+				guiElements[i].onTouching(Input.getX()-guiElements[i].box.x, Input.getY()-guiElements[i].box.y);
+			} else if (Input.isReleasing(guiElements[i].box)) {
+				guiElements[i].onRelease(Input.getX()-guiElements[i].box.x, Input.getY()-guiElements[i].box.y);
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
