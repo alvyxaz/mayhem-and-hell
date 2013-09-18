@@ -25,7 +25,7 @@ public abstract class GuiElement implements Comparable<GuiElement>{
 	
 	public GuiManager manager;
 	
-	public boolean visible;
+	public boolean visible = true;
 	public GuiPriority priority;
 	
 	// Basic variables, used by GuiManager to arrange object 
@@ -33,7 +33,6 @@ public abstract class GuiElement implements Comparable<GuiElement>{
 	
 	public GuiElement(GuiPriority priority) {
 		box = new Rectangle();
-		establishSize();
 		this.priority = priority;
 	}
 	
@@ -63,6 +62,19 @@ public abstract class GuiElement implements Comparable<GuiElement>{
 	@Override
 	public int compareTo(GuiElement other) {
 		return Integer.compare(priority.ordinal(), other.priority.ordinal());
+	}
+	
+	public void setX(float x) {
+		box.x = x;
+	}
+	
+	public void setY(float y) {
+		box.y = y;
+	}
+	
+	public void setPosition(float x, float y) {
+		setX(x);
+		setY(y);
 	}
 	
 }

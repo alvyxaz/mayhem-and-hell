@@ -129,7 +129,7 @@ public class ObjectPanel extends JPanel implements ActionListener, MouseListener
 			
 				for (EnvironmentObject eo : objects) {
 					xmlWriter.element("object")
-						.attribute("id", eo.objectId)
+						.attribute("id", eo.tempIdHolder)
 						.attribute("type", eo.type)
 						.attribute("x", eo.x)
 						.attribute("y", eo.y)

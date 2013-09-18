@@ -23,8 +23,6 @@ public class SkillBar extends GuiElement {
 		Assets.manager.load("textures/textures.atlas", TextureAtlas.class);
 	}
 	
-	private TextureRegion slotIcon;
-
 	@Override
 	public void onRelease(float x, float y) {
 		int slotSelected = (int) (y / slotHeight);

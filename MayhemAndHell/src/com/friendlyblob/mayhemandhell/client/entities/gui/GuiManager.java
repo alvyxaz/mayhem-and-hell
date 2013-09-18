@@ -20,41 +20,49 @@ public class GuiManager {
 	// Caches an ordered priority queue
 	private GuiElement [] guiElements;
 	
+	public TargetBar targetBar;
+	
 	public GuiManager() {
 		guiElements = new GuiElement[0];
 		guiElementsQueue = new PriorityQueue<GuiElement>(5);
+		
+		// Adding required GUI elements
+		targetBar = new TargetBar();
+		addGuiElement(targetBar, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.TOP);
 	}
 	
 	/**
 	 * Adds a GuiElement to queue and caches it.
 	 * @param element
 	 */
-	public  void addGuiElement(GuiElement element, 
+	public void addGuiElement(GuiElement element, 
 			GuiPositionHorizontal horizontal, GuiPositionVertical vertical) {
-
+		
+		element.establishSize();
+		
 		// Establishing Y position
 		switch(vertical) {
 			case TOP:
-				element.box.y = MyGame.SCREEN_HEIGHT - element.box.height;
+				element.setY(MyGame.SCREEN_HEIGHT - element.box.height);
 				break;
 			case MIDDLE:
-				element.box.y = (MyGame.SCREEN_HEIGHT - element.box.height)/2;
+				element.setY((MyGame.SCREEN_HEIGHT - element.box.height)/2);
 				break;
 			case BOTTOM:
-				element.box.y = 0;
+				element.setY(0);
 				break;
 		}
 		
 		// Establishing X position
 		switch(horizontal) {
 			case LEFT:
-				element.box.x = 0;
+				element.setX(0);
 				break;
 			case MIDDLE:
-				element.box.x = (MyGame.SCREEN_WIDTH - element.box.width)/2;
+				element.setX((MyGame.SCREEN_WIDTH - element.box.width)/2);
 				break;
 			case RIGHT:
-				element.box.x = MyGame.SCREEN_WIDTH - element.box.width;
+				element.setX(MyGame.SCREEN_WIDTH - element.box.width);
 				break;
 		}
 		
@@ -77,6 +85,9 @@ public class GuiManager {
 	public void draw(SpriteBatch spriteBatch) {
 		// Going backwards, because highest priority has to be drawn last
 		for (int i = guiElements.length-1; i >= 0; i--) {
+			if (!guiElements[i].visible) {
+				continue;
+			}
 			guiElements[i].draw(spriteBatch);
 		}
 	}
@@ -87,13 +98,17 @@ public class GuiManager {
 	 * @return true if any of the GUI elements were clicked 
 	 */
 	public boolean update(float deltaTime) {
-		if (!Gdx.input.justTouched() && !Input.isReleasing()) {
+		if (!Gdx.input.isTouched() && !Input.isReleasing()) {
 			// We can pretend that gui was clicked so that
 			// we don't have to analyse click input in gameplay logic.
 			return true;
 		}
 		
 		for (int i = 0; i < guiElements.length; i++) {
+			if (!guiElements[i].visible) {
+				continue;
+			}
+			
 			if (Input.isTouching(guiElements[i].box)) {
 				guiElements[i].onTouching(Input.getX()-guiElements[i].box.x, Input.getY()-guiElements[i].box.y);
 			} else if (Input.isReleasing(guiElements[i].box)) {

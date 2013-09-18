@@ -68,10 +68,17 @@ public class MyGame extends Game implements ApplicationListener {
 		
 		// Initializing screens;
 		screenLoading = new LoadingScreen(this);
-		screenZoneLoading = new ZoneLoadingScreen(this, "mainIsland");
 		
 		// Setting first screen to render
 		setScreen(screenLoading);
+    }
+    
+    /**
+     * Prepares screens that should be ready after loader is done
+     * with loading main resources
+     */
+    public void prepareScreens() {
+    	screenZoneLoading = new ZoneLoadingScreen(this, "mainIsland");
     }
 
     public void connectToServer() {

@@ -17,9 +17,23 @@ filter: Nearest,Nearest
 repeat: none
 gui/ingame/skill_slot
   rotate: false
-  xy: 2, 2
+  xy: 104, 6
   size: 16, 16
   orig: 16, 16
+  offset: 0, 0
+  index: -1
+gui/ingame/target_background
+  rotate: false
+  xy: 2, 2
+  size: 100, 20
+  orig: 100, 20
+  offset: 0, 0
+  index: -1
+gui/ingame/x
+  rotate: false
+  xy: 122, 11
+  size: 11, 11
+  orig: 11, 11
   offset: 0, 0
   index: -1
 

@@ -13,14 +13,13 @@ public class LoadingScreen extends BaseScreen{
 		super(game);
 		Assets.manager.load("textures/debugging/px.png", Texture.class);
 		Assets.manager.load("textures/textures.atlas", TextureAtlas.class);
-		
 	}
 
 	@Override
 	public void draw(float deltaTime) {
 		if(Assets.manager.update()){
-			if(game.screenGame == null)
-				game.screenGame = new GameScreen(game);
+			game.prepareScreens();
+			
 			game.setScreen(game.screenZoneLoading);
 		}
 		

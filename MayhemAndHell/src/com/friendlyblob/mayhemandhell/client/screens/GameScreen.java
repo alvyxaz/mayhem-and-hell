@@ -19,7 +19,7 @@ import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditor;
 public class GameScreen extends BaseScreen{
 	private GameWorld world;
 	
-	private GuiManager guiManager;
+	public GuiManager guiManager;
 	
 	public GameScreen(MyGame game) {
 		super(game);
@@ -69,19 +69,10 @@ public class GameScreen extends BaseScreen{
 		if(!guiManager.update(deltaTime)) {
 			// Pass touch event to other entities
 			if (!MapEditor.enabled) {
-				updateGameplayInput();
+				world.updateWorldInput();
 			}
 		}
 		
-	}
-	
-	/*
-	 * Analysing user input in gameplay mode.
-	 */
-	public void updateGameplayInput() {
-		if (Input.isReleasing()) {
-			world.getPlayer().requestMovementDestination(world.toWorldX(Input.getX()), world.toWorldY(Input.getY()));
-		}
 	}
 
 	@Override

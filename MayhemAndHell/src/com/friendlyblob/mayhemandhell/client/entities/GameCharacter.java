@@ -11,8 +11,6 @@ import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
 
 public class GameCharacter extends GameObject {
 
-	public Rectangle hitBox;
-	
 	private int targetX;
 	private int targetY;
 	
@@ -28,8 +26,7 @@ public class GameCharacter extends GameObject {
 	private TiledMapTileLayer collisionLayer;
 	
 	public GameCharacter(int id, int x, int y, TiledMapTileLayer collisionLayer){
-		super(x, y);
-		this.objectId = id;
+		super(id);
 		hitBox = new Rectangle(x, y, 15, 28);
 		
 		this.collisionLayer = collisionLayer;
