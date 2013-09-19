@@ -15,9 +15,12 @@ import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 public class GameObject {
 	
 	public static enum GameObjectType {
+		OTHER,
 		PLAYER,
 		MOB,	// Mobile object (Monster, animal, etc.)
-		NPC		// Non mobile object (Most likely a person you can "Talk" to)
+		NPC,	// Non mobile object (Most likely a character you can "Talk" to)
+		ITEM,
+		RESOURCE // Mining, crafting and other resources
 	}
 	
 	private int objectId;
@@ -32,11 +35,19 @@ public class GameObject {
 	
 	private GameObjectType type;
 	
+	private String name;
 	
 	public void setType(GameObjectType type) {
 		this.type = type;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 	
 	public GameObjectType getType() {
 		return type;
@@ -50,10 +61,15 @@ public class GameObject {
 	 * Sets objects target to a given object 
 	 * (Player targeting Player, Player targeting object ant etc.)
 	 * @param object Object to set target to
+	 * @return true if target set successfully, false if not.
 	 */
-	public void setTarget(GameObject object) {
+	public boolean setTarget(GameObject object) {
+		if (object == null) {
+			return false;
+		}
 		this.target = object;
 		object.addTargetedBy(this);
+		return true;
 	}
 	
 	/**
@@ -69,7 +85,7 @@ public class GameObject {
 	 * Adds a game object that is targeting current object
 	 * @param object GameObject that targets current object
 	 */
-	public void addTargetedBy(GameObject object) {
+	private void addTargetedBy(GameObject object) {
 		targetedBy.add(object);
 	}
 	
@@ -105,6 +121,7 @@ public class GameObject {
 	}
 	
 	public GameObject() {
+		name = "Unknown";
 		position = new ObjectPosition();
 	}
 	

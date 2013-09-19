@@ -29,7 +29,7 @@ public class Region {
 	}
 	
 	private FastMap<Integer, GameCharacter> characters;
-	private FastMap<Integer, GameObject> objects;
+	private FastMap<Integer, GameObject> allObjects;
 	
 	private Region [] closeRegions;
 	
@@ -40,7 +40,7 @@ public class Region {
 		regionX = x;
 		regionY = y;
 		characters = new FastMap<Integer, GameCharacter>().shared();
-		objects = new FastMap<Integer, GameObject>().shared();
+		allObjects = new FastMap<Integer, GameObject>().shared();
 		closeRegions = new Region [0];
 	}
 	
@@ -49,7 +49,7 @@ public class Region {
 	 * @param object
 	 */
 	public void addObject(GameObject object) {
-		objects.put(object.getObjectId(), object);
+		allObjects.put(object.getObjectId(), object);
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class Region {
 	 * @param object
 	 */
 	public void removeObject(GameObject object) {
-		objects.remove(object.getObjectId());
+		allObjects.remove(object.getObjectId());
 	}
 	
 	/**
@@ -66,6 +66,7 @@ public class Region {
 	 */
 	public void removeCharacter(GameCharacter character) {
 		characters.remove(character.getObjectId());
+		allObjects.remove(character.getObjectId());
 	}
 	
 	/**
@@ -75,6 +76,17 @@ public class Region {
 	public void addCharacter(GameCharacter character) {
 		character.setRegion(this);
 		characters.put(character.getObjectId(), character);
+		allObjects.put(character.getObjectId(), character);
+	}
+	
+	/**
+	 * Value, returned by this method, will include characters,
+	 * because all of the characters are also stored in allObjects.
+	 * @param objectId
+	 * @return GameObject in this region, or null if it does not exist
+	 */
+	public GameObject getObject(int objectId) {
+		return allObjects.get(objectId);
 	}
 	
 	/**
@@ -160,7 +172,7 @@ public class Region {
 		List<GameObject> visibleObjects = new ArrayList<GameObject>();
 		
 		// Current region
-		for (GameObject object : objects.values()) {
+		for (GameObject object : allObjects.values()) {
 			visibleObjects.add(object);
 		}
 		
@@ -217,6 +229,6 @@ public class Region {
 	}
 	
 	public FastMap<Integer, GameObject> getObjects() {
-		return objects;
+		return allObjects;
 	}
 }

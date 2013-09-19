@@ -16,6 +16,7 @@ import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.entities.gui.TargetBar.TargetInfo;
 import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditor;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 import com.friendlyblob.mayhemandhell.client.screens.BaseScreen;
 import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 import com.friendlyblob.mayhemandhell.client.screens.ZoneLoadingScreen;
@@ -115,9 +116,16 @@ public class GameWorld {
 				// Clicked on an object, let's show a target bar
 				// TODO check whether clicked on the object that is already targeted
 				// And act accordingly (like use the first available action on double click)
+				
+				//-----------------------------------------------------
+				// TODO remove lines below if no longer detached from server
 				TargetInfo targetInfo = new TargetInfo();
 				targetInfo.name = gameObject.name;
 				game.screenGame.guiManager.targetBar.showTarget(targetInfo);
+				//-----------------------------------------------------
+				
+//				MyGame.connection.sendPacket(new RequestTarget(gameObject.objectId));
+				
 			} else {
 				// Movement should be the last case
 				getPlayer().requestMovementDestination(toWorldX(Input.getX()), toWorldY(Input.getY()));
