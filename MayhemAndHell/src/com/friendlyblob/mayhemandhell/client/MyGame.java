@@ -17,6 +17,7 @@ import com.friendlyblob.mayhemandhell.client.network.PacketHandler;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientVersion;
 import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 import com.friendlyblob.mayhemandhell.client.screens.LoadingScreen;
+import com.friendlyblob.mayhemandhell.client.screens.TestScreen;
 import com.friendlyblob.mayhemandhell.client.screens.ZoneLoadingScreen;
 
 public class MyGame extends Game implements ApplicationListener {
@@ -70,7 +71,7 @@ public class MyGame extends Game implements ApplicationListener {
 		screenLoading = new LoadingScreen(this);
 		
 		// Setting first screen to render
-		setScreen(screenLoading);
+		setScreen(new TestScreen(this));
     }
     
     /**
