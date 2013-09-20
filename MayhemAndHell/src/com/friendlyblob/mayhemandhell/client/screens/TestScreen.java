@@ -1,11 +1,13 @@
 package com.friendlyblob.mayhemandhell.client.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.friendlyblob.mayhemandhell.client.MyGame;
+import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 
 public class TestScreen extends BaseScreen {
@@ -15,7 +17,7 @@ public class TestScreen extends BaseScreen {
 	public int tileWidth = 16;
 	public int tileHeight = 16;
 	
-	public int [][] collisions = new int[9][9];
+	public int [][] collisions = new int[8][9];
 	public Pixmap pixmap;
 	public Texture texture;
 	
@@ -27,18 +29,21 @@ public class TestScreen extends BaseScreen {
 	public TestScreen(MyGame game) {
 		super(game);	
 		
-		
-		
 		collisions[3][3] = 1;
 		collisions[2][3] = 1;
 		
-		calculateDestination(2*tileWidth, 1*tileHeight, 4*tileWidth, 4*tileHeight);
-		
+		redraw(3, 3, 60, 60);
+	}
+	
+	public void redraw(int startX, int startY, int testX, int testY) {
 		/* --------------------------------------------------------
 		 * GRAPHICAL REPRESENTATION (not finished)
 		 */
 		// Drawing grid
 		pixmap = new Pixmap(128, 128, Pixmap.Format.RGBA8888);
+		
+		int maxX = collisions[0].length*tileWidth -1;
+		int maxY = collisions.length*tileWidth -1;
 		
 		pixmap.setColor(Color.DARK_GRAY);
 		for (int y = 0; y < collisions.length; y++) {
@@ -53,40 +58,36 @@ public class TestScreen extends BaseScreen {
 		for (int y = 0; y < collisions.length; y++) {
 			for (int x = 0; x < collisions[0].length; x++) {
 				if (collisions[y][x] == 1) {
-					pixmap.fillRectangle(x*tileWidth, y*tileWidth, tileWidth, tileHeight);
+					pixmap.fillRectangle(x*tileWidth, maxY - y*tileHeight - tileHeight, tileWidth, tileHeight);
 				}
 			}
 		}
 
 		pixmap.setColor(Color.GREEN);
 		
-		// Line data
-		int startX = 3;
-		int startY = 3;
-		int maxX = collisions[0].length*tileWidth -1;
-		int maxY = collisions.length*tileWidth -1;
 		
-		for (int i = 0; i < 1; i++) {
-			int endX = (int)(startX + Math.random()* (maxX-startX));
-			int endY = (int)(startY + Math.random()* (maxY-startY));
+		for (int i = 0; i < 10; i++) {
+			int endX = testX; // (int)(startX + Math.random()* (maxX-startX));
+			int endY = testY; //(int)(startY + Math.random()* (maxY-startY));
 		
+			pixmap.setColor(Color.RED);
+			pixmap.drawLine(startX, maxY-startY, endX, maxY-endY);
+			pixmap.setColor(Color.GREEN);
+			
+			System.out.println("Data: " + startX + " " + startY + " -  " + endX + " " + endY);
+			
 			calculateDestination(startX, startY, endX, endY);
 			
 			if (sqrDistanceBetween(startX, startY, tempVerticalX, tempVerticalY) < 
 					sqrDistanceBetween(startX, startY, tempHorizontalX, tempHorizontalY)) {
-				pixmap.drawLine(startX, startY, tempVerticalX, tempVerticalY);
+				pixmap.drawLine(startX, maxY-startY, tempVerticalX, maxY-tempVerticalY);
 			} else {
-				pixmap.drawLine(startX, startY, tempHorizontalX, tempHorizontalY);
+				pixmap.drawLine(startX, maxY-startY, tempHorizontalX, maxY-tempHorizontalY);
 			}
 		}
 		
 		
 		texture = new Texture(pixmap);
-		
-		
-		/* --------------------------------------------------------
-		 * 
-		 */
 	}
 	
 	public float calculateDestination( int currentX, int currentY, int targetX, int targetY) {
@@ -97,8 +98,8 @@ public class TestScreen extends BaseScreen {
 		final int targetTileY = getTileYAt(targetY);
 		
 		// Square distances (no need for root)
-		int sqrDstToTarget = sqrDistanceBetween(currentX, currentY, targetX, targetY);
-				
+		int sqrDstToTarget = (int)sqrDistanceBetween(currentX, currentY, targetX, targetY);
+		
 		// Tile that we have iterated to 
 		int tileIterX;
 		int tileIterY;
@@ -120,6 +121,8 @@ public class TestScreen extends BaseScreen {
 		int pointX;
 		int pointY;
 		
+		System.out.println(Math.toDegrees(angle));
+		
 		/**
 		 * HORIZONTAL INTERSECTION CHECK
 		 */
@@ -132,36 +135,59 @@ public class TestScreen extends BaseScreen {
 		
 		pointX = (int)(currentX + (currentY - pointY) / -Math.tan(angle));
 		
-		// Checking if current tile is collision tile
-		// TODO real collision check
-		if (collisions[getTileYAt(pointY)][getTileXAt(pointX)] == 1 ) {
-			horizontalX = pointX;
-			horizontalY = pointY;
-		} else {
-			// 2-3 differences per vertical tile
-			int dY = (yDirection == 1) ? tileHeight : -tileHeight;
-			int dX = (int)(tileHeight/Math.tan(angle));
+		
+		if (pointX < collisions[0].length * tileWidth && pointX > 0) {
+
+			tileIterX = getTileXAt(pointX);
+			tileIterY = getTileYAt(pointY);
 			
-			// Looping until the end
-			while (true) {
-				pointX += dX;
-				pointY += dY;
-				tileIterX = getTileXAt(pointX);
-				tileIterY = getTileYAt(pointY);
+			// Checking if current tile is collision tile
+			// TODO real collision check
+			if (collisions[tileIterY][tileIterX] == 1 ) {
+				horizontalX = pointX;
+				horizontalY = pointY;
+			} else {
+				// 2-3 differences per vertical tile
+				int dY = (yDirection == 1) ? tileHeight : -tileHeight;
+				int dX = (int)(tileHeight/Math.tan(angle));
 				
-				// Checking if collision detected
-				// TODO real collision check
-				if (collisions[tileIterY][tileIterX] == 1) {
-					horizontalX = pointX;
-					horizontalY = pointY;
-					break;
-				} else {
+				System.out.println("---HOR---");
+				
+				// Looping until the end
+				while (true) {
+					pointX += dX;
+					pointY += dY;
+
+					tileIterX = getTileXAt(pointX);
+					tileIterY = getTileYAt(pointY);
+					
+					System.out.println(tileIterX + " " + tileIterY);
+					
 					// Checking if it's time to exit the loop 
 					// (went further than targeted to)
 					if(sqrDistanceBetween(currentX, currentY, pointX, pointY) > sqrDstToTarget) {
 						horizontalX = targetX;
 						horizontalY = targetY;
 						break;
+					}
+					
+					// If reached the limit of tilemap
+					// Move a step back to the place where it wasn't out of bounds
+					if (tileIterX >= collisions[0].length || tileIterY >= collisions.length
+							|| tileIterX < 0 || tileIterY < 0) {
+						horizontalX = pointX - dX;
+						horizontalY = pointY - dY;
+						break;
+					}
+					
+					// Checking if collision detected
+					// TODO real collision check
+					if (collisions[tileIterY][tileIterX] == 1) {
+						horizontalX = pointX;
+						horizontalY = pointY;
+						break;
+					} else {
+						
 					}
 				}
 			}
@@ -170,6 +196,8 @@ public class TestScreen extends BaseScreen {
 		/**
 		 * VERTICAL INTERSECTION CHECK
 		 */
+		
+		System.out.println("---VERT");
 		// 1. Finding a potential collision point 
 		if (xDirection == 1) {
 			pointX = (currentX/tileWidth) * tileWidth + tileWidth;
@@ -179,38 +207,56 @@ public class TestScreen extends BaseScreen {
 		
 		pointY = (int)(currentY + (currentX - pointX) * -Math.tan(angle));
 
-		//pointY = getLinearYAtX(pointX, currentX, currentY, targetX, targetY); 
-		
-		// Checking if current tile is collision tile
-		// TODO real collision check
-		if (collisions[getTileYAt(pointY)][getTileXAt(pointX)] == 1 ) {
-			verticalX = pointX;
-			verticalY = pointY;
-		} else {
-			// 2-3 differences per horizontal tile
-			int dX = (yDirection == 1) ? tileWidth : -tileWidth;
-			int dY = (int)(tileHeight*Math.tan(angle));
+		if (pointY < collisions.length*tileHeight && pointY > 0) {
 			
-			// Looping until the end
-			while (true) {
-				pointX += dX;
-				pointY += dY;
-				tileIterX = getTileXAt(pointX);
-				tileIterY = getTileYAt(pointY);
+			
+			tileIterX = getTileXAt(pointX);
+			tileIterY = getTileYAt(pointY);
+			
+			// Checking if current tile is collision tile
+			// TODO real collision check
+			if (collisions[tileIterY][tileIterX] == 1 ) {
+				verticalX = pointX;
+				verticalY = pointY;
+			} else {
+				// 2-3 differences per horizontal tile
+				int dX = (xDirection == 1) ? tileWidth : -tileWidth;
+				int dY = (int)(tileHeight*Math.tan(angle));
 				
-				// Checking if collision detected
-				// TODO real collision check
-				if (collisions[tileIterY][tileIterX] == 1) {
-					verticalX = pointX;
-					verticalY = pointY;
-					break;
-				} else {
+				// Looping until the end
+				while (true) {
+					pointX += dX;
+					pointY += dY;
+					tileIterX = getTileXAt(pointX);
+					tileIterY = getTileYAt(pointY);
+					
+					System.out.println(tileIterX + " " + tileIterY);
+					
 					// Checking if it's time to exit the loop 
 					// (went further than targeted to)
 					if(sqrDistanceBetween(currentX, currentY, pointX, pointY) > sqrDstToTarget) {
 						verticalX = targetX;
 						verticalY = targetY;
 						break;
+					}
+					
+					// If reached the limit of tilemap
+					// Move a step back to the place where it wasn't out of bounds
+					if (tileIterX > collisions[0].length || tileIterY > collisions.length
+							|| tileIterX < 0 || tileIterY < 0) {
+						verticalX = pointX - dX;
+						verticalY = pointY - dY;
+						break;
+					}
+					
+					// Checking if collision detected
+					// TODO real collision check
+					if (collisions[tileIterY][tileIterX] == 1) {
+						verticalX = pointX;
+						verticalY = pointY;
+						break;
+					} else {
+						
 					}
 				}
 			}
@@ -240,8 +286,8 @@ public class TestScreen extends BaseScreen {
 		return 0;
 	}
 	
-	public int sqrDistanceBetween(int currentX, int currentY, int targetX, int targetY) {
-		return (targetX - currentX)*(targetX - currentX) + (targetY-currentY)*(targetY-currentY);
+	public float sqrDistanceBetween(float startX, float startY, float endX, float endY) {
+		return (endX - startX)*(endX - startX) + (endY-startY)*(endY-startY);
 	}
 	
 	public int getLinearYAtX(int x, float currentX, int currentY, int targetX, int targetY) {
@@ -258,6 +304,10 @@ public class TestScreen extends BaseScreen {
 
 	@Override
 	public void draw(float deltaTime) {
+		if (Input.isReleasing()) {
+			redraw(3,3, Input.getX(), Input.getY());
+		}
+		
 		spriteBatch.begin();
 		spriteBatch.draw(texture, 0, 0);
 		
