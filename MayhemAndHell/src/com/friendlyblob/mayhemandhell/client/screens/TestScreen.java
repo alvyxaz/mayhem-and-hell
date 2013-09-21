@@ -1,14 +1,12 @@
 package com.friendlyblob.mayhemandhell.client.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
-import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 
 public class TestScreen extends BaseScreen {
 
@@ -20,14 +18,7 @@ public class TestScreen extends BaseScreen {
 	public int [][] collisions = new int[8][9];
 	public Pixmap pixmap;
 	public Texture texture;
-	
-	public static int tempVerticalX;
-	public static int tempVerticalY;
-	public static int tempHorizontalX;
-	public static int tempHorizontalY;
-	
-	public static int activeTileX;
-	public static int activeTileY;
+
 	
 	public TestScreen(MyGame game) {
 		super(game);	
@@ -71,31 +62,20 @@ public class TestScreen extends BaseScreen {
 
 		pixmap.setColor(Color.GREEN);
 		
-		
+		Point point;
 		for (int i = 0; i < 60; i++) {
 			int endX = (int)(Math.random()*maxX);
 			int endY = (int)(Math.random()*maxY);
 		
-			pixmap.setColor(Color.RED);
-			pixmap.drawLine(startX, maxY-startY, endX, maxY-endY);
-			pixmap.setColor(Color.GREEN);
+			point = calculateDestination(startX, startY, endX, endY);
 			
-//			System.out.println("Data: " + startX + " " + startY + " -  " + endX + " " + endY);
-			
-			calculateDestination(startX, startY, endX, endY);
-			
-			if (sqrDistanceBetween(startX, startY, tempVerticalX, tempVerticalY) < 
-					sqrDistanceBetween(startX, startY, tempHorizontalX, tempHorizontalY)) {
-				pixmap.drawLine(startX, maxY-startY, tempVerticalX, maxY-tempVerticalY);
-			} else {
-				pixmap.drawLine(startX, maxY-startY, tempHorizontalX, maxY-tempHorizontalY);
-			}
+			pixmap.drawLine(startX, maxY-startY, point.x, maxY-point.y);
 		}
 				
 		texture = new Texture(pixmap);
 	}
-	
-	public float calculateDestination( int currentX, int currentY, int targetX, int targetY) {
+
+	public Point calculateDestination( int currentX, int currentY, int targetX, int targetY) {
 		// Tile that we have iterated to 
 		int tileIterX;
 		int tileIterY;
@@ -199,13 +179,12 @@ public class TestScreen extends BaseScreen {
 			}
 		}
 		
-		// TODO REMOVE
-		tempHorizontalX = horizontalX;
-		tempVerticalX = verticalX;
-		tempHorizontalY = horizontalY;
-		tempVerticalY = verticalY;
-		
-		return 0;
+		if (sqrDistanceBetween(currentX, currentY, verticalX, verticalY) < 
+				sqrDistanceBetween(currentX, currentY, horizontalX, horizontalY)) {
+			return new Point(verticalX, verticalY); 
+		} else {
+			return new Point(horizontalX, horizontalY); 
+		}
 	}
 	
 	public int getTileXAt(int x) {
@@ -220,7 +199,7 @@ public class TestScreen extends BaseScreen {
 		return 0;
 	}
 	
-	public float sqrDistanceBetween(float startX, float startY, float endX, float endY) {
+	public int sqrDistanceBetween(int startX, int startY, int endX, int endY) {
 		return (endX - startX)*(endX - startX) + (endY-startY)*(endY-startY);
 	}
 	
@@ -242,10 +221,6 @@ public class TestScreen extends BaseScreen {
 		
 		spriteBatch.draw(texture, 0, 0);
 		
-		spriteBatch.setColor(Color.CYAN);
-		spriteBatch.draw(Assets.px, activeTileX, activeTileY, 16, 16);
-		spriteBatch.setColor(Color.WHITE);
-		
 		spriteBatch.end();
 	}
 	
@@ -257,6 +232,17 @@ public class TestScreen extends BaseScreen {
 
 	}
 
+	public static class Point {
+		public int x;
+		public int y;
+		
+		public Point(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	
 	@Override
 	public void prepare() {
 		// TODO Auto-generated method stub
