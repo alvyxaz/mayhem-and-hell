@@ -21,8 +21,8 @@ import com.friendlyblob.mayhemandhell.client.screens.TestScreen;
 import com.friendlyblob.mayhemandhell.client.screens.ZoneLoadingScreen;
 
 public class MyGame extends Game implements ApplicationListener {
-	public static int SCREEN_WIDTH = 200;
-	public static int SCREEN_HEIGHT = 120;
+	public static int SCREEN_WIDTH = 400;
+	public static int SCREEN_HEIGHT = 240;
 	public static int SCREEN_HALF_WIDTH;
 	public static int SCREEN_HALF_HEIGHT;
 	public static Rectangle SCREEN_RECTANGLE;
@@ -71,7 +71,7 @@ public class MyGame extends Game implements ApplicationListener {
 		screenLoading = new LoadingScreen(this);
 		
 		// Setting first screen to render
-		setScreen(new TestScreen(this));
+		setScreen(screenLoading);
     }
     
     /**

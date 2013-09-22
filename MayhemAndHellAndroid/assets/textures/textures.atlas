@@ -129,7 +129,7 @@ repeat: none
 tiles/tiles
   rotate: false
   xy: 2, 2
-  size: 128, 128
-  orig: 128, 128
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1

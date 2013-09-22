@@ -17,16 +17,26 @@ public class TilePanel extends JPanel implements MouseListener {
 
 	private BufferedImage tileSheet;
 
+	// TODO tileSize should be set in one place only
+	private static final int tileSize = 16;
+	
+	private final int tilesInX;
+	private final int tilesInY;
+	
 	public TilePanel() {
-		setPreferredSize(new Dimension(16*16, 16*20));
 		addMouseListener(this);
-		
+		this.setBackground(Color.DARK_GRAY);
 		try {
 			tileSheet = ImageIO.read(new File("./textures/tiles/tiles.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		tilesInX = tileSheet.getWidth()/tileSize;
+		tilesInY = tileSheet.getHeight()/tileSize;
+		
+		setPreferredSize(new Dimension(tilesInX*tileSize, tilesInY*tileSize));
 	}
 	
 	@Override 
@@ -38,14 +48,20 @@ public class TilePanel extends JPanel implements MouseListener {
 		g2d.drawImage(tileSheet, 0, 0, null);
 		
 		g2d.setColor(new Color(1, 1, 1, .5f));
-		g2d.fillRect(MapEditor.selectedTileTexture % 8 * 16, MapEditor.selectedTileTexture/8 * 16, 16, 16);
+		
+		g2d.fillRect(
+				(MapEditor.selectedTileTexture % tilesInX) * tileSize, 
+				MapEditor.selectedTileTexture/tilesInX * tileSize, 
+				tileSize, 
+				tileSize);
 		
 		repaint();
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
-		MapEditor.selectedTileTexture = me.getX() / 16 + me.getY() / 16 * 8;
+		int tileSelected = me.getX() / tileSize + (me.getY() / tileSize)*tilesInX ;
+		MapEditor.selectedTileTexture = tileSelected;
 	}
 
 	@Override
