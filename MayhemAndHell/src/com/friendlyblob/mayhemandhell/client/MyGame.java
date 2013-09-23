@@ -85,10 +85,10 @@ public class MyGame extends Game implements ApplicationListener {
 
     public void connectToServer() {
     	try {
-//			MyGame.connection = new Connection(new PacketHandler(), "localhost", 7777);
-//			MyGame.connection.game = this;
-//			MyGame.connection.start();
-//			MyGame.connection.sendPacket(new ClientVersion(5));
+			MyGame.connection = new Connection(new PacketHandler(), "localhost", 7777);
+			MyGame.connection.game = this;
+			MyGame.connection.start();
+			MyGame.connection.sendPacket(new ClientVersion(5));
 		} catch (Exception e){
 			System.out.println();
 		}

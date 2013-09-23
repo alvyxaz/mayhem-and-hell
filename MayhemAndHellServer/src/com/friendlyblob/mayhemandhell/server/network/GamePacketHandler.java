@@ -65,6 +65,9 @@ public class GamePacketHandler implements IPacketHandler<GameClient>,
 					case 0x01:
 						response = new RequestMove();
 						break;
+					case 0x02:
+						response = new RequestTarget();
+						break;
 				}
 				break;
 		}

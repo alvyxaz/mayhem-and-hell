@@ -14,6 +14,10 @@ public class GameCharacter extends GameObject {
 	private int targetX;
 	private int targetY;
 	
+	private float easeX;
+	private float easeY;
+	private float easeTime;
+	
 	private int movementSpeed = 0; // Pixels per second
 	
 	// States
@@ -21,10 +25,9 @@ public class GameCharacter extends GameObject {
 	private final int IDLE = 0;
 	private final int MOVING = 1;
 	
-	private float visibilityTimeOut;
-
 	public GameCharacter(int id, int x, int y){
 		super(id);
+		position.set(x, y);
 		hitBox = new Rectangle(x, y, 15, 28);
 	}
 	
@@ -33,28 +36,42 @@ public class GameCharacter extends GameObject {
 		case IDLE :
 			break;
 		case MOVING:
-			float oldX = hitBox.x, oldY = hitBox.y;
-			boolean collisionX = false, collisionY = false;
-			
 			// Checking whether object has arrived
-			if (Math.abs(targetX - hitBox.x) < movementSpeed * deltaTime && Math.abs(targetY - hitBox.y) < movementSpeed * deltaTime) {
+			if (Math.abs(targetX - position.x) < movementSpeed * deltaTime && Math.abs(targetY - position.y) < movementSpeed * deltaTime) {
 				state = IDLE;
+				setPosition(targetX, targetY);
 				return;
 			}
 						
-			float angle = (float)Math.atan2(targetY - hitBox.y, targetX - hitBox.x);
+			float angle = (float)Math.atan2(targetY - position.y, targetX - position.x);
+			float movementX = (float) Math.cos(angle) * movementSpeed * deltaTime;
+			float movementY = (float) Math.sin(angle) * movementSpeed * deltaTime;
 			
-			// Moving 
-			hitBox.x += Math.cos(angle) * movementSpeed * deltaTime;
-			hitBox.y += Math.sin(angle) * movementSpeed * deltaTime;
+			if (easeTime > 0) {
+				movementX += easeX * deltaTime;
+				movementY += easeY * deltaTime;
+				easeTime -= deltaTime;
+			}
+			
+			moveBy(movementX, movementY);
+					
 			
 			break;
 		}
 	}
 	
+	public void moveBy(float x, float y) {
+		position.x += x;
+		position.y += y;
+		hitBox.x = position.x - hitBox.width/2;
+		hitBox.y = position.y;
+	}
+	
 	public void setPosition(int x, int y) {
-		this.hitBox.x = x - (int) hitBox.width/2;
-		this.hitBox.y = y;
+		this.position.x = x;
+		this.position.y = y;
+		hitBox.x = x - hitBox.width/2;
+		hitBox.y = y;
 	}
 	
 	public void draw(SpriteBatch spriteBatch){
@@ -63,8 +80,18 @@ public class GameCharacter extends GameObject {
 		spriteBatch.setColor(Color.WHITE);
 	}
 	
+	/**
+	 * Interpolates player position by give values
+	 * @param xOffset
+	 * @param yOffset
+	 */
+	public void easeByOffset(float xOffset, float yOffset, float time) {
+		this.easeTime = time;
+		this.easeX = xOffset / easeTime;
+		this.easeY = yOffset / easeTime;
+	}
+	
 	public void moveTo (int x, int y) {
-		this.targetX = x - (int) hitBox.width/2;
 		this.targetX = x;
 		this.targetY = y;
 		state = MOVING;
@@ -73,10 +100,5 @@ public class GameCharacter extends GameObject {
 	public void moveTo (int x, int y, int speed) {
 		this.movementSpeed = speed;
 		moveTo(x, y);
-	}
-	
-	public void stop(float oldX, float oldY) {
-		targetX = (int) oldX;
-		targetY = (int) oldY;
 	}
 }

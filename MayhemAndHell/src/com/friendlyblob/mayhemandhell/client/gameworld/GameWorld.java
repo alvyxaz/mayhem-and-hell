@@ -60,9 +60,6 @@ public class GameWorld {
 		 * Entities initialization
 		 */
 		player = new Player(0, 100, 100); // TODO do not initialize until login is successful
-
-		// TODO cleanup temp code below.
-		putCharacter(new GameCharacter(13362, 50, 90));
 	}
 	
 	public void putCharacter(GameCharacter character) {
@@ -112,14 +109,7 @@ public class GameWorld {
 				// TODO check whether clicked on the object that is already targeted
 				// And act accordingly (like use the first available action on double click)
 				
-				//-----------------------------------------------------
-				// TODO remove lines below if no longer detached from server
-				TargetInfo targetInfo = new TargetInfo();
-				targetInfo.name = gameObject.name;
-				game.screenGame.guiManager.targetBar.showTarget(targetInfo);
-				//-----------------------------------------------------
-				
-//				MyGame.connection.sendPacket(new RequestTarget(gameObject.objectId));
+				MyGame.connection.sendPacket(new RequestTarget(gameObject.objectId));
 				
 			} else {
 				// Movement should be the last case

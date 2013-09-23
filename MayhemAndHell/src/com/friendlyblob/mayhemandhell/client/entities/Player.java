@@ -2,7 +2,9 @@ package com.friendlyblob.mayhemandhell.client.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
 
 public class Player extends GameCharacter{
 	
@@ -26,10 +28,7 @@ public class Player extends GameCharacter{
 	}
 	
 	public void requestMovementDestination(int x, int y) {
-		// TODO Wait for response before moving
-//		MyGame.connection.sendPacket(new RequestMove(x, y));
-
-		moveTo(x, y,50);
+		MyGame.connection.sendPacket(new RequestMove(x, y));
 	}
 	
 }

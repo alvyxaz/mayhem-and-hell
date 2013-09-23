@@ -17,6 +17,7 @@ public class Player extends GameCharacter {
 	public Player() {
 		super();
 		this.setObjectId((int)(Math.random()*2000)); // TODO put a real id
+		this.setName("PC " + this.getObjectId());
 		this.setType(GameObjectType.PLAYER);
 		equippedItems = new EquipableItem[EquipmentSlot.values().length];
 	}

@@ -24,7 +24,7 @@ public class RequestTarget extends ClientPacket {
 		}
 		
 		GameObject object = getClient().getPlayer().getRegion().getObject(objectId);
-		
+
 		if (getClient().getPlayer().setTarget(object)) {
 			// If target successfully set
 			getClient().sendPacket(new TargetInfoResponse(object.getName()));
