@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.friendlyblob.mayhemandhell.client.MyGame;
+import com.friendlyblob.mayhemandhell.client.controls.Input;
+import com.friendlyblob.mayhemandhell.client.entities.EnvironmentObject;
+import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 
 public class MapEditor {
@@ -15,6 +18,27 @@ public class MapEditor {
 	public static int selectedObject = 1;
 	
 	public static MapEditorWindow editorWindow;
+	
+	public static void update() {
+		switch (MapEditor.editorWindow.tabbedPane.getSelectedIndex()) {
+			case 1:
+				if (Input.isReleasing()) {
+					if (MapEditor.editorWindow.collisionModeButton.isSelected()) {
+					}
+				}
+				
+				if (Gdx.input.isTouched()) {
+					if (!MapEditor.editorWindow.collisionModeButton.isSelected()) {
+					} 
+				}
+				break;
+			case 2:
+				if (Input.isReleasing()) {
+				}
+				break;
+			default:
+		}
+	}
 	
 	/*
 	 * Method that allows moving camera freely. Used when map editor is enabled

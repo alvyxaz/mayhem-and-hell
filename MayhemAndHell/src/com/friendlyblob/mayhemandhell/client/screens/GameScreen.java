@@ -34,6 +34,7 @@ public class GameScreen extends BaseScreen{
 		GameWorld.initialize();
 		world = GameWorld.getInstance();
 		world.setGame(game);
+		
 		game.connectToServer();
 	}
 
@@ -57,6 +58,8 @@ public class GameScreen extends BaseScreen{
 		}
 
 		guiManager.draw(spriteBatch);
+		
+		Assets.defaultFont.draw(spriteBatch, fpsText, 20, 20);
 		
 		spriteBatch.end();
 	}

@@ -240,7 +240,7 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 			int[][] tempCollisionMap;
 //			tempMap = Map.getTileMap();
 			tempMap = null;
-			tempCollisionMap = Map.getCollisionMap();
+//			tempCollisionMap = Map.getCollisionMap();
 			
 			String id = zoneTable.getModel().getValueAt(zoneTable.getSelectedRow(), 0).toString();
 			String title = zoneTable.getModel().getValueAt(zoneTable.getSelectedRow(), 1).toString();
@@ -273,10 +273,10 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 				
 				for (int i = 0; i < tempMap.length; i++) {
 					for (int j = 0; j < tempMap[i].length; j++) {
-						xml.element("tile")
-							.attribute("gid", tempMap[i][j])
-							.attribute("collision", tempCollisionMap[i][j])
-							.pop();
+//						xml.element("tile")
+//							.attribute("gid", tempMap[i][j])
+//							.attribute("collision", tempCollisionMap[i][j])
+//							.pop();
 					}
 				}
 				
@@ -454,7 +454,7 @@ public class MapEditorWindow extends JFrame implements WindowListener, ActionLis
 		    	  tempCollisionMap = new int[regionWidth][regionHeight];
 		      }
 		      
-		      Map.load(tempMap, tempCollisionMap); 
+//		      Map.load(tempMap, tempCollisionMap); 
 		}
 		
 	}

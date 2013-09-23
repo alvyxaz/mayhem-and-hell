@@ -34,7 +34,7 @@ public class CharactersInRegion extends ReceivablePacket {
 					// TODO some sort of interpolation
 					// world.getCharacter(objectId).moveTo(x, y, speed);
 				} else {
-					world.putCharacter(new GameCharacter(objectId, x, y, (TiledMapTileLayer) Map.getInstance().getMap().getLayers().get(0)));
+					world.putCharacter(new GameCharacter(objectId, x, y));
 				}
 			}
 		} catch (Exception e) {

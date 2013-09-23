@@ -3,6 +3,7 @@ package com.friendlyblob.mayhemandhell.client.screens;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.friendlyblob.mayhemandhell.client.MyGame;
+import com.friendlyblob.mayhemandhell.client.gameworld.MapData;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 
 public class LoadingScreen extends BaseScreen{
@@ -19,6 +20,11 @@ public class LoadingScreen extends BaseScreen{
 	public void draw(float deltaTime) {
 		if(Assets.manager.update()){
 			game.prepareScreens();
+			
+			// TODO get a response from server, find out which zone a player is in,
+			// and load a map of that zone.
+			int zoneId = 1;
+			game.screenZoneLoading.loadZone(zoneId);	// Initialize zone loading
 			
 			game.setScreen(game.screenZoneLoading);
 		}

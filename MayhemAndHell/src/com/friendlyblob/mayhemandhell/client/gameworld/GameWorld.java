@@ -8,6 +8,7 @@ import javolution.util.FastMap;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector3;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.entities.EnvironmentObject;
@@ -43,7 +44,8 @@ public class GameWorld {
 	 * Camera
 	 */
 	private OrthographicCamera worldCam;
-
+	private Vector3 camPos;
+	
 	public GameWorld() {
 		
 		/*--------------------------------
@@ -52,18 +54,15 @@ public class GameWorld {
 		worldCam = new OrthographicCamera(MyGame.SCREEN_WIDTH, MyGame.SCREEN_HEIGHT);
 		worldCam.translate(MyGame.SCREEN_WIDTH/2, MyGame.SCREEN_HEIGHT/2);
 		worldCam.update();
+		camPos = worldCam.position;
 		
 		/*
 		 * Entities initialization
 		 */
-		map = Map.getInstance();
-		map.setWorld(this);
-		map.load(worldCam);
-
-		player = new Player(0, 100, 100, (TiledMapTileLayer) map.getMap().getLayers().get(0)); // TODO do not initialize until login is successful
+		player = new Player(0, 100, 100); // TODO do not initialize until login is successful
 
 		// TODO cleanup temp code below.
-		putCharacter(new GameCharacter(13362, 50, 90,(TiledMapTileLayer) map.getMap().getLayers().get(0)));
+		putCharacter(new GameCharacter(13362, 50, 90));
 	}
 	
 	public void putCharacter(GameCharacter character) {
@@ -85,10 +84,6 @@ public class GameWorld {
 	}
 	
 	public void update(float deltaTime) {
-//		if (Input.isReleasing()) {
-//			game.setScreen(new ZoneLoadingScreen(game, "mainIsland"));
-//		}
-		
 		player.update(deltaTime);
 		
 		// TODO optimize to avoid iterators (Make sure FastMap uses them first)
@@ -96,11 +91,11 @@ public class GameWorld {
 			character.update(deltaTime);
 		}
 		
-		map.update(deltaTime);
-		
 		if (!MapEditor.enabled){
 			cameraFollowPlayer(deltaTime);
 		}
+		
+		map.update(deltaTime);
 	}
 	
 	/**
@@ -134,11 +129,10 @@ public class GameWorld {
 	}
 	
 	public void draw(SpriteBatch spriteBatch) {
-		map.draw(spriteBatch);
-		
-		
 		spriteBatch.setProjectionMatrix(worldCam.combined);
 
+		map.drawBelow(spriteBatch);
+		
 		player.draw(spriteBatch);
 		
 		for (EnvironmentObject go : environmentObjects) {
@@ -150,6 +144,7 @@ public class GameWorld {
 			character.draw(spriteBatch);
 		}
 		
+		map.drawAbove(spriteBatch);
 	}
 	
 	public void cameraFollowPlayer(float deltaTime){
@@ -178,6 +173,24 @@ public class GameWorld {
 		return map;
 	}
 	
+	/**
+	 * Creates a map from MapData
+	 * @param data
+	 */
+	public void createMap(MapData data) {
+		if (this.map != null) {
+			this.map.dispose();
+		}
+		map = new Map(this, data);
+	}
+	
+	public void setMap(Map map) {
+		if (this.map != null) {
+			this.map.dispose();
+		}
+		this.map = map;
+	}
+	
 	public Player getPlayer() {
 		return player;
 	}
@@ -190,14 +203,14 @@ public class GameWorld {
 	* Translate screen x coordinates to world x coordinate
 	*/
 	public int toWorldX(int x) {
-		return (int)(x*worldCam.zoom + map.getCamPos().x-MyGame.SCREEN_HALF_WIDTH);
+		return (int)(x*worldCam.zoom + camPos.x-MyGame.SCREEN_HALF_WIDTH);
 	}
 	
 	/*
 	* Translate screen y coordinates to world y coordinate
 	*/
 	public int toWorldY(int y) {
-		return (int)(y*worldCam.zoom + map.getCamPos().y-MyGame.SCREEN_HALF_HEIGHT);
+		return (int)(y*worldCam.zoom + camPos.y-MyGame.SCREEN_HALF_HEIGHT);
 	}
 	
 	/**
@@ -223,6 +236,10 @@ public class GameWorld {
 	
 	public static GameWorld getInstance() {
 		return instance;
+	}
+	
+	public OrthographicCamera getWorldCam() {
+		return worldCam;
 	}
 	
 }

@@ -29,7 +29,7 @@ public class CharacterAppeared extends ReceivablePacket {
 		}
 		
 		if (!world.characters.containsKey(characterId)) {
-			world.characters.put(characterId, new GameCharacter(characterId, x, y, (TiledMapTileLayer) Map.getInstance().getMap().getLayers().get(0)) );
+			world.characters.put(characterId, new GameCharacter(characterId, x, y) );
 		}
 	}
 

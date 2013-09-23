@@ -80,6 +80,7 @@ public class MyGame extends Game implements ApplicationListener {
      */
     public void prepareScreens() {
     	screenZoneLoading = new ZoneLoadingScreen(this, "mainIsland");
+    	screenGame = new GameScreen(this);
     }
 
     public void connectToServer() {
