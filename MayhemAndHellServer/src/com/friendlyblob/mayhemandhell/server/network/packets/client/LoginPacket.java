@@ -13,9 +13,10 @@ import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.GameClientPacket;
+import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.LoginSuccessful;
 
-public class LoginPacket extends GameClientPacket{
+public class LoginPacket extends ClientPacket{
 
 	private String login;
 	private String password;

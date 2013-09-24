@@ -1,5 +1,7 @@
 package com.friendlyblob.mayhemandhell.server;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,6 +92,15 @@ public class Shutdown extends Thread{
 		protected long getEstimatedTime() {
 			return System.currentTimeMillis() - startTime;
 		}
+	}
+	
+	public static final class ShutDownListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Shutdown.getInstance().run();
+		}
+		
 	}
 	
 }

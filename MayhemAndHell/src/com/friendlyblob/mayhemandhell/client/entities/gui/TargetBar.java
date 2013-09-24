@@ -77,7 +77,7 @@ public class TargetBar extends GuiElement {
 		this.visible = false;
 		this.targetInfo = null;
 		
-		// MyGame.connection.sendPacket(new RequestTarget(-1));
+		MyGame.connection.sendPacket(new RequestTarget(-1));
 	}
 
 	public void showTarget(TargetInfo info) {

@@ -1,9 +1,10 @@
 package com.friendlyblob.mayhemandhell.server.network.packets.client;
 
 import com.friendlyblob.mayhemandhell.server.network.GameClientPacket;
+import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.KeyPacket;
 
-public class ClientVersion extends GameClientPacket{
+public class ClientVersion extends ClientPacket{
 
 	int version = -1;
 	

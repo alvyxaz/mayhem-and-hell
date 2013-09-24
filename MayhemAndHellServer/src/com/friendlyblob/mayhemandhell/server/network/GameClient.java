@@ -15,6 +15,7 @@ import org.mmocore.network.MMOConnection;
 import org.mmocore.network.ReceivablePacket;
 
 import com.friendlyblob.mayhemandhell.server.Config;
+import com.friendlyblob.mayhemandhell.server.ServerStatistics;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerClose;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
@@ -113,13 +114,18 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>> implements 
 		}
 		
 		getConnection().sendPacket(serverPacket);
-
+		
+		if (ServerStatistics.TRACK) {
+			ServerStatistics.packetsSent.addAndGet(1);
+//			ServerStatistics.packetsReceived.addAndGet(serverPacket.getSizeInBytes());
+		}
+		
 		serverPacket.runImpl();
 	}
 	
 	public void close(ServerPacket ServerPacket) {
 		if (getConnection() == null) {
-			return; // ofline shop
+			return;
 		}
 		
 		if (aditionalClosePacket != null) {

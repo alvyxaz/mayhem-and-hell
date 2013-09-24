@@ -21,6 +21,7 @@ public class RequestTarget extends ClientPacket {
 		if (objectId == -1) {
 			// If requesting to remove the target
 			getClient().getPlayer().removeTarget();
+			return;
 		}
 		
 		GameObject object = getClient().getPlayer().getRegion().getObject(objectId);

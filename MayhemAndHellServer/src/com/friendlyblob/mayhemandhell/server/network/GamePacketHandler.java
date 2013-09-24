@@ -9,7 +9,9 @@ import org.mmocore.network.IPacketHandler;
 import org.mmocore.network.MMOConnection;
 import org.mmocore.network.ReceivablePacket;
 
+import com.friendlyblob.mayhemandhell.server.ServerStatistics;
 import com.friendlyblob.mayhemandhell.server.network.GameClient.GameClientState;
+import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.client.*;
 
 
@@ -39,7 +41,7 @@ public class GamePacketHandler implements IPacketHandler<GameClient>,
 		// Operation code
 		int opcode = buf.get() & 0xFF;
 		
-		ReceivablePacket<GameClient> response = null;
+		ClientPacket response = null;
 		GameClientState state = client.getState();
 		
 		switch (state) {
@@ -73,6 +75,11 @@ public class GamePacketHandler implements IPacketHandler<GameClient>,
 		}
 		
 		// TODO has to be able to go through with null for response
+		
+		if (ServerStatistics.TRACK) {
+			ServerStatistics.packetsReceived.addAndGet(1);
+//			ServerStatistics.bytesReceived.addAndGet(response.getSizeInBytes());
+		}
 		
 		return response;
 	} 
