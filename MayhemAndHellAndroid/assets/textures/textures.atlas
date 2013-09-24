@@ -29,6 +29,21 @@ gui/ingame/target_background
   orig: 100, 20
   offset: 0, 0
   index: -1
+gui/ingame/window
+  rotate: false
+  xy: 135, 15
+  size: 7, 7
+  split: 3, 3, 3, 3
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+gui/ingame/window_title
+  rotate: false
+  xy: 144, 8
+  size: 1, 14
+  orig: 1, 14
+  offset: 0, 0
+  index: -1
 gui/ingame/x
   rotate: false
   xy: 122, 11
@@ -127,6 +142,18 @@ format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 tiles/tiles
+  rotate: false
+  xy: 2, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+
+textures7.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+tiles/tiles2
   rotate: false
   xy: 2, 2
   size: 512, 512

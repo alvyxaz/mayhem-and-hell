@@ -21,6 +21,9 @@ public class GuiManager {
 	private GuiElement [] guiElements;
 	
 	public TargetBar targetBar;
+	public GuiWindow guiWindow;
+	
+	public GuiWindow dragging = null;
 	
 	public GuiManager() {
 		guiElements = new GuiElement[0];
@@ -37,7 +40,7 @@ public class GuiManager {
 	 */
 	public void addGuiElement(GuiElement element, 
 			GuiPositionHorizontal horizontal, GuiPositionVertical vertical) {
-		
+		element.setManager(this);
 		element.establishSize();
 		
 		// Establishing Y position
@@ -101,6 +104,15 @@ public class GuiManager {
 		if (!Gdx.input.isTouched() && !Input.isReleasing()) {
 			// We can pretend that gui was clicked so that
 			// we don't have to analyse click input in gameplay logic.
+			return true;
+		}
+		
+		// Disable other element input checking while dragging a window
+		if (dragging != null) {
+			dragging.onTouching(Input.getX()-dragging.box.x, Input.getY()-dragging.box.y);
+			if (Input.isReleasing()) {
+				dragging.stopDragging();
+			}
 			return true;
 		}
 		

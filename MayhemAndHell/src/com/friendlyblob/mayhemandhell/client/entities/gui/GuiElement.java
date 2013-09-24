@@ -51,7 +51,7 @@ public abstract class GuiElement implements Comparable<GuiElement>{
 	public abstract void onTouching(float x, float y);
 	
 	/**
-	 * Called by GuiElement constructor to establish a size of element.
+	 * Called by GuiManager before adding an element
 	 */
 	public abstract void establishSize();
 	
@@ -75,6 +75,10 @@ public abstract class GuiElement implements Comparable<GuiElement>{
 	public void setPosition(float x, float y) {
 		setX(x);
 		setY(y);
+	}
+	
+	public void setManager(GuiManager manager) {
+		this.manager = manager;
 	}
 	
 }

@@ -20,7 +20,6 @@ public class SkillBar extends GuiElement {
 		super(priority);
 		
 		slotTexture = Assets.getTextureRegion("gui/ingame/skill_slot");
-		Assets.manager.load("textures/textures.atlas", TextureAtlas.class);
 	}
 	
 	@Override

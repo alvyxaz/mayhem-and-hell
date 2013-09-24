@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -34,6 +35,9 @@ public class Assets {
 	// TODO somehow separate different types of textures?
 	public static TextureRegion getTextureRegion(String url) {
 		return manager.get("textures/textures.atlas", TextureAtlas.class).findRegion(url);
+	}
+	public static NinePatch getNinePatch(String url) {
+		return manager.get("textures/textures.atlas", TextureAtlas.class).createPatch(url);
 	}
 	
 }

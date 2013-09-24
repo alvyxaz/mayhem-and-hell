@@ -51,7 +51,6 @@ public class LoginPacket extends GameClientPacket{
 			hash +=
 		        Integer.toString( ( hashDigest[i] & 0xff ) + 0x100, 16).substring( 1 );
 		}
-		
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ? AND password = ?"))
 		{
@@ -59,7 +58,7 @@ public class LoginPacket extends GameClientPacket{
 			ps.setString(2, hash);
 			ResultSet rset = ps.executeQuery();
 			
-			 while (rset.next()) {
+			while (rset.next()) {
 				if (rset.getInt(1) > 0) {
 					getClient().setState(GameClient.GameClientState.AUTHORIZED);
 					// TODO fetch player data from database and attach Player object to connection
@@ -72,8 +71,8 @@ public class LoginPacket extends GameClientPacket{
 									(int) player.getPosition().getX(),
 									(int) player.getPosition().getY()));
 					break;
-				 }
-			 }
+				}
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

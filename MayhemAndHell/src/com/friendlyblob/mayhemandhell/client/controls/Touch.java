@@ -8,7 +8,7 @@ public class Touch {
 	
 	public boolean released;
 	
-	public float highestDx;
-	public float highestDy;
+	public float dx;
+	public float dy;
 	
 }
