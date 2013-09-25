@@ -21,7 +21,7 @@ public class GuiManager {
 	private GuiElement [] guiElements;
 	
 	public TargetBar targetBar;
-	public GuiWindow guiWindow;
+	public Inventory inventory;
 	
 	public GuiWindow dragging = null;
 	
@@ -29,9 +29,8 @@ public class GuiManager {
 		guiElements = new GuiElement[0];
 		guiElementsQueue = new PriorityQueue<GuiElement>(5);
 		
-		// Adding required GUI elements
-		targetBar = new TargetBar();
-		addGuiElement(targetBar, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.TOP);
+		inventory = new Inventory();
+		addGuiElement(inventory, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.MIDDLE);
 	}
 	
 	/**

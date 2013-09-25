@@ -15,23 +15,30 @@ textures2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+gui/ingame/inventory_slot
+  rotate: false
+  xy: 104, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
 gui/ingame/skill_slot
   rotate: false
-  xy: 104, 6
+  xy: 130, 10
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 gui/ingame/target_background
   rotate: false
-  xy: 2, 2
+  xy: 2, 6
   size: 100, 20
   orig: 100, 20
   offset: 0, 0
   index: -1
 gui/ingame/window
   rotate: false
-  xy: 135, 15
+  xy: 161, 19
   size: 7, 7
   split: 3, 3, 3, 3
   orig: 7, 7
@@ -39,14 +46,14 @@ gui/ingame/window
   index: -1
 gui/ingame/window_title
   rotate: false
-  xy: 144, 8
+  xy: 170, 12
   size: 1, 14
   orig: 1, 14
   offset: 0, 0
   index: -1
 gui/ingame/x
   rotate: false
-  xy: 122, 11
+  xy: 148, 15
   size: 11, 11
   orig: 11, 11
   offset: 0, 0
@@ -122,6 +129,18 @@ textures5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+items/sword
+  rotate: false
+  xy: 2, 2
+  size: 18, 19
+  orig: 18, 19
+  offset: 0, 0
+  index: -1
+
+textures6.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 objects/boat
   rotate: false
   xy: 2, 38
@@ -137,7 +156,7 @@ objects/tree
   offset: 0, 0
   index: -1
 
-textures6.png
+textures7.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -149,7 +168,7 @@ tiles/tiles
   offset: 0, 0
   index: -1
 
-textures7.png
+textures8.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
