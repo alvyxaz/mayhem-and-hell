@@ -29,6 +29,9 @@ public class GuiManager {
 		guiElements = new GuiElement[0];
 		guiElementsQueue = new PriorityQueue<GuiElement>(5);
 		
+		targetBar = new TargetBar();
+		addGuiElement(targetBar, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.TOP);
+		
 		inventory = new Inventory();
 		addGuiElement(inventory, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.MIDDLE);
 	}

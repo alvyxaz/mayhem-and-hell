@@ -19,10 +19,21 @@ public abstract class EquipableItem extends Item {
 	 *
 	 */
 	public static enum EquipmentSlot {
+		// Armor
 		HEAD,
 		CHEST,
+		BOOTS,
+		GLOVES,
+		LEGS,
+		
+		// Weapons
 		MAIN_HAIND,
-		OFF_HAND
+		OFF_HAND,
+		
+		// Etc
+		RING_1,
+		RING_2,
+		
 	}
 	
 	private EquipmentSlot slot;

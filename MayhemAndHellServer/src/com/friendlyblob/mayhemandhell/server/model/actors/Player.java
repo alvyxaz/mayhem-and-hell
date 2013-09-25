@@ -5,6 +5,7 @@ import com.friendlyblob.mayhemandhell.server.actions.GameActions.GameAction;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem.EquipmentSlot;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
+import com.friendlyblob.mayhemandhell.server.model.items.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 
@@ -12,14 +13,14 @@ public class Player extends GameCharacter {
 	
 	private GameClient client = null;
 
-	public EquipableItem [] equippedItems;
+	public ItemInstance [] equippedItems;
 	
 	public Player() {
 		super();
 		this.setObjectId((int)(Math.random()*2000)); // TODO put a real id
 		this.setName("PC " + this.getObjectId());
 		this.setType(GameObjectType.PLAYER);
-		equippedItems = new EquipableItem[EquipmentSlot.values().length];
+		equippedItems = new ItemInstance[EquipmentSlot.values().length];
 	}
 
 	/**
@@ -27,8 +28,8 @@ public class Player extends GameCharacter {
 	 * @param item
 	 * @return true if successful, false if not
 	 */
-	public synchronized boolean equipItem(EquipableItem item) {
-		if (item.canEquip(this)) {
+	public synchronized boolean equipItem(ItemInstance item) {
+		if (item.isEquipable() && item.canEquip(this)) {
 			
 			unequipItem(equippedItems[item.getSlotIndex()]);
 			
@@ -47,7 +48,7 @@ public class Player extends GameCharacter {
 	 * Unequips an intem and removes StatModifier's
 	 * @param item
 	 */
-	public synchronized void unequipItem(EquipableItem item) {
+	public synchronized void unequipItem(ItemInstance item) {
 		if (equippedItems[item.getSlotIndex()] != null) {
 			this.getStats().removeStatModifiers(
 					equippedItems[item.getSlotIndex()].getStatModifiers());
@@ -60,7 +61,7 @@ public class Player extends GameCharacter {
 	 * @param itemId
 	 * @return
 	 */
-	public Item itemInInventory(int itemId) {
+	public ItemInstance itemInInventory(int itemId) {
 		// TODO Make an inventory
 		return null;
 	}
@@ -71,10 +72,10 @@ public class Player extends GameCharacter {
 	 * @return
 	 */
 	public boolean equipItem (int itemId) {
-		Item item = itemInInventory(itemId);
+		ItemInstance item = itemInInventory(itemId);
 		
-		if (item != null && item instanceof EquipableItem) {
-			return equipItem((EquipableItem) item);
+		if (item != null && item.isEquipable()) {
+			return equipItem(item);
 		}
 		return false;
 	}
@@ -85,7 +86,7 @@ public class Player extends GameCharacter {
 	 * @param itemId
 	 */
 	public synchronized void unequipItem (int itemId) {
-		Item item = null;
+		ItemInstance item = null;
 		
 		for (int i = 0; i < equippedItems.length; i++) {
 			if (equippedItems[i].getObjectId() == itemId) {
@@ -94,8 +95,8 @@ public class Player extends GameCharacter {
 			}
 		}
 		
-		if (item != null && item instanceof EquipableItem) {
-			unequipItem((EquipableItem) item);
+		if (item != null && item.isEquipable()) {
+			unequipItem(item);
 		}
 	}
 	
