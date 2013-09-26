@@ -24,8 +24,8 @@ public class Config {
 	public static int DATABASE_MAX_CONNECTIONS = 10;
 	public static int DATABASE_MAX_IDLE_TIME = 0;
 	public static String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
-	public static String DATABASE_URL = "jdbc:mysql://192.185.5.13/alvyxaz_island";
-	public static String DATABASE_LOGIN = "alvyxaz_island";
+	public static String DATABASE_URL = "jdbc:mysql://158.129.18.169/mayhemandhell";
+	public static String DATABASE_LOGIN = "root";
 	public static String DATABASE_PASSWORD = "p4nd4r011";
 	public static long CONNECTION_CLOSE_TIME = 60000;
 	
