@@ -1,5 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.model.stats;
 
+import java.util.NoSuchElementException;
+
 public enum Stat {
 
 	MAX_HP("maxHp"),
@@ -9,10 +11,10 @@ public enum Stat {
 	
 	MOVEMENT_SPEED("movementSpeed"),
 
-	PHYSICAL_DAMAGE("physicalDamage"),
-	PHYSICAL_DEFENCE("physicalDefence"),
-	MAGIC_DAMAGE("magicDamage"),
-	MAGIC_DEFENSE("magicDefense"),
+	PHYSICAL_DAMAGE("pDamage"),
+	PHYSICAL_DEFENCE("pDefence"),
+	MAGIC_DAMAGE("mDamage"),
+	MAGIC_DEFENSE("mDefence"),
 
 	STRENGTH("strength"),
 	DEXTERITY("dexterity"),
@@ -29,5 +31,15 @@ public enum Stat {
 	
 	public String getValue() {
 		return value;
+	}
+	
+	public static Stat valueOfXml(String value) {
+		for (Stat s : values()) {
+			if (s.getValue().equals(value)) {
+				return s;
+			}
+		}
+		
+		throw new NoSuchElementException("Unknown name '" + value + "' for enum BaseStats");
 	}
 }

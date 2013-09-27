@@ -1,5 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.model.items;
 
+import java.util.Arrays;
+
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.stats.StatModifier;
 
@@ -8,7 +10,7 @@ import com.friendlyblob.mayhemandhell.server.model.stats.StatModifier;
  * @author Alvys
  *
  */
-public abstract class EquipableItem extends Item {
+public class EquipableItem extends Item {
 
 	/**
 	 * Represents an equipment slot. Before modifying,
@@ -36,8 +38,25 @@ public abstract class EquipableItem extends Item {
 		
 	}
 	
+	
 	private EquipmentSlot slot;
 	private StatModifier [] modifiers;
+	
+	public EquipableItem() {
+		modifiers = new StatModifier[0];
+	}
+	
+	public void addModifier(StatModifier modifier) {
+		StatModifier [] temp = Arrays.copyOf(modifiers, modifiers.length+1);
+		
+		for (int i = 0; i < modifiers.length; i++ ) {
+			temp[i] = modifiers[i];
+		}
+		
+		modifiers = temp;
+		
+	}
+	
 	
 	/**
 	 * Returns a list of stat modifiers, or null if none exist

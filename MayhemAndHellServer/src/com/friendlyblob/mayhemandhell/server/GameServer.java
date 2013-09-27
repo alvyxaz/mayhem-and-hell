@@ -10,7 +10,9 @@ import java.util.logging.Logger;
 import org.mmocore.network.SelectorConfig;
 import org.mmocore.network.SelectorThread;
 
+import com.friendlyblob.mayhemandhell.server.data.ItemDataParser;
 import com.friendlyblob.mayhemandhell.server.model.World;
+import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.GamePacketHandler;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
@@ -40,6 +42,9 @@ public class GameServer{
     	gameServer = this;
     	log.finest(getClass().getSimpleName() + ": used mem:" + getUsedMemoryMB() + "MB");
     	
+    	// Loading gameserver data (items and etc)
+    	ItemTable.getInstance();
+    	
     	ThreadPoolManager.getInstance();
     	
     	GameTimeController.initialize();
@@ -48,6 +53,7 @@ public class GameServer{
     	
     	// Shutdown hook
     	Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
+    	
     	
     	System.gc();
 		// maxMemory is the upper limit the jvm can use, totalMemory the size of

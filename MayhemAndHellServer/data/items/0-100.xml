@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "type" should be a classname of the item !-->
+<list>
+	<item id="1" type="EquipableItem" name="Frozen Sword">
+		<set name="icon" val="sword" />
+		<set name="description" val="Regular sword. But frozen." />
+		<modifiers>
+			<modifier stat="pDamage" type="increment_base" value="10" />
+			<modifier stat="pDefence" type="multiply_base" value="2" />
+		</modifiers>
+	</item>
+</list>
