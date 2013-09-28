@@ -4,6 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,7 +21,7 @@ import javax.swing.event.MenuListener;
 
 public class GUI extends SwingWorker<String, Object> {
 
-	public static class GuiFrame extends JFrame{
+	public static class GuiFrame extends JFrame implements WindowListener {
 		private StatisticsPanel stats;
 		
 		public GuiFrame() {
@@ -34,7 +37,7 @@ public class GUI extends SwingWorker<String, Object> {
 			
 			JMenu serverMenu = new JMenu("Server");
 			JMenuItem shutdownItem = new JMenuItem("Shutdown");
-			shutdownItem.addActionListener(new Shutdown.ShutDownListener());
+			shutdownItem.addActionListener(Shutdown.LISTENER);
 			serverMenu.add(shutdownItem);
 			
 			menuBar.add(fileMenu);
@@ -46,6 +49,8 @@ public class GUI extends SwingWorker<String, Object> {
 			stats = new StatisticsPanel();
 			this.add(stats);
 
+			this.addWindowListener(this);
+			
 			Timer t = new Timer(1000, new ActionListener() {
 
 				@Override
@@ -55,6 +60,35 @@ public class GUI extends SwingWorker<String, Object> {
 				
 			});
 			t.start();
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			Shutdown.getInstance().run();
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
 		}
 		
 //		public static void main(String[] args) {

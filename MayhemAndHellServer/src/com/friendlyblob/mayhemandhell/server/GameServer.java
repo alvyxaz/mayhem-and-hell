@@ -11,6 +11,7 @@ import org.mmocore.network.SelectorConfig;
 import org.mmocore.network.SelectorThread;
 
 import com.friendlyblob.mayhemandhell.server.data.ItemDataParser;
+import com.friendlyblob.mayhemandhell.server.factories.IdFactory;
 import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
@@ -45,6 +46,13 @@ public class GameServer{
     	// Loading gameserver data (items and etc)
     	ItemTable.getInstance();
     	
+    	// Loading factories
+    	IdFactory.initialize();
+    	
+    	for(int i = 0; i < 5; i++) {
+    		System.out.println(IdFactory.getInstance().getNextId());
+    	}
+
     	ThreadPoolManager.getInstance();
     	
     	GameTimeController.initialize();

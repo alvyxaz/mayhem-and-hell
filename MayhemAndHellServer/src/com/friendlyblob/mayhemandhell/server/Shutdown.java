@@ -13,6 +13,8 @@ public class Shutdown extends Thread{
 	
 	private int countdownTimer;
 	
+	public static final ShutDownListener LISTENER = new ShutDownListener(); 
+	
 	@Override
 	public void run() {
 		
