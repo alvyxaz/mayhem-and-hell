@@ -4,23 +4,47 @@ import java.util.NoSuchElementException;
 
 public enum Stat {
 
-	MAX_HP("maxHp"),
-	MAX_MP("maxMp"),
+	// Vital stats
+	MAX_HEALTH("maxHp"),
+	MAX_MANA("maxMp"),
 	MAX_ENERGY("maxEnergy"),
 	MAX_WEIGHT("maxWeight"),
 	
-	MOVEMENT_SPEED("movementSpeed"),
+	// Movement stats
+	WALKING_SPEED("walkingSpeed"),
+	RUNNING_SPEED("runningSpeed"),
 
-	PHYSICAL_DAMAGE("pDamage"),
-	PHYSICAL_DEFENCE("pDefence"),
-	MAGIC_DAMAGE("mDamage"),
-	MAGIC_DEFENSE("mDefence"),
-
+	// Core stats
 	STRENGTH("strength"),
 	DEXTERITY("dexterity"),
 	INTELLIGENCE("intelligence"),
-	CONSTITUTION("constitution");
+	VITALITY("vitality"),
+	TOUGHNESS("toughness"),
 	
+	// Main damage
+	PHYSICAL_DAMAGE("pDamage"),
+	MAGIC_DAMAGE("mDamage"),
+	RANGE_DAMAGE("rDamage"),
+	
+	// Main defence
+	PHYSICAL_DEFENCE("pDefence"),
+	MAGIC_DEFECE("mDefence"),
+	RANGE_DEFENCE("rDefence"),
+	
+	// Elemental resistance
+	FIRE_RESISTANCE("fireResistance"),
+	FROST_RESISTANCE("frostResistance"),
+	ELECTRICITY_RESISTANCE("electricityResistance"),
+	POISON_RESISTANCE("poisonResistance"),
+	HOLY_RESISTANCE("holyResistance"),
+	
+	// Elemental damage
+	FIRE_DAMAGE("fireDamage"),
+	FROST_DAMAGE("frostDamage"),
+	ELECTRIC_DAMAGE("electricDamage"),
+	POISON_DAMAGE("poisonDamage"),
+	HOLY_DAMAGE("holyDamage");
+
 	public static final int COUNT = values().length;
 	
 	private String value;

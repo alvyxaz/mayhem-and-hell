@@ -5,10 +5,11 @@ import java.util.Map;
 import javolution.util.FastMap;
 
 import com.friendlyblob.mayhemandhell.server.data.ItemDataParser;
+import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
-import com.friendlyblob.mayhemandhell.server.model.items.ItemInstance;
 
 public class ItemTable {	
+	private static ItemTable instance;
 	
 	// Item templates
 	private Item [] itemTemplates;
@@ -17,6 +18,10 @@ public class ItemTable {
 	public ItemTable() {
 		items = new FastMap<Integer, Item>();
 		load();
+	}
+	
+	public static void initialize() {
+		instance = new ItemTable();
 	}
 	
 	/**
@@ -53,10 +58,6 @@ public class ItemTable {
 	}
 	
 	public static ItemTable getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	public static final class SingletonHolder {
-		public static ItemTable INSTANCE = new ItemTable();
+		return instance;
 	}
 }

@@ -1,7 +1,9 @@
-package com.friendlyblob.mayhemandhell.server.model.items;
+package com.friendlyblob.mayhemandhell.server.model.instances;
 
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
+import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem;
+import com.friendlyblob.mayhemandhell.server.model.items.Item;
 import com.friendlyblob.mayhemandhell.server.model.stats.StatModifier;
 
 public class ItemInstance extends GameObject {

@@ -17,72 +17,20 @@ import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 public class GameCharacter extends GameObject{
 
 	private int health;
-	/**
-	 * @return the health
-	 */
-	public int getHealth() {
-		return health;
-	}
-
-	/**
-	 * Restores health to maximum amount
-	 */
-	public void restoreHealth() {
-		this.health = getMaxHealth();
-	}
 	
-	/**
-	 * @param health the health to set
-	 */
-	public void setHealth(int health) {
-		this.health = health;
-	}
-
-	/**
-	 * @return the energy
-	 */
-	public int getEnergy() {
-		return energy;
-	}
-
-	/**
-	 * @param energy the energy to set
-	 */
-	public void setEnergy(int energy) {
-		this.energy = energy;
-	}
-
-	/**
-	 * @return the mana
-	 */
-	public int getMana() {
-		return mana;
-	}
-
-	/**
-	 * @param mana the mana to set
-	 */
-	public void setMana(int mana) {
-		this.mana = mana;
-	}
-
 	private int energy;
 	private int mana;
 	
-	private BaseStats baseStats;
 	private CharacterStats stats;
 	
 	private MovementData movement;
 	
-	public GameCharacter() {
-		// Initialize base stats
-		
-		// TODO Use a template or something to base stats of
-		StatsSet set = new StatsSet();
-		set.set("baseWalkingSpeed", 100);
-		set.set("baseRunningSpeed", 200);
-		baseStats = new BaseStats(set);
+	private CharacterTemplate template;
 	
+	public GameCharacter(int objectId, CharacterTemplate template) {
+		this.objectId = objectId;
+		this.template = template;
+		
 		// Initialize stats
 		stats = new CharacterStats(this);
 	}
@@ -162,10 +110,6 @@ public class GameCharacter extends GameObject{
 		return movement;
 	}
 	
-	public BaseStats getBaseStats() {
-		return baseStats;
-	}
-	
 	public int getMovementSpeed() {
 		// TODO Check whether running or walking, and return what's necessary
 		return getWalkingSpeed();
@@ -181,6 +125,59 @@ public class GameCharacter extends GameObject{
 
 	public void sendPacket(ServerPacket packet) {
 		
+	}
+	
+	public CharacterTemplate getTemplate() {
+		return template;
+	}
+	
+	/**
+	 * @return the health
+	 */
+	public int getHealth() {
+		return health;
+	}
+
+	/**
+	 * Restores health to maximum amount
+	 */
+	public void restoreHealth() {
+		this.health = getMaxHealth();
+	}
+	
+	/**
+	 * @param health the health to set
+	 */
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
+	/**
+	 * @return the energy
+	 */
+	public int getEnergy() {
+		return energy;
+	}
+
+	/**
+	 * @param energy the energy to set
+	 */
+	public void setEnergy(int energy) {
+		this.energy = energy;
+	}
+
+	/**
+	 * @return the mana
+	 */
+	public int getMana() {
+		return mana;
+	}
+
+	/**
+	 * @param mana the mana to set
+	 */
+	public void setMana(int mana) {
+		this.mana = mana;
 	}
 	
 }

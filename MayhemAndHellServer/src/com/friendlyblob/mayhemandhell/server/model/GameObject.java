@@ -23,7 +23,7 @@ public class GameObject {
 		RESOURCE // Mining, crafting and other resources
 	}
 	
-	private int objectId;
+	protected int objectId;
 	private ObjectPosition position;
 	
 	private Region region;

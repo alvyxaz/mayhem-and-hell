@@ -2,10 +2,10 @@ package com.friendlyblob.mayhemandhell.server.model.actors;
 
 import com.friendlyblob.mayhemandhell.server.actions.GameActions;
 import com.friendlyblob.mayhemandhell.server.actions.GameActions.GameAction;
+import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem.EquipmentSlot;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
-import com.friendlyblob.mayhemandhell.server.model.items.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 
@@ -15,9 +15,9 @@ public class Player extends GameCharacter {
 
 	public ItemInstance [] equippedItems;
 	
-	public Player() {
-		super();
-		this.setObjectId((int)(Math.random()*2000)); // TODO put a real id
+	public Player(int objectId, CharacterTemplate template) {
+		super(objectId, template);
+		this.setObjectId((int)(Math.random()*2000)); // TODO remove
 		this.setName("PC " + this.getObjectId());
 		this.setType(GameObjectType.PLAYER);
 		equippedItems = new ItemInstance[EquipmentSlot.values().length];

@@ -10,6 +10,10 @@ import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterLef
  */
 public class Mob extends GameCharacter {
 	
+	public Mob(int objectId, CharacterTemplate template) {
+		super(objectId, template);
+	}
+
 	private boolean aggressive;
 	
 	private boolean dead;

@@ -157,11 +157,11 @@ public class CharacterStats {
 	}
 
 	public int getWalkingSpeed() {
-		return calculateInt(Stat.MOVEMENT_SPEED, activeCharacter.getBaseStats().baseMovementSpeed);
+		return calculateInt(Stat.WALKING_SPEED, activeCharacter.getTemplate().getBaseWalkingSpeed());
 	}
 	
 	public int getMaxHealth() {
-		return calculateInt(Stat.MAX_HP, activeCharacter.getBaseStats().baseMaxHealth);
+		return calculateInt(Stat.MAX_HEALTH, activeCharacter.getTemplate().getBaseMaxHealth());
 	}
 	
 }
