@@ -24,7 +24,7 @@ import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
  * @author Alvys
  *
  */
-public class ItemDataParser {
+public class ItemDataParser extends DataParser {
 
 	private final List<Item> itemsInFile = new FastList<>();
 	
@@ -86,8 +86,6 @@ public class ItemDataParser {
 		item.itemId = itemId;
 		item.name = itemName;
 		item.set = new StatsSet();
-		item.set.set("itemId", itemId);
-		item.set.set("name", itemName);
 		
 		for (itemNode = itemNode.getFirstChild(); itemNode != null; 
 				itemNode = itemNode.getNextSibling()) {
@@ -116,8 +114,6 @@ public class ItemDataParser {
 	 * @param item
 	 */
 	public void parseModifiers(Node modifiersNode, Item item) {
-		StatModifier [] modifiers = new StatModifier[5];
-		
 		for (Node n = modifiersNode.getFirstChild(); n != null; n = n.getNextSibling()) {
 			if ("modifier".equals(n.getNodeName())){
 				
@@ -129,27 +125,10 @@ public class ItemDataParser {
 				if (item instanceof EquipableItem) {
 					((EquipableItem) item).addModifier(new StatModifier(stat, type, value));
 				}
-				
 			}
 		}
 	}
 	
-	/**
-	 * Parses a set element, and adds it to item set
-	 * @param n
-	 * @param set
-	 * @throws InvocationTargetException
-	 */
-	public void parseSetPair(Node n, StatsSet set)  throws InvocationTargetException {
-		String name = n.getAttributes().getNamedItem("name").getNodeValue().trim();
-		String value = n.getAttributes().getNamedItem("val").getNodeValue().trim();
-		char ch = value.isEmpty() ? ' ' : value.charAt(0);
-		
-		if (Character.isDigit(ch)) {
-			set.set(name, String.valueOf(value));
-		} else {
-			set.set(name, value);
-		}
-	}
+
 	
 }

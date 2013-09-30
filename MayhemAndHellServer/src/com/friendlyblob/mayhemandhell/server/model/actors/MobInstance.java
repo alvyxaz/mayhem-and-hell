@@ -8,9 +8,9 @@ import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterLef
  * @author Alvys
  *
  */
-public class Mob extends GameCharacter {
+public class MobInstance extends GameCharacter {
 	
-	public Mob(int objectId, CharacterTemplate template) {
+	public MobInstance(int objectId, CharacterTemplate template) {
 		super(objectId, template);
 	}
 

@@ -3,7 +3,7 @@ package com.friendlyblob.mayhemandhell.server;
 import java.util.Calendar;
 
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
-import com.friendlyblob.mayhemandhell.server.model.actors.Mob;
+import com.friendlyblob.mayhemandhell.server.model.actors.MobInstance;
 
 import javolution.util.FastMap;
 
@@ -19,7 +19,7 @@ public class GameTimeController extends Thread{
 	private final FastMap<Integer, GameCharacter> movingObjects = new FastMap<Integer, GameCharacter>().shared();
 	
 	// Collection of all characters that are about to respawn 
-	private final FastMap<Integer, Mob> respawningMobs = new FastMap<Integer, Mob>().shared();
+	private final FastMap<Integer, MobInstance> respawningMobs = new FastMap<Integer, MobInstance>().shared();
 	
 	private final long referenceTime;
 	
@@ -68,7 +68,7 @@ public class GameTimeController extends Thread{
 	 * Registers mob that is dead to be respawned
 	 * @param mob
 	 */
-	public final void registerRespawningMob(Mob mob) {
+	public final void registerRespawningMob(MobInstance mob) {
 		if (mob == null) {
 			return;
 		}
@@ -88,8 +88,8 @@ public class GameTimeController extends Thread{
 	}
 	
 	public void respawnMobs() {
-		Mob mob;
-		for (FastMap.Entry<Integer, Mob> e = respawningMobs.head(), 
+		MobInstance mob;
+		for (FastMap.Entry<Integer, MobInstance> e = respawningMobs.head(), 
 				tail = respawningMobs.tail(); (e = e.getNext()) != tail;) {
 			mob = e.getValue();
 			

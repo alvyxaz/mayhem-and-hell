@@ -3,7 +3,7 @@ package com.friendlyblob.mayhemandhell.server.model.actors;
 import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 
 public class CharacterTemplate {
-
+	
 	// Vital stats
 	private final int baseMaxHealth;
 	private final int baseMaxMana;
@@ -45,7 +45,11 @@ public class CharacterTemplate {
 	private final int basePoisonDamage;
 	private final int baseHolyDamage;
 	
+	public StatsSet set;
+	
 	public CharacterTemplate(StatsSet set) {
+		this.set = set;
+		
 		baseMaxHealth = set.getInteger("baseMaxHealth", 100);
 		baseMaxMana = set.getInteger("baseMaxMana", 100);
 		baseMaxEnergy = set.getInteger("baseMaxEnergy", 100);
@@ -80,6 +84,7 @@ public class CharacterTemplate {
 		basePoisonDamage = set.getInteger("basePoisonDamage", 0);
 		baseHolyDamage = set.getInteger("baseHolyDamage", 0);
 	}
+	
 
 	/**
 	 * @return the baseMaxHealth

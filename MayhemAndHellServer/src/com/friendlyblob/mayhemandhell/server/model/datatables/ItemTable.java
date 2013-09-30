@@ -40,7 +40,6 @@ public class ItemTable {
 			items.put(item.itemId, item);
 		}
 		
-		// TODO load stuff
 		buildLookupTable(highest);
 	}
 	
@@ -59,5 +58,9 @@ public class ItemTable {
 	
 	public static ItemTable getInstance() {
 		return instance;
+	}
+	
+	public Item getItem(int id) {
+		return itemTemplates[id];
 	}
 }

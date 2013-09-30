@@ -24,5 +24,13 @@ public class Item {
 		return itemId;
 	}
 
+	/**
+	 * Whether or not item can be stacked 
+	 * TODO implement (together with max stack size)
+	 * @return
+	 */
+	public boolean isStackable() {
+		return false;
+	}
 	
 }

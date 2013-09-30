@@ -15,6 +15,7 @@ import com.friendlyblob.mayhemandhell.server.factories.IdFactory;
 import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.datatables.CharacterTemplateTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
+import com.friendlyblob.mayhemandhell.server.model.datatables.NpcTable;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.GamePacketHandler;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
@@ -46,6 +47,7 @@ public class GameServer{
     	
     	// Loading gameserver data (items and etc)
     	ItemTable.initialize();
+    	NpcTable.initialize();
     	CharacterTemplateTable.initialize();
     	
     	// Loading factories

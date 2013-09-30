@@ -1,5 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.model;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,18 +14,15 @@ public class World {
 	private ConcurrentHashMap<Integer, GameCharacter> allPlayers;
 	private ConcurrentHashMap<Integer, GameObject> allObjects;
 
-	private ArrayList<Zone> allZones;
+	private TIntObjectHashMap<Zone> allZones;
 	
 	public World() {
 		allPlayers = new ConcurrentHashMap<Integer, GameCharacter>() ;
 		allObjects = new ConcurrentHashMap<Integer, GameObject>() ;
 		
 		// TODO load all zones from somewhere
-		allZones = new ArrayList<Zone>();
-		allZones.add(new Zone());
-		
-		// Start thread to synchronize players
-		nearbyCharactersBroadcastTask();
+		allZones = new TIntObjectHashMap<Zone>();
+		allZones.put(0 ,new Zone());
 	}
 	
 	public void addPlayer(Player player) {
@@ -45,22 +44,5 @@ public class World {
 	
 	public static World getInstance() {
 		return SingletonHolder.INSTANCE;
-	}
-	
-	/**
-	 * Creates a thread that sends data about nearby
-	 * characters to players in nearby regions.
-	 */
-	public void nearbyCharactersBroadcastTask () {
-		ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new Runnable() {
-
-			@Override
-			public void run() {
-				for(Zone zone : allZones) {
-					// TODO remove or do something with it;
-				}
-			}
-			
-		}, 0, 5000); // Send all player data every five seconds.
 	}
 }

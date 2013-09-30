@@ -48,13 +48,7 @@ public class EquipableItem extends Item {
 	
 	public void addModifier(StatModifier modifier) {
 		StatModifier [] temp = Arrays.copyOf(modifiers, modifiers.length+1);
-		
-		for (int i = 0; i < modifiers.length; i++ ) {
-			temp[i] = modifiers[i];
-		}
-		
 		modifiers = temp;
-		
 	}
 	
 	
