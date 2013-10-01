@@ -2,12 +2,11 @@ package com.friendlyblob.mayhemandhell.server.model;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
-import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
+import com.friendlyblob.mayhemandhell.server.model.datatables.ZoneTable;
 
 public class World {
 
@@ -22,7 +21,10 @@ public class World {
 		
 		// TODO load all zones from somewhere
 		allZones = new TIntObjectHashMap<Zone>();
-		allZones.put(0 ,new Zone());
+		
+		for (ZoneTemplate zone : ZoneTable.getInstance().getZoneTemplates()) {
+			allZones.put(zone.getZoneId(), new Zone(zone));
+		}
 	}
 	
 	public void addPlayer(Player player) {
@@ -37,10 +39,13 @@ public class World {
 		return allObjects.get(id);
 	}
 	
+	public Zone getZone(int id) {
+		return allZones.get(id);
+	}
+	
 	public static final class SingletonHolder {
 		public final static World INSTANCE = new World();
 	}
-	
 	
 	public static World getInstance() {
 		return SingletonHolder.INSTANCE;

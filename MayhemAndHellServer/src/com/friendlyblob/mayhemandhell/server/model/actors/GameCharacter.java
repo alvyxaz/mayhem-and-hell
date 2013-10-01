@@ -21,6 +21,8 @@ public class GameCharacter extends GameObject{
 	private int energy;
 	private int mana;
 	
+	private boolean alive;
+	
 	private CharacterStats stats;
 	
 	private MovementData movement;
@@ -106,6 +108,25 @@ public class GameCharacter extends GameObject{
 		public int timeStamp;
 	}
 	
+	/**
+	 * Restores health, mana and energy to maximum
+	 */
+	public void restoreVitals() {
+		this.health = getMaxHealth();
+		this.energy = getMaxEnergy();
+		this.mana = getMaxMana();
+	}
+	
+	public void revive() {
+		this.alive = true;
+	}
+	
+	/**
+	 * TODO implement
+	 */
+	public void removeEffects() {
+	}
+	
 	public MovementData getMovement() {
 		return movement;
 	}
@@ -119,9 +140,18 @@ public class GameCharacter extends GameObject{
 		return stats.getMaxHealth();
 	}
 	
+	private int getMaxMana() {
+		return stats.getMaxMana();
+	}
+	
+	private int getMaxEnergy() {
+		return stats.getMaxEnergy();
+	}
+	
 	private int getWalkingSpeed() {
 		return stats.getWalkingSpeed();
 	}
+	
 
 	public void sendPacket(ServerPacket packet) {
 		

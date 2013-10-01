@@ -18,6 +18,10 @@ public class NpcTable {
 		load();
 	}
 	
+	public NpcTemplate getTemplate(int id) {
+		return npcs.get(id);
+	}
+	
 	public void load() {
 		int highest = 0;
 		

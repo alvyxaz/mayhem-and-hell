@@ -63,12 +63,14 @@ public class NpcDataParser extends DataParser {
 	public NpcTemplate parseNpc(Node npcNode) throws InvocationTargetException {
 		int npcId = Integer.parseInt(npcNode.getAttributes().getNamedItem("id").getNodeValue());
 		String npcName = npcNode.getAttributes().getNamedItem("name").getNodeValue();
-
+		String type = npcNode.getAttributes().getNamedItem("type").getNodeValue();
+		
 		NpcTemplate npc = new NpcTemplate();
 		currentNpc = npc;
 		
 		npc.npcId = npcId;
 		npc.name = npcName;
+		npc.setType(type);
 		
 		for (npcNode = npcNode.getFirstChild(); npcNode != null; 
 				npcNode = npcNode.getNextSibling()) {

@@ -64,10 +64,11 @@ public class LoginPacket extends ClientPacket{
 				if (rset.getInt(1) > 0) {
 					getClient().setState(GameClient.GameClientState.AUTHORIZED);
 					// TODO fetch player data from database and attach Player object to connection.
-					// Remove random generated ID at player
+					// TODO Remove random generated ID at player
 					Player player = new Player(666, CharacterTemplateTable.getInstance().getTemplate("player"));
 					getClient().setPlayer(player);
 					player.setClient(getClient());
+					
 					getClient().sendPacket(
 							new LoginSuccessful(
 									player.getObjectId(),

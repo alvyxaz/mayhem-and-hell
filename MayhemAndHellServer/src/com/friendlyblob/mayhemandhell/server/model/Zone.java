@@ -21,22 +21,17 @@ import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersIn
  *
  */
 public class Zone {
-
-	private int tileWidth = 96;		// Tile width in pixels
-	private int tileHeight = 48;	// Tile height in pixels
-	
-	private int regionsCountX = 4;		// Zone width in regions
-	private int regionsCountY = 4; 		// Zone height in regions
-	
-	private int regionWidth = 10;	// Region width in tiles
-	private int regionHeight = 10;	// Region height in tiles
+	private int zoneId;
 	
 	private Map<Integer, Player> allPlayers;
 	private Map<Integer, GameObject> allObjects;
 	
 	private Region [][]  regions;
 	
-	public Zone() {
+	private ZoneTemplate template;
+	
+	public Zone(ZoneTemplate template) {
+		this.template = template;
 		allPlayers = new FastMap<Integer, Player>().shared();
 		allObjects = new FastMap<Integer, GameObject>().shared();
 		
@@ -84,7 +79,7 @@ public class Zone {
 	 * @return region X index
 	 */
 	public int getRegionX(int x) {
-		return (x/tileWidth)/regionWidth;
+		return (x/template.getTileWidth())/template.getRegionWidth();
 	}
 	
 	/**
@@ -93,7 +88,7 @@ public class Zone {
 	 * @return region y index
 	 */
 	public int getRegionY(int y) {
-		return (y/(tileHeight/2))/regionHeight;
+		return (y/(template.getTileHeight()/2))/template.getRegionHeight();
 	}
 	
 	/**
@@ -103,7 +98,7 @@ public class Zone {
 		int regionX = getRegionX((int)(character.getPosition().getX()));
 		int regionY = getRegionY((int)(character.getPosition().getY()));
 		
-		if(regionX >= regionsCountX || regionX < 0 || regionY >= regionsCountY || regionY < 0) {
+		if(regionX >= template.getRegionsCountX() || regionX < 0 || regionY >= template.getRegionsCountY() || regionY < 0) {
 			return;
 		}
 		
@@ -181,8 +176,8 @@ public class Zone {
 	 * Sends data about nearby characters to all players
 	 */
 	public void nearbyCharactersBroadcast() {
-		for(int y = 0; y < regionsCountY; y++) {
-			for(int x = 0; x < regionsCountX; x++) {
+		for(int y = 0; y < template.getRegionsCountY(); y++) {
+			for(int x = 0; x < template.getRegionsCountX(); x++) {
 				regions[y][x].updateNearbyPlayersData();
 			}
 		}
@@ -193,23 +188,23 @@ public class Zone {
 	 */
 	private void initializeRegions() {
 
-		regions = new Region[regionsCountY][regionsCountX];
-		for(int y = 0; y < regionsCountY; y++) {
-			for(int x = 0; x < regionsCountX; x++) {
+		regions = new Region[template.getRegionsCountY()][template.getRegionsCountX()];
+		for(int y = 0; y < template.getRegionsCountY(); y++) {
+			for(int x = 0; x < template.getRegionsCountX(); x++) {
 				regions[y][x] = new Region(x, y);
 			}
 		}
 		
 		// Connecting nearby regions
-		for(int y = 0; y < regionsCountY; y++) {
-			for(int x = 0; x < regionsCountX; x++) {
+		for(int y = 0; y < template.getRegionsCountY(); y++) {
+			for(int x = 0; x < template.getRegionsCountX(); x++) {
 				boolean right = false;
 				boolean left = false;
 				boolean bottom = false;
 				boolean top = false;
 				
 				// If has a neigbour at right
-				if (x < regionsCountX-1) {
+				if (x < template.getRegionsCountX()-1) {
 					right = true;
 					regions[y][x].addCloseRegion(regions[y][x+1]); 
 				}
@@ -227,7 +222,7 @@ public class Zone {
 				}
 				
 				// If has a neigbour at top
-				if (y < regionsCountY-1) {
+				if (y < template.getRegionsCountY()-1) {
 					top = true;
 					regions[y][x].addCloseRegion(regions[y+1][x]); 
 				}

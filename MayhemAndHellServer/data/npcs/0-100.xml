@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- "type" should be a classname of the npc without Instance postfix  !-->
 <list>
-	<npc id="1" name="Rat">
+	<npc id="1" type="Npc" name="Rat">
 		<itemDropList>
 			<item id="1" min="1" max="1" chance="100" />
 		</itemDropList>

@@ -164,4 +164,12 @@ public class CharacterStats {
 		return calculateInt(Stat.MAX_HEALTH, activeCharacter.getTemplate().getBaseMaxHealth());
 	}
 	
+	public int getMaxEnergy() {
+		return calculateInt(Stat.MAX_ENERGY, activeCharacter.getTemplate().getBaseMaxEnergy());
+	}
+	
+	public int getMaxMana() {
+		return calculateInt(Stat.MAX_MANA, activeCharacter.getTemplate().getBaseMaxMana());
+	}
+	
 }

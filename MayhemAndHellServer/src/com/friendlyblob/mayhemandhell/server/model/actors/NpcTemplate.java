@@ -23,8 +23,11 @@ public class NpcTemplate extends CharacterTemplate {
 	
 	private ItemDrop[] itemDropList;
 	
+	private int respawnTime; // Respawn time in milliseconds;
+	
 	public NpcTemplate(StatsSet set) {
 		super(set);
+		respawnTime = set.getInteger("respawnTime", 1000);
 		itemDropList = new ItemDrop[0];
 	}
 	
@@ -33,6 +36,14 @@ public class NpcTemplate extends CharacterTemplate {
 	 */
 	public NpcTemplate() {
 		this(new StatsSet());
+	}
+
+	public int getRespawnTime() {
+		return respawnTime;
+	}
+
+	public void setRespawnTime(int respawnTime) {
+		this.respawnTime = respawnTime;
 	}
 
 	public int getNpcId() {

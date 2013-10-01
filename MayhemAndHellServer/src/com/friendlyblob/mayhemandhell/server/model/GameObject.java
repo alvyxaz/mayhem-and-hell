@@ -5,6 +5,7 @@ import java.util.List;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
+import com.friendlyblob.mayhemandhell.server.factories.IdFactory;
 import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
 /**
@@ -55,6 +56,16 @@ public class GameObject {
 	
 	public GameObject getTarget() {
 		return target;
+	}
+	
+	/**
+	 * Removes this object from zone, releases and grabs a new objectId
+	 * from IdFactory.
+	 */
+	public void refreshId() {
+		this.zone.removeObject(this);
+		IdFactory.getInstance().releaseId(this.objectId);
+		this.objectId = IdFactory.getInstance().getNextId();
 	}
 	
 	/**
