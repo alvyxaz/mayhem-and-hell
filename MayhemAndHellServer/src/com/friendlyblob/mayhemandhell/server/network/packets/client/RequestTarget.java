@@ -17,14 +17,13 @@ public class RequestTarget extends ClientPacket {
 
 	@Override
 	public void run() {
-		
 		if (objectId == -1) {
 			// If requesting to remove the target
 			getClient().getPlayer().removeTarget();
 			return;
 		}
 		
-		GameObject object = getClient().getPlayer().getRegion().getObject(objectId);
+		GameObject object = getClient().getPlayer().getRegion().getCloseObject(objectId);
 
 		if (getClient().getPlayer().setTarget(object)) {
 			// If target successfully set

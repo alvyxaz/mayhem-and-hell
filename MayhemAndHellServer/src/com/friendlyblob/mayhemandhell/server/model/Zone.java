@@ -46,8 +46,18 @@ public class Zone {
 	public void addPlayer(Player player) {
 		allPlayers.put(player.getObjectId(), player);
 		player.setZone(this);
-		
 		updateRegion(player);
+	}
+	
+	/**
+	 * Adds a character to the zone and assigns
+	 * it to a region. (No need to have a collection
+	 * of all characters in the zone, so far).
+	 * @param character
+	 */
+	public void addCharacter(GameCharacter character) {
+		character.setZone(this);
+		updateRegion(character);
 	}
 	
 	/**
@@ -98,7 +108,7 @@ public class Zone {
 		int regionX = getRegionX((int)(character.getPosition().getX()));
 		int regionY = getRegionY((int)(character.getPosition().getY()));
 		
-		if(regionX >= template.getRegionsCountX() || regionX < 0 || regionY >= template.getRegionsCountY() || regionY < 0) {
+		if (regionX >= template.getRegionsCountX() || regionX < 0 || regionY >= template.getRegionsCountY() || regionY < 0) {
 			return;
 		}
 		
@@ -106,8 +116,8 @@ public class Zone {
 		
 		boolean firstAppearance = oldRegion == null;  // oldRegion is null if player just joined
 		
-		if(regions[regionY][regionX] != oldRegion) {
-			if(!firstAppearance) {
+		if (regions[regionY][regionX] != oldRegion) {
+			if (!firstAppearance) {
 				oldRegion.removeCharacter(character);	 	// Remove from old region
 				
 				// Notify players at farthest side, indicating that this character left visible area
@@ -121,6 +131,9 @@ public class Zone {
 						new CharacterAppeared(character));
 				regions[regionY][regionX].broadcastToSide(getRegionSideByOffsetY(oldRegion.regionY, regionY, false), 
 						new CharacterAppeared(character));
+				
+				// Send player data about newly visible players in a newly visible side
+				character.sendPacket(new CharactersInRegion(character.getRegion().getVisibleCharacters()));
 			}
 			
 			character.setRegion(regions[regionY][regionX]); 	// Set new region to current

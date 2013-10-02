@@ -90,6 +90,23 @@ public class Region {
 	}
 	
 	/**
+	 * Just like getObject, except looks through every nearby region
+	 * @param objectId
+	 * @return
+	 */
+	public GameObject getCloseObject(int objectId) {
+		GameObject object = null;
+		for (Region region : closeRegions) {
+			object = region.getObject(objectId);
+			if (object != null) {
+				return object;
+			}
+		}
+		
+		return getObject(objectId);
+	}
+	
+	/**
 	 * Sends a packet to characters in all nearby regions, including itself
 	 * @param packet
 	 */
@@ -206,6 +223,41 @@ public class Region {
 			}
 		}
 
+		return visibleCharacters;
+	}
+	
+	/**
+	 * TODO might be possible to optimize
+	 * @param side
+	 * @return
+	 */
+	public List<GameCharacter> getVisibleCharactersAtSide(RegionSide side) {
+		List<GameCharacter> visibleCharacters = new ArrayList<GameCharacter>();
+		
+		for(int i = 0; i < closeRegions.length; i++) {
+			switch(side) {
+				case LEFT:
+					if (regionX > closeRegions[i].regionX) {
+						visibleCharacters.addAll(closeRegions[i].getCharacters().values());
+					}
+					break;
+				case RIGHT:
+					if (regionX < closeRegions[i].regionX) {
+						visibleCharacters.addAll(closeRegions[i].getCharacters().values());
+					}
+					break;
+				case TOP:
+					if (regionY < closeRegions[i].regionY) {
+						visibleCharacters.addAll(closeRegions[i].getCharacters().values());
+					}
+					break;
+				case BOTTOM:
+					if (regionY > closeRegions[i].regionY) {
+						visibleCharacters.addAll(closeRegions[i].getCharacters().values());
+					}
+					break;
+			}
+		}
 		return visibleCharacters;
 	}
 	

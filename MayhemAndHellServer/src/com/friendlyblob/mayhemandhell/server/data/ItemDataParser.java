@@ -96,7 +96,6 @@ public class ItemDataParser extends DataParser {
 			}
 			
 			if ("set".equalsIgnoreCase(itemNode.getNodeName())) {
-				
 				parseSetPair(itemNode, item.set);
 			} else if ("modifiers".equalsIgnoreCase(itemNode.getNodeName())) {
 				parseModifiers(itemNode, item);

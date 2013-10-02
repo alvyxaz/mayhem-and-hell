@@ -1,6 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.model;
 
 import java.lang.reflect.Constructor;
+import java.util.Random;
 
 import com.friendlyblob.mayhemandhell.server.factories.IdFactory;
 import com.friendlyblob.mayhemandhell.server.model.actors.NpcTemplate;
@@ -15,6 +16,8 @@ import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
  */
 public class Spawn {
 
+	private static final Random random = new Random();
+	
 	private int startX;
 	private int startY;
 	private int endX;
@@ -98,13 +101,22 @@ public class Spawn {
 	 * @return
 	 */
 	public NpcInstance initializeNpcInstance(NpcInstance npc) {
+		int dX = endX-startX;
+		int dY = endY-startY;
+		
+		if (dX > 0 && dY > 0) {
+			npc.setPosition(startX + random.nextInt(dX), startY + random.nextInt(dY));
+		} else {
+			npc.setPosition(startX, startY);
+		}
+		
 		npc.restoreVitals();
 		npc.removeEffects();
 		npc.revive();
 		
 		if (npc.getZone() == null) {
 			npc.setZone(World.getInstance().getZone(zoneId));
-			npc.getZone().addObject(npc);
+			npc.getZone().addCharacter(npc);
 		}
 		
 		return null;

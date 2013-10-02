@@ -8,6 +8,8 @@ public class NpcInstance extends GameCharacter {
 
 	public NpcInstance(int objectId, NpcTemplate template) {
 		super(objectId, template);
+		
+		this.setName(template.name + "-" + objectId);
 	}
 	
 }
