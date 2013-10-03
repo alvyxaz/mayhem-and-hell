@@ -26,10 +26,10 @@ public class GameScreen extends BaseScreen{
 		
 		// Temporary GUI implementation 
 		guiManager = new GuiManager();
-		guiManager.addGuiElement(
-				new SkillBar(GuiPriority.LOW), 
-				GuiPositionHorizontal.RIGHT, 
-				GuiPositionVertical.MIDDLE);
+//		guiManager.addGuiElement(
+//				new SkillBar(GuiPriority.LOW), 
+//				GuiPositionHorizontal.RIGHT, 
+//				GuiPositionVertical.MIDDLE);
 		
 		GameWorld.initialize();
 		world = GameWorld.getInstance();

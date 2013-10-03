@@ -2,22 +2,28 @@ package com.friendlyblob.mayhemandhell.server.actions;
 
 public class GameActions {
 
-	public static GameAction [] onPlayer = new GameAction[]{
-		GameAction.ATTACK,
+	public static GameAction[] friendlyPlayer = new GameAction[]{
 		GameAction.TRADE,
 		GameAction.WHISPER
+	};
+	
+	public static GameAction[] hostineNpc = new GameAction[] {
+		GameAction.ATTACK,
 	};
 	
 	public static enum GameAction {
 		ATTACK("Attack"),
 		TRADE("Trade"),
-		WHISPER("Whisper"),
-		USE_SKILL("UseSkill");
+		WHISPER("Whisper");
 		
-		private String title;
+		private String name;
 		
-		private GameAction(String title) {
-			this.title = title;
+		private GameAction(String name) {
+			this.name = name;
+		}
+		
+		public String getName() {
+			return name;
 		}
 	}
 }

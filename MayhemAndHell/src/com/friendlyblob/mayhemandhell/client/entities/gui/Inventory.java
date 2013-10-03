@@ -31,6 +31,7 @@ public class Inventory extends GuiWindow {
 					slotSize, 
 					slotSize);
 		}
+		visible = false;
 	}
 	
 	@Override

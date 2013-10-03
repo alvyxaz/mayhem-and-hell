@@ -76,13 +76,14 @@ public class TargetBar extends GuiElement {
 	public void removeTarget() {
 		this.visible = false;
 		this.targetInfo = null;
-		
+		manager.actionsBar.hide();
 		MyGame.connection.sendPacket(new RequestTarget(-1));
 	}
 
-	public void showTarget(TargetInfo info) {
+	public void showTarget(TargetInfo info, String[] actions) {
 		this.targetInfo = info;
 		this.visible = true;
+		manager.actionsBar.show(actions);
 	}
 	
 	public static class TargetInfo {

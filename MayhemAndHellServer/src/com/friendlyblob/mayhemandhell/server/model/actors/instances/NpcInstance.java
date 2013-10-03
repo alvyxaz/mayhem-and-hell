@@ -10,6 +10,7 @@ public class NpcInstance extends GameCharacter {
 		super(objectId, template);
 		
 		this.setName(template.name + "-" + objectId);
+		this.setType(GameObjectType.HOSTILE_NPC); // TODO ability to change to either friendly or hostile
 	}
 	
 }

@@ -122,7 +122,9 @@ public class Player extends GameCharacter {
 		if (getTarget() != null) {
 			switch (getTarget().getType()) {
 			case PLAYER:
-				return GameActions.onPlayer;
+				return GameActions.friendlyPlayer;
+			case HOSTILE_NPC:
+				return GameActions.hostineNpc;
 			}
 		}
 		return null;

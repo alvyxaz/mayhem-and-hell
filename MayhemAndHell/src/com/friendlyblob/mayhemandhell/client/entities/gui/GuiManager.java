@@ -22,6 +22,7 @@ public class GuiManager {
 	
 	public TargetBar targetBar;
 	public Inventory inventory;
+	public ActionsBar actionsBar;
 	
 	public GuiWindow dragging = null;
 	
@@ -34,6 +35,10 @@ public class GuiManager {
 		
 		inventory = new Inventory();
 		addGuiElement(inventory, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.MIDDLE);
+		
+		actionsBar = new ActionsBar();
+		addGuiElement(actionsBar, GuiPositionHorizontal.RIGHT, GuiPositionVertical.BOTTOM);
+		
 	}
 	
 	/**
