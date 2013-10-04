@@ -58,6 +58,16 @@ public class GameCharacter extends GameObject{
 		int dX = (int)(movement.destinationX - getPosition().getX());
 		int dY = (int)(movement.destinationY - getPosition().getY());
 		
+		// Updating destination if following a target
+		if (movement.isFollowing()) {
+			movement.updateDestination();
+			
+			if (!movement.isWalkingBy()) {
+				return false;
+			}
+			
+		}
+		
 		// Check if destination is reached
 		if (dX * dX + dY * dY < distanceCovered * distanceCovered) {
 			getPosition().set(movement.destinationX, movement.destinationY);
@@ -69,7 +79,7 @@ public class GameCharacter extends GameObject{
 	}
 	
 	/**
-	 * Registers a new movement destination in <b>movement</b> variable
+	 * Registers a new movement destination
 	 * Called only once when user requests to move a character.
 	 * 
 	 * Actions:
@@ -83,16 +93,37 @@ public class GameCharacter extends GameObject{
 	public boolean moveCharacterTo(int x, int y) {
 		// TODO check boundaries and collisions. If out of bounds - return false
 		
-		movement = new MovementData();
-		movement.destinationX = x;
-		movement.destinationY = y;
-		movement.movementSpeed = getMovementSpeed();
-		movement.timeStamp = GameTimeController.getInstance().getGameTicks();
+		MovementData movementData = new MovementData();
+		movementData.destinationX = x;
+		movementData.destinationY = y;
+		movementData.movementSpeed = getMovementSpeed();
+		movementData.timeStamp = GameTimeController.getInstance().getGameTicks();
+		
+		moveCharacterTo(movementData);
+		
+		return true;
+	}
+	
+	public void walkBy(GameObject character) {
+		MovementData movementData = new MovementData();
+		movementData.movementSpeed = this.getMovementSpeed();
+		movementData.timeStamp = GameTimeController.getInstance().getGameTicks();
+		movementData.follow(character, true);
+		moveCharacterTo(movementData);
+	}
+	
+	/**
+	 * Initializes a movement from a given MovementData
+	 * @param movementData
+	 * @return
+	 */
+	public boolean moveCharacterTo(MovementData movementData) {
+		this.movement = movementData;
 		
 		GameTimeController.getInstance().registerMovingObject(this);
 		
 		// Notify nearby characters about movement
-		getRegion().broadcastToCloseRegions(new NotifyCharacterMovement(getObjectId(), movement, getPosition()));
+		getRegion().broadcastToCloseRegions(new NotifyCharacterMovement(getObjectId(), movementData, getPosition()));
 		
 		return true;
 	}
@@ -106,6 +137,34 @@ public class GameCharacter extends GameObject{
 		public float destinationY;
 		public int movementSpeed;
 		public int timeStamp;
+
+		private boolean walkBy;
+		private GameObject targetToFollow;
+		
+		public void follow(GameObject character, boolean walkBy) {
+			this.walkBy = walkBy;
+			this.targetToFollow = character;
+			destinationX = character.getPosition().getX();
+			destinationY = character.getPosition().getY();
+		}
+		
+		public boolean isFollowing() {
+			return targetToFollow != null;
+		}
+		
+		public void updateDestination() {
+			destinationX = targetToFollow.getPosition().getX();
+			destinationY = targetToFollow.getPosition().getY();
+		}
+		
+		/**
+		 * Checks whether our intention is to walk by, or follow "forever"
+		 * @return true if walking by.
+		 */
+		public boolean isWalkingBy() {
+			return walkBy;
+		}
+		
 	}
 	
 	/**

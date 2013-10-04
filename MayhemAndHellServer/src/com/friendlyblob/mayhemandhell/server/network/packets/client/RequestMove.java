@@ -18,7 +18,6 @@ public class RequestMove extends ClientPacket{
 	@Override
 	public void run() {
 		if(getClient().getPlayer().moveCharacterTo(x, y)) {
-			Player player = getClient().getPlayer();
 			// TODO Have in mind that player might change speed while moving
 		} else {
 			// TODO Send a packet of failed action

@@ -63,7 +63,6 @@ public class TargetBar extends GuiElement {
 
 	@Override
 	public void draw(SpriteBatch spriteBatch) {
-
 		spriteBatch.draw(background, box.x, box.y);
 		spriteBatch.draw(xTexture, xRectangle.x, xRectangle.y);
 		Assets.defaultFont.draw(spriteBatch, targetInfo.name, box.x + 5, box.y + box.height - 5);
