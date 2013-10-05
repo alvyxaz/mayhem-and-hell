@@ -129,7 +129,7 @@ textures5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-items/sword
+icons/sword
   rotate: false
   xy: 2, 2
   size: 18, 19
@@ -153,29 +153,5 @@ objects/tree
   xy: 132, 2
   size: 71, 100
   orig: 71, 100
-  offset: 0, 0
-  index: -1
-
-textures7.png
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-tiles/tiles
-  rotate: false
-  xy: 2, 2
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-
-textures8.png
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-tiles/tiles2
-  rotate: false
-  xy: 2, 2
-  size: 512, 512
-  orig: 512, 512
   offset: 0, 0
   index: -1
