@@ -12,8 +12,9 @@ public class LoadingScreen extends BaseScreen{
 	
 	public LoadingScreen(MyGame game) {
 		super(game);
-		Assets.manager.load("textures/debugging/px.png", Texture.class);
-		Assets.manager.load("textures/textures.atlas", TextureAtlas.class);
+		Assets.manager.load("textures/atlas/textures.atlas", TextureAtlas.class);
+		
+		Assets.manager.load("textures/characters/characters.png", Texture.class);
 	}
 
 	@Override
