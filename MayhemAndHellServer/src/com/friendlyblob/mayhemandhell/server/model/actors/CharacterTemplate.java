@@ -55,8 +55,8 @@ public class CharacterTemplate {
 		baseMaxEnergy = set.getInteger("baseMaxEnergy", 100);
 		baseMaxWeight = set.getInteger("baseMaxWeight", 100);
 		
-		baseWalkingSpeed = set.getInteger("baseWalkingSpeed", 100);
-		baseRunningSpeed = set.getInteger("baseRunningSpeed", 100);
+		baseWalkingSpeed = set.getInteger("baseWalkingSpeed", 50);
+		baseRunningSpeed = set.getInteger("baseRunningSpeed", 50);
 		
 		baseStrength = set.getInteger("baseStrength", 10);
 		baseDexterity = set.getInteger("baseDexterity", 10);

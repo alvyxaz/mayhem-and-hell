@@ -11,8 +11,8 @@ import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
 
 public class GameCharacter extends GameObject {
 
-	private int targetX;
-	private int targetY;
+	protected int targetX;
+	protected int targetY;
 	
 	private float easeX;
 	private float easeY;
@@ -24,6 +24,13 @@ public class GameCharacter extends GameObject {
 	private int state = 0;
 	private final int IDLE = 0;
 	private final int MOVING = 1;
+	
+	protected int direction = 2;
+	
+	float animationCycle = 0;
+	float timePerFrame = 0.1f;
+	int frameCount = 4;
+	protected int currentFrame;
 	
 	public GameCharacter(int id, int x, int y){
 		super(id);
@@ -54,10 +61,16 @@ public class GameCharacter extends GameObject {
 			}
 			
 			moveBy(movementX, movementY);
-					
 			
 			break;
 		}
+		
+		// Updating frame timer
+		animationCycle += deltaTime;
+		if(animationCycle > timePerFrame*frameCount) {
+			animationCycle = 0;
+		}
+		currentFrame = (int)(( animationCycle /timePerFrame)) % frameCount;
 	}
 	
 	public void moveBy(float x, float y) {
@@ -95,10 +108,40 @@ public class GameCharacter extends GameObject {
 		this.targetX = x;
 		this.targetY = y;
 		state = MOVING;
+		
+		float angle = (float)Math.atan2(targetY - position.y, targetX - position.x);
+
+		// Calculate direction
+		if (angle >= -Math.PI/4 && angle <= Math.PI/4) {
+			direction = MovementDirection.RIGHT.value;
+		} else if (angle >= Math.PI/4 && angle <= Math.PI*3/4) {
+			direction = MovementDirection.UP.value;
+		} else if (angle >= -Math.PI*3/4 && angle <= -Math.PI/4) {
+			direction = MovementDirection.DOWN.value;
+		} else {
+			direction = MovementDirection.LEFT.value;
+		}
 	}
 	
 	public void moveTo (int x, int y, int speed) {
 		this.movementSpeed = speed;
 		moveTo(x, y);
 	}
+	
+	public boolean isMoving() {
+		return state == MOVING;
+	}
+	
+	public static enum MovementDirection {
+		UP(0),
+		RIGHT(1),
+		DOWN(2),
+		LEFT(3);
+		
+		public int value;
+		
+		MovementDirection(int value) {
+			this.value = value;
+		}
+	};
 }

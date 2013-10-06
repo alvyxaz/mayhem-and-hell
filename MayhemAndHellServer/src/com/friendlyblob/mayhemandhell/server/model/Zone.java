@@ -30,12 +30,24 @@ public class Zone {
 	
 	private ZoneTemplate template;
 	
+	private int [][] collisions;
+	
 	public Zone(ZoneTemplate template) {
 		this.template = template;
 		allPlayers = new FastMap<Integer, Player>().shared();
 		allObjects = new FastMap<Integer, GameObject>().shared();
 		
+		// TODO load from a file
+		collisions = new int[100][100];
+		for (int i = 0; i < collisions.length; i++) {
+			collisions[i][5] = 1;
+		}
+		
 		initializeRegions();
+	}
+	
+	public int[][] getCollisions() {
+		return collisions;
 	}
 	
 	/**
