@@ -2,6 +2,7 @@ package com.friendlyblob.mayhemandhell.client.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
@@ -10,6 +11,7 @@ import com.friendlyblob.mayhemandhell.client.entities.gui.GuiElement.GuiPriority
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager.GuiPositionHorizontal;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager.GuiPositionVertical;
+import com.friendlyblob.mayhemandhell.client.entities.gui.LiveNotifications;
 import com.friendlyblob.mayhemandhell.client.entities.gui.SkillBar;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
@@ -21,15 +23,15 @@ public class GameScreen extends BaseScreen{
 	
 	public GuiManager guiManager;
 	
+	public LiveNotifications notifications;
+	
 	public GameScreen(MyGame game) {
 		super(game);
 		
+		notifications = new LiveNotifications();
+		
 		// Temporary GUI implementation 
 		guiManager = new GuiManager();
-//		guiManager.addGuiElement(
-//				new SkillBar(GuiPriority.LOW), 
-//				GuiPositionHorizontal.RIGHT, 
-//				GuiPositionVertical.MIDDLE);
 		
 		GameWorld.initialize();
 		world = GameWorld.getInstance();
@@ -45,6 +47,8 @@ public class GameScreen extends BaseScreen{
 		 * World
 		 */
 		world.draw(spriteBatch);
+		
+		notifications.draw(spriteBatch, deltaTime);
 		
 		spriteBatch.end();
 		/*---------------------------------------
@@ -75,7 +79,6 @@ public class GameScreen extends BaseScreen{
 				world.updateWorldInput();
 			}
 		}
-		
 	}
 
 	@Override
