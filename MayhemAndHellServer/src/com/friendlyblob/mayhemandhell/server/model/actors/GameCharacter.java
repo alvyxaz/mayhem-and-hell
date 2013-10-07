@@ -1,5 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.model.actors;
 
+import java.nio.ByteBuffer;
+
 import com.friendlyblob.mayhemandhell.server.GameTimeController;
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.World;
@@ -11,7 +13,9 @@ import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterLeft;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.TargetInfoResponse;
 import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
 /*
@@ -24,7 +28,7 @@ public class GameCharacter extends GameObject{
 	private int energy;
 	private int mana;
 	
-	private boolean alive;
+	protected boolean alive;
 	
 	private CharacterStats stats;
 	
@@ -214,7 +218,6 @@ public class GameCharacter extends GameObject{
 		public boolean isWalkingBy() {
 			return walkBy;
 		}
-		
 	}
 	
 	/**
@@ -282,13 +285,55 @@ public class GameCharacter extends GameObject{
 	 */
 	public void restoreHealth() {
 		this.health = getMaxHealth();
+		onHealthChange();
 	}
 	
 	/**
 	 * @param health the health to set
 	 */
 	public void setHealth(int health) {
-		this.health = health;
+		this.health = Math.min(health, getMaxHealth());
+		onHealthChange();
+	}
+	
+	/**
+	 * Either adds or removes (negative) a certain amount of health.
+	 * Calls "onHealthChange() method"
+	 * @param health
+	 */
+	public void offsetHealth(int offset) {
+		this.health += offset;
+		this.health = Math.min(this.health, getMaxHealth());
+		
+		// Check if character is dead
+		if (this.health < 0) {
+			onDeath();
+		}
+	}
+	
+	/**
+	 * Get's called when character dies
+	 */
+	public void onDeath() {
+		this.alive = false;
+		this.removeTarget();
+		this.clearTargetedBy();
+		
+		// TODO maybe show a body for some time before removing from region.
+		this.getRegion().broadcastToCloseRegions(new CharacterLeft(this.getObjectId()));
+	}
+	
+	/**
+	 * Get's called every time after health is changed
+	 */
+	public void onHealthChange() {
+		// Notify players who are targeting this entity
+		// with new target info
+		for (GameObject object : getTargetedBy()) {
+			if (object instanceof Player) {
+				((Player)object).sendPacket(new TargetInfoResponse(this, ((Player)object).getAvailableActions()));
+			}
+		}
 	}
 
 	/**
@@ -319,4 +364,10 @@ public class GameCharacter extends GameObject{
 		this.mana = mana;
 	}
 	
+	@Override
+	public void fillInfo(ByteBuffer buffer) {
+		super.fillInfo(buffer);
+		buffer.putInt(this.health);
+		buffer.putInt(this.getMaxHealth());
+	}
 }

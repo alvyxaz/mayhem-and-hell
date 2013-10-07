@@ -28,7 +28,7 @@ public class RequestTarget extends ClientPacket {
 		if (getClient().getPlayer().setTarget(object)) {
 			// If target successfully set
 			getClient().sendPacket(new TargetInfoResponse(
-					object.getName(), 
+					object, 
 					getClient().getPlayer().getAvailableActions()));
 		} else {
 			// Notify that action has failed

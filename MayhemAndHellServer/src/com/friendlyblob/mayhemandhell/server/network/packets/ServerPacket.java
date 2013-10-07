@@ -8,8 +8,7 @@ import com.friendlyblob.mayhemandhell.server.network.GameClient;
 
 public abstract class ServerPacket extends SendablePacket<GameClient>{
 
-	public void runImpl()
-	{
+	public void runImpl() {
 		
 	}
 	

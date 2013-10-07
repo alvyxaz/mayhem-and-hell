@@ -1,5 +1,6 @@
 package com.friendlyblob.mayhemandhell.server.model;
 
+import java.nio.ByteBuffer;
 import java.util.List;
 
 import javolution.util.FastList;
@@ -16,12 +17,18 @@ import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 public class GameObject {
 	
 	public static enum GameObjectType {
-		OTHER,
-		PLAYER,
-		FIENDLY_NPC,	// Non mobile object (Most likely a character you can "Talk" to)
-		HOSTILE_NPC,
-		ITEM,
-		RESOURCE // Mining, crafting and other resources
+		OTHER(0),
+		PLAYER(1),
+		FIENDLY_NPC(2),	// Non mobile object (Most likely a character you can "Talk" to)
+		HOSTILE_NPC(3),
+		ITEM(4),
+		RESOURCE(5); // Mining, crafting and other resources
+		
+		public int value;
+		
+		GameObjectType(int value) {
+			this.value = value;
+		}
 	}
 	
 	protected int objectId;
@@ -56,6 +63,10 @@ public class GameObject {
 	
 	public GameObject getTarget() {
 		return target;
+	}
+	
+	public List<GameObject> getTargetedBy() {
+		return targetedBy;
 	}
 	
 	/**
@@ -150,6 +161,14 @@ public class GameObject {
 	
 	public void setObjectId(int id) {
 		this.objectId = id;
+	}
+	
+	/**
+	 * Fills buffer with information about this object
+	 * @param buffer
+	 */
+	public void fillInfo(ByteBuffer buffer) {
+		buffer.put((byte) type.value);
 	}
 	
 }

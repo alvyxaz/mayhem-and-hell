@@ -16,8 +16,6 @@ public class MobInstance extends GameCharacter {
 
 	private boolean aggressive;
 	
-	private boolean dead;
-	
 	private int spawnZoneX;
 	private int spawnZoneY;
 	private int wonderingWidth;
@@ -59,22 +57,13 @@ public class MobInstance extends GameCharacter {
 		// Update region if changed (automatically notifies nearby)
 		this.getZone().updateRegion(this);
 		
-		dead = false;
+		this.alive = true;
 	}
 	
-	/**
-	 * Set's mob's state to dead, adds it to GameTimeController
-	 * to be respawned.
-	 * TODO Show dead body for a while, before respawning
-	 */
-	public void markAsDead() {
-		dead = true;
-		this.removeTarget();
-		this.clearTargetedBy();
-		
+	@Override
+	public void onDeath() {
+		super.onDeath();
 		spawnAtTick = GameTimeController.getInstance().getGameTicks() 
 				+ spawnInterval/GameTimeController.MILLIS_IN_TICK;
-		GameTimeController.getInstance().registerRespawningMob(this);
-		this.getRegion().broadcastToCloseRegions(new CharacterLeft(this.getObjectId()));
 	}
 }

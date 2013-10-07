@@ -20,6 +20,37 @@ public abstract class GameObject {
 	
 	public String name;
 	
+	public GameObjectType type;
+	
+	public static enum GameObjectType {
+		OTHER(0),
+		PLAYER(1),
+		FIENDLY_NPC(2),	// Non mobile object (Most likely a character you can "Talk" to)
+		HOSTILE_NPC(3),
+		ITEM(4),
+		RESOURCE(5); // Mining, crafting and other resources
+		
+		public int value;
+		
+		GameObjectType(int value) {
+			this.value = value;
+		}
+		
+		public static GameObjectType fromValue(int value) {
+			for (GameObjectType type : GameObjectType.values()) {
+				if (value == type.value) {
+					return type;
+				}
+			}
+			return null;
+		}
+		
+		// Checks whether entity should have health points
+		public static boolean hasHealth(GameObjectType type) {
+			return type == GameObjectType.HOSTILE_NPC || type == GameObjectType.PLAYER;
+		}
+	}
+	
 	public GameObject(int objectId) {
 		this.objectId = objectId;
 		this.name = "Unknown";
@@ -31,4 +62,13 @@ public abstract class GameObject {
 	}
 	
 	public abstract void draw(SpriteBatch sb);
+	
+	public void setType(GameObjectType type) {
+		this.type = type;
+	}
+	
+	public void setType(int type) {
+		setType(GameObjectType.fromValue(type));
+	}
+	
 }
