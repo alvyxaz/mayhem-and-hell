@@ -29,7 +29,6 @@ public class GUI extends SwingWorker<String, Object> {
 			setSize(700, 500);
 			setLocationRelativeTo(null);
 			setDefaultCloseOperation(EXIT_ON_CLOSE); 
-			this.setVisible(true);
 
 			// Adding java menu
 			JMenuBar menuBar = new JMenuBar();
@@ -60,6 +59,8 @@ public class GUI extends SwingWorker<String, Object> {
 				
 			});
 			t.start();
+			
+			this.setVisible(true);
 		}
 
 		@Override
