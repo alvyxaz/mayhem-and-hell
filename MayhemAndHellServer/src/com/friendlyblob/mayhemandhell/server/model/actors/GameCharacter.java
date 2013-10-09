@@ -15,6 +15,7 @@ import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterLeft;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyMovementStop;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.TargetInfoResponse;
 import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
@@ -50,6 +51,13 @@ public class GameCharacter extends GameObject{
 	 * @return true if character has reached its destination
 	 */
 	public boolean updatePosition (int gameTicks) {
+		
+		// Movement might be set to null at some point to
+		// indicate that character has stopped.
+		if (movement == null) {
+			return true;
+		}
+		
 		float prevX = getPosition().getX();
 		float prevY = getPosition().getY();
 		
@@ -76,7 +84,7 @@ public class GameCharacter extends GameObject{
 		}
 		
 		// Check if destination is reached
-		if (dX * dX + dY * dY < distanceCovered * distanceCovered) {
+		if (dX * dX + dY * dY <= distanceCovered * distanceCovered) {
 			getPosition().set(movement.destinationX, movement.destinationY);
 			movement = null;
 			return true;
@@ -130,7 +138,7 @@ public class GameCharacter extends GameObject{
 		GameTimeController.getInstance().registerMovingObject(this);
 		
 		// Notify nearby characters about movement
-		getRegion().broadcastToCloseRegions(new NotifyCharacterMovement(getObjectId(), movementData, getPosition()));
+		getRegion().broadcastToCloseRegions(new NotifyCharacterMovement(this));
 		
 		return true;
 	}
@@ -370,4 +378,34 @@ public class GameCharacter extends GameObject{
 		buffer.putInt(this.health);
 		buffer.putInt(this.getMaxHealth());
 	}
+	
+	/**
+	 * Checks whether character is currently moving
+	 * @return
+	 */
+	public boolean isMoving() {
+		return movement != null;
+	}
+	
+	/**
+	 * Stops server side movement and broadcasts a packet
+	 * indicating that character has stopped.
+	 * @param position
+	 */
+	public void stopMoving(ObjectPosition position) {
+		movement = null;
+		if (position != null) {
+			this.getPosition().set(position.getX(), position.getY());
+		}
+		this.getRegion().broadcastToCloseRegions(new NotifyMovementStop(this));
+	}
+	
+	/**
+	 * TODO implement
+	 * @return
+	 */
+	public boolean isMovementDisabled() {
+		return false;
+	}
+	
 }

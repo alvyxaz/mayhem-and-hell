@@ -1,8 +1,12 @@
 package com.friendlyblob.mayhemandhell.server.ai;
 
+import java.util.concurrent.Future;
+
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.skills.Skill;
+import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.AutoAttack;
 import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
 /**
@@ -16,8 +20,10 @@ public abstract class Ai implements Control {
 
 	protected Intention intention = Intention.IDLE;
 	
-	protected volatile boolean clientMoving;
-	protected volatile boolean clientAutoAttacking;
+	protected volatile boolean moving;
+	protected volatile boolean autoAttacking;
+	
+	private int movingToObjectOffset;
 	
 	private GameObject target;
 	protected GameCharacter attackTarget;
@@ -28,6 +34,9 @@ public abstract class Ai implements Control {
 	
 	private static final int FOLLOW_INTERVAL = 1000;
 	private static final int ATTACK_FOLLOW_INTERVAL = 500;
+	private static final int MAX_FOLLOW_DISTANCE = 100;
+	
+	protected Future<?> followTask = null;
 	
 	protected Ai(GameCharacter actor) {
 		this.actor = actor;
@@ -48,7 +57,7 @@ public abstract class Ai implements Control {
 	public void setAttackTarget(GameCharacter target) {
 		this.attackTarget = target;
 	}
-
+	
 	/**
 	 * 
 	 * @param intention
@@ -167,7 +176,6 @@ public abstract class Ai implements Control {
 	
 	protected abstract void onEventAfraid(GameCharacter attacker);
 	
-	
 	protected abstract void onIntentionIdle();
 
 	protected abstract void onIntentionActive();
@@ -186,5 +194,112 @@ public abstract class Ai implements Control {
 	
 	protected abstract void onIntentionInteract(GameObject object);
 	
+	protected void stopMoving() {
+		if (actor.isMoving()) {
+			actor.stopMoving(actor.getPosition());
+		}
+	}
+	
+	public boolean isAutoAttacking() {
+		return autoAttacking;
+	}
+	
+	public void setAutoAttacking(boolean autoAttacking) {
+		this.autoAttacking = autoAttacking; 
+	}
+	
+	public void startAutoAttack() {
+		if (!isAutoAttacking()) {
+			setAutoAttacking(true);
+			// Send a notification to nearby characters, indicating that auto attack was started.
+			actor.getRegion().broadcastToCloseRegions(
+					new AutoAttack(actor.getObjectId(), true));
+		}
+		// TODO start combat mode or something
+	}
+	
+	public void stopAutoAttack() {
+		if (isAutoAttacking()) {
+			setAutoAttacking(false);
+		}
+	}
+	
+	public void notifyDead() {
+		intention = intention.IDLE;
+		
+		// Stop following, skill casting and etc.
+	}
+	
+	/**
+	 * TODO implement some sort of a limit of how many times per
+	 * second can we move to an object. Probably the best way to do it
+	 * is calculate an approximate game tick after which to update.
+	 * @param object
+	 * @param offset
+	 */
+	public void moveToObject(GameObject object, int offset) {
+		if (!actor.isMovementDisabled()) {
+			return;
+		}
+		
+		moving = true;
+		movingToObjectOffset = offset;
+		target = object;
+		
+		actor.moveCharacterTo((int)object.getPosition().getX(), (int)object.getPosition().getY());
+	}
+	
+	public synchronized void startFollow(GameCharacter target) {
+		if (followTask != null) {
+			followTask.cancel(false);
+			followTask = null;
+		}
+		followTarget = target;
+		followTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(new FollowTask(), 5, FOLLOW_INTERVAL);
+	}
+	
+	public GameCharacter getFollowTarget() {
+		return followTarget;
+	}
+	
+	public GameObject getTarget() {
+		return target;
+	}
+	
+	private class FollowTask implements Runnable {
+		int range = 20;
+		
+		public FollowTask() {
+		}
+		
+		public FollowTask(int range) {
+			this.range = range;
+		}
+		
+		@Override
+		public void run() {
+			if (followTask == null) {
+				return;
+			}
+			
+			GameCharacter target = followTarget;
+			
+			// If there's no target
+			if (target == null) {
+				setIntention(Intention.IDLE);
+				return;
+			}
+			
+			if (!actor.isInsideRadius(target, range)) {
+				// If target is too far to be followed
+				if (!actor.isInsideRadius(target, MAX_FOLLOW_DISTANCE)) {
+					setIntention(Intention.IDLE);
+					return;
+				}
+				
+				moveToObject(target, range);
+			}
+		}
+	}
 	
 }
