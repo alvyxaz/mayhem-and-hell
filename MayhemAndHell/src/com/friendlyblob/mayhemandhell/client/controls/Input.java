@@ -144,13 +144,14 @@ public class Input {
 		for(int i= 0; i < touch.length; i++)
 			touch[i] = new Touch();
 		
-		keys = new KeyboardKey[6];
+		keys = new KeyboardKey[7];
 		keys[0] = new KeyboardKey(Keys.F1);
 		keys[1] = new KeyboardKey(Keys.PLUS);
 		keys[2] = new KeyboardKey(Keys.MINUS);
 		keys[3] = new KeyboardKey(Keys.G);
 		keys[4] = new KeyboardKey(Keys.C);
 		keys[5] = new KeyboardKey(Keys.F2);
+		keys[6] = new KeyboardKey(Keys.ENTER);
 	}
 	
 	

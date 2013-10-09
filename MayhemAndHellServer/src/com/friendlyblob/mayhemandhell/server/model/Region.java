@@ -164,11 +164,8 @@ public class Region {
 		
 		List<GameCharacter> visibleCharacters = getVisibleCharacters();
 		
-		if (characters.size() > 0) {
-			CharactersInRegion packet = new CharactersInRegion(visibleCharacters);
-			broadcast(packet);
-		}
-		 
+		CharactersInRegion packet = new CharactersInRegion(visibleCharacters);
+		broadcast(packet); 
 	}
 	
 	/**

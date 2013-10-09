@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import javolution.util.FastMap;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -17,6 +18,7 @@ import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.entities.gui.TargetBar.TargetInfo;
 import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditor;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 import com.friendlyblob.mayhemandhell.client.screens.BaseScreen;
 import com.friendlyblob.mayhemandhell.client.screens.GameScreen;

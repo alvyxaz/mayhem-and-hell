@@ -43,6 +43,10 @@ public class World {
 		return allZones.get(id);
 	}
 	
+	public ConcurrentHashMap<Integer, GameCharacter> getPlayers() {
+		return allPlayers;
+	}
+	
 	public static final class SingletonHolder {
 		public final static World INSTANCE = new World();
 	}

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
+import com.friendlyblob.mayhemandhell.client.entities.gui.Chat.ChatMessageType;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiElement.GuiPriority;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager.GuiPositionHorizontal;
@@ -17,6 +18,7 @@ import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditor;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientChatMessage;
 
 public class GameScreen extends BaseScreen{
 	private GameWorld world;
@@ -57,9 +59,9 @@ public class GameScreen extends BaseScreen{
 		spriteBatch.begin();
 		spriteBatch.setProjectionMatrix(guiCam.combined);
 		
-		if (MapEditor.enabled){
-			MapEditor.drawInfo(spriteBatch);
-		}
+//		if (MapEditor.enabled){
+//			MapEditor.drawInfo(spriteBatch);
+//		}
 
 		guiManager.draw(spriteBatch);
 		
@@ -71,6 +73,12 @@ public class GameScreen extends BaseScreen{
 	@Override
 	public void update(float deltaTime) {
 		world.update(deltaTime);
+		
+		if (Input.keyReleased(Keys.ENTER)) {
+			System.out.println("RELEASED");
+			
+			MyGame.connection.sendPacket(new ClientChatMessage("labas" + Math.random(), ChatMessageType.TALK));
+		}
 		
 		// If GUI didn't catch touch input
 		if(!guiManager.update(deltaTime)) {

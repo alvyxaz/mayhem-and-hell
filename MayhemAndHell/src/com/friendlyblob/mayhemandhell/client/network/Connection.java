@@ -129,8 +129,6 @@ public class Connection extends Thread {
 		return amountRead;
 	}
 	
-	public boolean kazkas = false;
-	
 	@Override
 	public void run() {
 		// TODO Cleanup reading thread, no infinite loop

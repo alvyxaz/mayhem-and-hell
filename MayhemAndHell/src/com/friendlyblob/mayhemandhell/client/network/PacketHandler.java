@@ -34,6 +34,9 @@ public class PacketHandler {
 			case 0x07:
 				response = new TargetInfoResponse();
 				break;
+			case 0x08:
+				response = new ChatMessageNotify();
+				break;
 				
 			// Don't add any packets below this line
 			case 0xFF:
