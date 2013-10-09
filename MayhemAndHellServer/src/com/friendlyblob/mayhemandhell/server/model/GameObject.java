@@ -163,6 +163,10 @@ public class GameObject {
 		this.objectId = id;
 	}
 	
+	public boolean isInsideRadius(GameObject target, int radius) {
+		return this.getPosition().distanceTo(target.getPosition()) <= radius;
+	}
+	
 	/**
 	 * Fills buffer with information about this object
 	 * @param buffer

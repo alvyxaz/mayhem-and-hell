@@ -12,6 +12,12 @@ public class ObjectPosition {
 		y = 0;
 	}
 	
+	public int distanceTo(ObjectPosition target) {
+		int dx = (int)(target.x - this.x);
+		int dy = (int)(target.y - this.y);
+		return (int) Math.sqrt(dx*dx + dy*dy);
+	}
+	
 	public float getX() {
 		return x;
 	}
