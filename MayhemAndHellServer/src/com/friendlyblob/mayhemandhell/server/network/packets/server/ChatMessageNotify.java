@@ -21,7 +21,7 @@ public class ChatMessageNotify extends ServerPacket{
 
 	@Override
 	public void write() {
-		writeC(0x08);
+		writeC(0xA0);
 		writeD(playerId);
 		writeS(msg);
 		writeD(type);
