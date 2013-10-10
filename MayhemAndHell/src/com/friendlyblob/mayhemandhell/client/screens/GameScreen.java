@@ -74,12 +74,6 @@ public class GameScreen extends BaseScreen{
 	public void update(float deltaTime) {
 		world.update(deltaTime);
 		
-		if (Input.keyReleased(Keys.ENTER)) {
-			System.out.println("RELEASED");
-			
-			MyGame.connection.sendPacket(new ClientChatMessage("labas" + Math.random(), ChatMessageType.TALK));
-		}
-		
 		// If GUI didn't catch touch input
 		if(!guiManager.update(deltaTime)) {
 			// Pass touch event to other entities

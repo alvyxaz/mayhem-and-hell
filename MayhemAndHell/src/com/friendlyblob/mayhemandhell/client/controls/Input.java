@@ -144,7 +144,7 @@ public class Input {
 		for(int i= 0; i < touch.length; i++)
 			touch[i] = new Touch();
 		
-		keys = new KeyboardKey[7];
+		keys = new KeyboardKey[8];
 		keys[0] = new KeyboardKey(Keys.F1);
 		keys[1] = new KeyboardKey(Keys.PLUS);
 		keys[2] = new KeyboardKey(Keys.MINUS);
@@ -152,6 +152,7 @@ public class Input {
 		keys[4] = new KeyboardKey(Keys.C);
 		keys[5] = new KeyboardKey(Keys.F2);
 		keys[6] = new KeyboardKey(Keys.ENTER);
+		keys[7] = new KeyboardKey(Keys.BACKSPACE);
 	}
 	
 	

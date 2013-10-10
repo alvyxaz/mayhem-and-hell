@@ -5,11 +5,16 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject.GameObjectType;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiElement.GuiPriority;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientChatMessage;
 
 /**
  * Manages chat related stuff.
@@ -17,7 +22,7 @@ import com.friendlyblob.mayhemandhell.client.helpers.Assets;
  * @author Vytautas
  *
  */
-public class Chat extends GuiElement {
+public class Chat extends GuiElement implements InputProcessor{
 	public static enum ChatMessageType {
 		TALK(0),
 		WHISPER(1),
@@ -50,10 +55,16 @@ public class Chat extends GuiElement {
 	private final int showMaxLines = 6;
 	private final int lineHeight = 10;
 	
+	private boolean active;
+	private StringBuilder tempMsg;
+	
 	public Chat() {
 		super(GuiPriority.HIGH);
 		
 		messages = new ArrayList<Message>();
+		tempMsg = new StringBuilder();
+		
+		Gdx.input.setInputProcessor(this);
 	}
 	
 	public void addMessage (Message message) {
@@ -66,20 +77,18 @@ public class Chat extends GuiElement {
 
 	@Override
 	public void onRelease(float x, float y) {
-		// TODO Auto-generated method stub
-		
+		active = !active;
 	}
 
 	@Override
 	public void onTouching(float x, float y) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void establishSize() {
 		box.width = 150;
-		box.height = lineHeight * showMaxLines;
+		box.height = lineHeight * (showMaxLines + 1);
 	}
 
 	@Override
@@ -91,7 +100,12 @@ public class Chat extends GuiElement {
 		Assets.defaultFont.setColor(Color.CYAN);
 		
 		for (int i = 0; i < Math.min(showMaxLines, messages.size()); i++) {
-			Assets.defaultFont.draw(spriteBatch, messages.get(messages.size() - i - 1).message, 10, (i+1)*lineHeight);	
+			// Draw wrapped
+			Assets.defaultFont.draw(spriteBatch, messages.get(messages.size() - i - 1).message, 10, (i+2)*lineHeight);	
+		}
+		
+		if (tempMsg != null) {
+			Assets.defaultFont.draw(spriteBatch, tempMsg, 10, lineHeight);
 		}
 		
 		// Restore regular color
@@ -102,6 +116,81 @@ public class Chat extends GuiElement {
 	@Override
 	public void update(float deltaTime) {
 	}
+	
+	// ======================================
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        // TODO Auto-generated method stub
+        //dLog("This is the new processor");
+        return false;
+    }
+
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        // TODO Auto-generated method stub
+        //dLog("This is the new processor");
+        return false;
+    }
+
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        // TODO Auto-generated method stub
+        //dLog("This is the new processor");
+        return false;
+    }
+
+    public boolean scrolled(int amount) {
+        // TODO Auto-generated method stub
+        //dLog("This is the new processor");
+        return false;
+    }
+
+    public boolean mouseMoved(int screenX, int screenY) {
+        // TODO Auto-generated method stub
+        //dLog("This is the new processor");
+        return false;
+    }
+
+    public boolean keyUp(int keyCode) {
+    	if (active) {
+            switch (keyCode) {
+	            case Keys.ENTER:
+	            	if (tempMsg.length() > 0) {
+	        			MyGame.connection.sendPacket(new ClientChatMessage(tempMsg.toString(), ChatMessageType.TALK));
+	        		
+	        			active = false;
+	        			tempMsg.setLength(0);
+	            	}
+	            	break;
+	            case Keys.BACKSPACE:
+	            	if (tempMsg.length() > 0) {
+	            		tempMsg.setLength(tempMsg.length() - 1);
+	            	}
+	            	break;
+            }
+    	}
+
+    	
+        return false;
+    }
+
+    public boolean keyTyped(char character) {
+
+    	if (active) {
+    		int charCode = (int) character;
+    		// append only printable
+        	if (charCode > 31 && charCode < 127) {
+        		tempMsg.append(character);
+        	}
+     	}
+
+		return true;
+
+    }
+
+    public boolean keyDown(int keycode) {
+        // TODO Auto-generated method stub
+        //dLog("This is the new processor");
+        return false;
+    }
+    // ===============================================
 	
 	public class Message {
 		public int playerId;
