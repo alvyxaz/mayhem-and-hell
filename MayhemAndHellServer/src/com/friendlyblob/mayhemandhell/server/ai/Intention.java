@@ -9,7 +9,7 @@ package com.friendlyblob.mayhemandhell.server.ai;
  *
  */
 public enum Intention {
-	IDLE,
+	IDLE,		// Detached from object and no longer updated.
 	ACTIVE,		// Scan attackable targets, walk randomly and etc.
 	REST,		// Wait to be attacked
 	ATTACK,		// Attack a target

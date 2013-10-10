@@ -249,7 +249,7 @@ public abstract class Ai implements Control {
 		actor.moveCharacterTo((int)object.getPosition().getX(), (int)object.getPosition().getY());
 	}
 	
-	public synchronized void startFollow(GameCharacter target) {
+	public synchronized void startFollowing(GameCharacter target) {
 		if (followTask != null) {
 			followTask.cancel(false);
 			followTask = null;
@@ -264,6 +264,19 @@ public abstract class Ai implements Control {
 	
 	public GameObject getTarget() {
 		return target;
+	}
+	
+	public synchronized void stopFollowing() {
+		if (followTask != null) {
+			// Stop the Follow Task
+			followTask.cancel(false);
+			followTask = null;
+		}
+		followTarget = null;
+	}
+	
+	public void stopAiTask() {
+		stopFollowing();
 	}
 	
 	private class FollowTask implements Runnable {

@@ -3,6 +3,7 @@ package com.friendlyblob.mayhemandhell.server.model.actors;
 import java.nio.ByteBuffer;
 
 import com.friendlyblob.mayhemandhell.server.GameTimeController;
+import com.friendlyblob.mayhemandhell.server.ai.GameCharacterAi;
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.logic.CollisionManager;
@@ -37,12 +38,33 @@ public class GameCharacter extends GameObject{
 	
 	private CharacterTemplate template;
 	
+	protected GameCharacterAi ai;
+	
 	public GameCharacter(int objectId, CharacterTemplate template) {
 		this.objectId = objectId;
 		this.template = template;
 		
 		// Initialize stats
 		stats = new CharacterStats(this);
+	}
+	
+	public GameCharacterAi getAi() {
+		GameCharacterAi tempAi = ai;
+		
+		if (tempAi == null) {
+			synchronized(this) {
+				if (ai == null) {
+					ai = new GameCharacterAi(this);
+				}
+				return ai;
+			}
+		}
+		
+		return tempAi;
+	}
+	
+	public void detachAi() {
+		ai = null;
 	}
 	
 	/**

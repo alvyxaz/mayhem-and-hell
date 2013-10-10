@@ -8,7 +8,7 @@ public class NpcInstance extends GameCharacter {
 
 	public NpcInstance(int objectId, NpcTemplate template) {
 		super(objectId, template);
-		
+
 		this.setName(template.name + "-" + objectId);
 		this.setType(GameObjectType.HOSTILE_NPC); // TODO ability to change to either friendly or hostile
 	}
