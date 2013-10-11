@@ -23,7 +23,7 @@ import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersIn
 public class Zone {
 	private int zoneId;
 	
-	private Map<Integer, Player> allPlayers;
+	private Map<Integer, Player> players;
 	private Map<Integer, GameObject> allObjects;
 	
 	private Region [][]  regions;
@@ -34,7 +34,7 @@ public class Zone {
 	
 	public Zone(ZoneTemplate template) {
 		this.template = template;
-		allPlayers = new FastMap<Integer, Player>().shared();
+		players = new FastMap<Integer, Player>().shared();
 		allObjects = new FastMap<Integer, GameObject>().shared();
 		
 		// TODO load from a file
@@ -51,48 +51,26 @@ public class Zone {
 	}
 	
 	/**
-	 * Adding a player to the zone. 
-	 * Automatically adds a player to the region.
-	 * @param player player to be added
-	 */
-	public void addPlayer(Player player) {
-		allPlayers.put(player.getObjectId(), player);
-		player.setZone(this);
-		updateRegion(player);
-	}
-	
-	/**
-	 * Adds a character to the zone and assigns
-	 * it to a region. (No need to have a collection
-	 * of all characters in the zone, so far).
-	 * @param character
-	 */
-	public void addCharacter(GameCharacter character) {
-		character.setZone(this);
-		updateRegion(character);
-	}
-	
-	/**
-	 * Adding an object to the zone.
-	 * (Assigns a region for object too)
-	 * @param object
+	 * Adds a visible GameObject to the zone. Instances, such as item in inventory
+	 * or an NPC that is not visible int the world (not spawned) should not be added
+	 * to the zone.
+	 * @param object Player, GameCharacter or any other GameObject
 	 */
 	public void addObject(GameObject object) {
+		if (object instanceof Player) {
+			players.put(object.getObjectId(), (Player)object);
+		}
+		
+		if (object instanceof GameCharacter) {
+			updateRegion((GameCharacter) object);
+		}
+		
+		// General object
 		object.setZone(this);
 		object.setRegion(
 				regions[getRegionY((int)object.getPosition().getY())][getRegionX((int)object.getPosition().getX())]);
 		object.getRegion().addObject(object);
 		allObjects.put(object.getObjectId(), object);
-	}
-	
-	/**
-	 * Remove an object from zone (including region).
-	 * @param object
-	 */
-	public void removeObject(GameObject object) {
-		object.setZone(null);
-		object.setRegion(null);
-		allObjects.remove(object.getObjectId());
 	}
 	
 	/**
@@ -130,7 +108,7 @@ public class Zone {
 		
 		if (regions[regionY][regionX] != oldRegion) {
 			if (!firstAppearance) {
-				oldRegion.removeCharacter(character);	 	// Remove from old region
+				oldRegion.removeObject(character);	 	// Remove from old region
 				
 				// Notify players at farthest side, indicating that this character left visible area
 				oldRegion.broadcastToSide(getRegionSideByOffsetX(oldRegion.regionX, regionX, true), 
@@ -149,7 +127,7 @@ public class Zone {
 			}
 			
 			character.setRegion(regions[regionY][regionX]); 	// Set new region to current
-			regions[regionY][regionX].addCharacter(character);	// Add player to current region
+			regions[regionY][regionX].addObject(character);	// Add player to current region
 			
 			// If it's the first appearance, notify nearby regions that a new character is visible
 			if (firstAppearance) {
@@ -186,17 +164,25 @@ public class Zone {
 	}
 	
 	/**
-	 * Removes a player from the zone and region he's in.
-	 * Notifies nearby players about character leaving.
-	 * 
-	 * @param playerId Player's id
+	 * Remove an object from zone (including region).
+	 * @param object
 	 */
-	public void removePlayer(Player player) {
-		allPlayers.remove(player.getObjectId());
-		player.getRegion().removeCharacter(player);
-		player.getRegion().broadcastToCloseRegions(new CharacterLeft(player.getObjectId()));
+	public void removeObject(GameObject object) {
+		if (object instanceof Player) {
+			players.remove(object.getObjectId());
+		}
+		
+		if (object instanceof GameCharacter) {
+			object.getRegion().broadcastToCloseRegions(
+					new CharacterLeft(object.getObjectId()));
+		}
+		
+		object.setZone(null);
+		object.setRegion(null);
+		allObjects.remove(object.getObjectId());
 	}
 	
+
 	/**
 	 * Sends data about nearby characters to all players
 	 */

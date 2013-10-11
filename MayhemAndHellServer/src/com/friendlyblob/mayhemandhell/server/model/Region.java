@@ -29,6 +29,7 @@ public class Region {
 	}
 	
 	private FastMap<Integer, GameCharacter> characters;
+	private FastMap<Integer, Player> players;
 	private FastMap<Integer, GameObject> allObjects;
 	
 	private Region [] closeRegions;
@@ -41,6 +42,7 @@ public class Region {
 		regionY = y;
 		characters = new FastMap<Integer, GameCharacter>().shared();
 		allObjects = new FastMap<Integer, GameObject>().shared();
+		players = new FastMap<Integer, Player>().shared();
 		closeRegions = new Region [0];
 	}
 	
@@ -49,6 +51,14 @@ public class Region {
 	 * @param object
 	 */
 	public void addObject(GameObject object) {
+		if (object instanceof Player) {
+			players.put(object.getObjectId(), (Player)object);
+		}
+		
+		if (object instanceof GameCharacter) {
+			characters.put(object.getObjectId(), (GameCharacter)object);
+		}
+		
 		allObjects.put(object.getObjectId(), object);
 	}
 	
@@ -57,27 +67,17 @@ public class Region {
 	 * @param object
 	 */
 	public void removeObject(GameObject object) {
+		if (object instanceof Player) {
+			players.remove(object.getObjectId());
+		}
+		
+		if (object instanceof GameCharacter) {
+			characters.remove(object.getObjectId());
+		}
+		
 		allObjects.remove(object.getObjectId());
 	}
-	
-	/**
-	 * Removes character from region.
-	 * @param character
-	 */
-	public void removeCharacter(GameCharacter character) {
-		characters.remove(character.getObjectId());
-		allObjects.remove(character.getObjectId());
-	}
-	
-	/**
-	 * Adds a character to the region. Also, sets character's region to current region
-	 * @param character
-	 */
-	public void addCharacter(GameCharacter character) {
-		character.setRegion(this);
-		characters.put(character.getObjectId(), character);
-		allObjects.put(character.getObjectId(), character);
-	}
+
 	
 	/**
 	 * Value, returned by this method, will include characters,

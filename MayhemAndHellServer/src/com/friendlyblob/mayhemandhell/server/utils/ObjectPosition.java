@@ -43,4 +43,9 @@ public class ObjectPosition {
 		this.x += dX;
 		this.y += dY;
 	}
+	
+	@Override
+	public String toString() {
+		return "[Position: " + x + " " + y + "]";
+	}
 }

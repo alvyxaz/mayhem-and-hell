@@ -32,7 +32,7 @@ public class World {
 		allObjects.put(player.getObjectId(), player);
 		
 		// TODO add player to it's zone, not a random zone
-		allZones.get(0).addPlayer(player);
+		allZones.get(0).addObject(player);
 	}
 	
 	public GameObject getObject(int id) {

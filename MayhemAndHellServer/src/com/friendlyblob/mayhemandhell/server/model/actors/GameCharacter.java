@@ -73,7 +73,7 @@ public class GameCharacter extends GameObject{
 	 * @return true if character has reached its destination
 	 */
 	public boolean updatePosition (int gameTicks) {
-		
+
 		// Movement might be set to null at some point to
 		// indicate that character has stopped.
 		if (movement == null) {

@@ -207,7 +207,7 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>> implements 
 						setDetached(true);
 						
 						// Removing player from zone
-						getPlayer().getZone().removePlayer(player);
+						getPlayer().getZone().removeObject(player);
 					}
 				}
 				

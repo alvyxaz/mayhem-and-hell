@@ -116,7 +116,7 @@ public class Spawn {
 		
 		if (npc.getZone() == null) {
 			npc.setZone(World.getInstance().getZone(zoneId));
-			npc.getZone().addCharacter(npc);
+			npc.getZone().addObject(npc);
 		}
 		
 		return null;
