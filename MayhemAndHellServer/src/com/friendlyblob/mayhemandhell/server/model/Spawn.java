@@ -8,6 +8,7 @@ import com.friendlyblob.mayhemandhell.server.model.actors.NpcTemplate;
 import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcInstance;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ZoneTable;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
+import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
 /**
  * Represents an area in which certain npc's respawn.
@@ -70,10 +71,12 @@ public class Spawn {
 		try {
 			Object[] parameters = {IdFactory.getInstance().getNextId(), template};
 			npc = (NpcInstance) constructor.newInstance(parameters);
+			npc.setSpawn(this);
 			return initializeNpcInstance(npc);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		
 		return npc;
 	}
@@ -104,11 +107,7 @@ public class Spawn {
 		int dX = endX-startX;
 		int dY = endY-startY;
 		
-		if (dX > 0 && dY > 0) {
-			npc.setPosition(startX + random.nextInt(dX), startY + random.nextInt(dY));
-		} else {
-			npc.setPosition(startX, startY);
-		}
+		npc.setPosition(getRandomPosition());
 		
 		npc.restoreVitals();
 		npc.removeEffects();
@@ -209,7 +208,49 @@ public class Spawn {
 		this.respawnTime = respawnTime;
 	}
 
-
+	public ObjectPosition getRandomPosition() {
+		ObjectPosition position = new ObjectPosition();
+		
+		int dX = endX-startX;
+		int dY = endY-startY;
+		
+		if (dX > 0 && dY > 0) {
+			position.set(startX + random.nextInt(dX), startY + random.nextInt(dY));
+		} else {
+			position.set(startX, startY);
+		}
+		
+		return position;
+	}
+	
+	/**
+	 * Get's a new position within a given radius from a given position
+	 * @param current current position from which to calculate new point
+	 * @param radius maximum radius
+	 * @return
+	 */
+	public ObjectPosition getRandomPositionWithinRadius(
+			ObjectPosition current, int radius) {
+		
+		ObjectPosition target = getRandomPosition();
+		
+		int dX = (int) ( target.getX() - current.getX());
+		int dY = (int) (target.getY() - current.getY());
+		
+		float maxDistance = Math.min(radius, (float)Math.sqrt(dX * dX + dY * dY));
+		
+		float angle = (float) Math.atan2(target.getY() - current.getY(), target.getX() - current.getX());
+		
+		// Better than just rFloat*maxDistance, because has a higher chance of generating
+		// a decent distance
+		float distance = Math.min(Math.max(random.nextFloat()*radius, 10), maxDistance);
+		
+		target.setX(current.getX() + (float)Math.cos(angle)*distance);
+		target.setY(current.getY() + (float)Math.sin(angle)*distance);
+		
+		return target;
+	}
+	
 
 	/**
 	 * A task that does all of the spawning and respawning work.

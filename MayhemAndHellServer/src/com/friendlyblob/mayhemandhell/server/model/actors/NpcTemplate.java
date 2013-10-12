@@ -27,8 +27,13 @@ public class NpcTemplate extends CharacterTemplate {
 	
 	public NpcTemplate(StatsSet set) {
 		super(set);
-		respawnTime = set.getInteger("respawnTime", 1000);
 		itemDropList = new ItemDrop[0];
+	}
+	
+	@Override
+	public void parseSetData() {
+		super.parseSetData();
+		respawnTime = set.getInteger("respawnTime", 1000);
 	}
 	
 	/**

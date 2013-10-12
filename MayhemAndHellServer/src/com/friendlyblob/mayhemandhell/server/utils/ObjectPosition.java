@@ -30,7 +30,7 @@ public class ObjectPosition {
 		this.x = x;
 	}
 	
-	public void setY() {
+	public void setY(float y) {
 		this.y = y;
 	}
 	

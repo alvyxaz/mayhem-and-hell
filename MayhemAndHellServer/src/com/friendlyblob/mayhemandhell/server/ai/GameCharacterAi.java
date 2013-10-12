@@ -14,26 +14,31 @@ public class GameCharacterAi extends Ai {
 
 	@Override
 	public void setIntention(Intention intention) {
-		// TODO Auto-generated method stub
-		
+		setIntention(intention, null, null);
+	}
+	
+	public void setIntention(Intention intention, Object arg0) {
+		setIntention(intention, arg0, null);
 	}
 
 	@Override
 	public void notifyEvent(Event event) {
-		// TODO Auto-generated method stub
-		
+		notifyEvent(event, null, null);
 	}
 
 	@Override
 	protected void onEventThink() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected void onEventArrived() {
-		// TODO Auto-generated method stub
+
+		// If we were moving before.
+		if (getIntention() == Intention.MOVE_TO) {
+			setIntention(Intention.ACTIVE);
+		}
 		
+		onEventThink();
 	}
 
 	@Override
@@ -146,8 +151,7 @@ public class GameCharacterAi extends Ai {
 
 	@Override
 	protected void onIntentionMoveTo(ObjectPosition destination) {
-		// TODO Auto-generated method stub
-		
+		actor.moveCharacterTo((int) destination.getX(), (int) destination.getY());
 	}
 
 	@Override

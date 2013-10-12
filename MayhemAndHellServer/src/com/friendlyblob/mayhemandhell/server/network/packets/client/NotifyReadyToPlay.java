@@ -13,8 +13,13 @@ public class NotifyReadyToPlay extends ClientPacket {
 
 	@Override
 	public void run() {
-		getClient().setState(GameClientState.IN_GAME);
-		World.getInstance().addPlayer(getClient().getPlayer());
+		try {
+			getClient().setState(GameClientState.IN_GAME);
+			World.getInstance().addPlayer(getClient().getPlayer());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

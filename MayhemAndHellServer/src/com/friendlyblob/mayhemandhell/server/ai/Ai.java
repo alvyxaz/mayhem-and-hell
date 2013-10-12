@@ -36,6 +36,8 @@ public abstract class Ai implements Control {
 	private static final int ATTACK_FOLLOW_INTERVAL = 500;
 	private static final int MAX_FOLLOW_DISTANCE = 100;
 	
+	protected boolean thinking;
+	
 	protected Future<?> followTask = null;
 	
 	protected Ai(GameCharacter actor) {
@@ -56,6 +58,15 @@ public abstract class Ai implements Control {
 	
 	public void setAttackTarget(GameCharacter target) {
 		this.attackTarget = target;
+	}
+	
+	public void overrideIntention(Intention intention) {
+		this.intention = intention;
+	}
+	
+	public void prepareToDetach() {
+		overrideIntention(Intention.IDLE);
+		actor.detachAi();
 	}
 	
 	/**

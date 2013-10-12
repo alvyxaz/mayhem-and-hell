@@ -87,6 +87,8 @@ public class NpcDataParser extends DataParser {
 			}
 		}
 		
+		npc.parseSetData();
+		
 		return npc;
 	}
 	

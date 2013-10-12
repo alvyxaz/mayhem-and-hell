@@ -52,7 +52,7 @@ public class Zone {
 	
 	/**
 	 * Adds a visible GameObject to the zone. Instances, such as item in inventory
-	 * or an NPC that is not visible int the world (not spawned) should not be added
+	 * or an NPC that is not visible in the world (not spawned) should not be added
 	 * to the zone.
 	 * @param object Player, GameCharacter or any other GameObject
 	 */
@@ -108,7 +108,7 @@ public class Zone {
 		
 		if (regions[regionY][regionX] != oldRegion) {
 			if (!firstAppearance) {
-				oldRegion.removeObject(character);	 	// Remove from old region
+				oldRegion.removeSilently(character);	 	// Remove from old region
 				
 				// Notify players at farthest side, indicating that this character left visible area
 				oldRegion.broadcastToSide(getRegionSideByOffsetX(oldRegion.regionX, regionX, true), 
@@ -133,6 +133,17 @@ public class Zone {
 			if (firstAppearance) {
 				character.getRegion().broadcastToCloseRegions(new CharacterAppeared(character));
 				character.sendPacket(new CharactersInRegion(character.getRegion().getVisibleCharacters()));
+			}
+			
+			if (character instanceof Player) {
+				// Normally, we wouldn't have to notify both regions, because
+				// nearby regions are notified automatically.
+				// However, it might be possible to jump through multiple regions
+				// in one update, so it's safer to notify both.
+				regions[regionY][regionX].notifyPlayersAroundChange();
+				if (oldRegion != null) {
+					oldRegion.notifyPlayersAroundChange();
+				}
 			}
 		}
 	}
@@ -176,6 +187,8 @@ public class Zone {
 			object.getRegion().broadcastToCloseRegions(
 					new CharacterLeft(object.getObjectId()));
 		}
+		
+		object.getRegion().removeObject(object);
 		
 		object.setZone(null);
 		object.setRegion(null);

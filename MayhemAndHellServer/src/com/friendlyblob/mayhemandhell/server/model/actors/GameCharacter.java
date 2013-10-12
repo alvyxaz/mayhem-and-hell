@@ -3,6 +3,8 @@ package com.friendlyblob.mayhemandhell.server.model.actors;
 import java.nio.ByteBuffer;
 
 import com.friendlyblob.mayhemandhell.server.GameTimeController;
+import com.friendlyblob.mayhemandhell.server.ai.AiData;
+import com.friendlyblob.mayhemandhell.server.ai.Event;
 import com.friendlyblob.mayhemandhell.server.ai.GameCharacterAi;
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.World;
@@ -48,6 +50,24 @@ public class GameCharacter extends GameObject{
 		stats = new CharacterStats(this);
 	}
 	
+	public synchronized void attachAi() {
+		if (ai == null) {
+			ai = new GameCharacterAi(this);
+		}
+	}
+	
+	/**
+	 * Don't call it manually, use prepareToDetachAi first,
+	 * which calls this method automatically.
+	 */
+	public synchronized void detachAi() {
+		ai = null;
+	}
+	
+	public void prepareToDetachAi() {
+		ai.prepareToDetach();
+	}
+	
 	public GameCharacterAi getAi() {
 		GameCharacterAi tempAi = ai;
 		
@@ -61,10 +81,6 @@ public class GameCharacter extends GameObject{
 		}
 		
 		return tempAi;
-	}
-	
-	public void detachAi() {
-		ai = null;
 	}
 	
 	/**
@@ -109,6 +125,9 @@ public class GameCharacter extends GameObject{
 		if (dX * dX + dY * dY <= distanceCovered * distanceCovered) {
 			getPosition().set(movement.destinationX, movement.destinationY);
 			movement = null;
+			
+			getAi().notifyEvent(Event.ARRIVED);
+			
 			return true;
 		}
 		
@@ -294,7 +313,6 @@ public class GameCharacter extends GameObject{
 		return stats.getWalkingSpeed();
 	}
 	
-
 	public void sendPacket(ServerPacket packet) {
 		
 	}
@@ -430,4 +448,7 @@ public class GameCharacter extends GameObject{
 		return false;
 	}
 	
+	public AiData getAiData() {
+		return template.getAiData();
+	}
 }

@@ -16,6 +16,7 @@ import org.mmocore.network.ReceivablePacket;
 
 import com.friendlyblob.mayhemandhell.server.Config;
 import com.friendlyblob.mayhemandhell.server.ServerStatistics;
+import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerClose;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
@@ -207,7 +208,7 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>> implements 
 						setDetached(true);
 						
 						// Removing player from zone
-						getPlayer().getZone().removeObject(player);
+						World.getInstance().removePlayer(player);
 					}
 				}
 				

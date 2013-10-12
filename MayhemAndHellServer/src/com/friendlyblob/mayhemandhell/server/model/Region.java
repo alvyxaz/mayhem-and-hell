@@ -36,6 +36,9 @@ public class Region {
 	
 	public int regionX;
 	public int regionY;
+
+	// Number of players around
+	public int playersAround = 0;
 	
 	public Region(int x, int y) {
 		regionX = x;
@@ -48,6 +51,9 @@ public class Region {
 	
 	/**
 	 * Adds an object to region's objects collection 
+	 * DOES NOT fire notifyPlayersAroundChange()
+	 * DO NOT use it to add GameCharacter directly. GameCharacters are added
+	 * during the process of Zone.updateRegion().
 	 * @param object
 	 */
 	public void addObject(GameObject object) {
@@ -63,10 +69,84 @@ public class Region {
 	}
 	
 	/**
-	 * Removes an object from region's objects collection
+	 * Updates a number of players around (iterates through
+	 * nearby regions).
+	 */
+	public void updatePlayersAround() {
+		int count = 0;
+		count += getPlayers().size();
+		
+		for(int i = 0; i < closeRegions.length; i++) {
+			count += closeRegions[i].getPlayers().size();
+		}
+		
+		if (count == 0 && playersAround > 0) {
+			onVisiblePlayersDisappeared();
+		} else if (count > 0 && playersAround == 0) {
+			onFirstVisiblePlayerAppeared();
+		}
+		
+		playersAround = count;
+	}
+	
+	/**
+	 * Calls "onPlayersAroundChange()" for every nearby region
+	 */
+	public void notifyPlayersAroundChange() {
+		onPlayersAroundChange();
+		
+		for(int i = 0; i < closeRegions.length; i++) {
+			closeRegions[i].onPlayersAroundChange();
+		}
+	}
+	
+	/**
+	 * Called when all players left a nearby region
+	 * (had to be at least 1 player before)
+	 */
+	public void onVisiblePlayersDisappeared() {
+		for (GameCharacter character : characters.values()) {
+			if (!( character instanceof Player)) {
+				character.prepareToDetachAi();
+			}
+		}
+	}
+	
+	/**
+	 * Called when first visible player appeared in a nearby region
+	 * (there were no visible players before)
+	 */
+	public void onFirstVisiblePlayerAppeared() {
+		for (GameCharacter character : characters.values()) {
+			if (!( character instanceof Player)) {
+				character.attachAi();
+			}
+		}
+	}
+	
+	/**
+	 * Called every time 
+	 */
+	public void onPlayersAroundChange() {
+		updatePlayersAround();
+	}
+	
+	/**
+	 * Removes an object from region's collections,
+	 * Fires notifyPlayersAroundChange()
 	 * @param object
 	 */
 	public void removeObject(GameObject object) {
+		removeSilently(object);
+		notifyPlayersAroundChange();
+	}
+
+	/**
+	 * Removes an object from region's collections,
+	 * DOES NOT fire notifyPlayersAroundChange().
+	 * @param object
+	 */
+	public void removeSilently(GameObject object) {
 		if (object instanceof Player) {
 			players.remove(object.getObjectId());
 		}
@@ -77,7 +157,6 @@ public class Region {
 		
 		allObjects.remove(object.getObjectId());
 	}
-
 	
 	/**
 	 * Value, returned by this method, will include characters,
@@ -159,7 +238,7 @@ public class Region {
 	 * Sends data about nearby characters to all players
 	 */
 	public void updateNearbyPlayersData() {
-		// If there's no one to update data far
+		// If there's no one to update data for
 		if (this.characters.size() == 0 ) return;
 		
 		List<GameCharacter> visibleCharacters = getVisibleCharacters();
@@ -223,6 +302,10 @@ public class Region {
 		return visibleCharacters;
 	}
 	
+	public FastMap<Integer, Player> getPlayers() {
+		return players;
+	}
+	
 	/**
 	 * TODO might be possible to optimize
 	 * @param side
@@ -279,5 +362,9 @@ public class Region {
 	
 	public FastMap<Integer, GameObject> getObjects() {
 		return allObjects;
+	}
+	
+	public String toString() {
+		return "[Region: "+ regionX + " " + regionY + "]";
 	}
 }

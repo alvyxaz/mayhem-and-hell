@@ -35,6 +35,13 @@ public class World {
 		allZones.get(0).addObject(player);
 	}
 	
+	public void removePlayer(Player player) {
+		allPlayers.remove(player.getObjectId());
+		allObjects.remove(player.getObjectId());
+		player.getZone().removeObject(player);
+	}
+	
+	
 	public GameObject getObject(int id) {
 		return allObjects.get(id);
 	}

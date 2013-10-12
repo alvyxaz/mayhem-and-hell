@@ -1,55 +1,62 @@
 package com.friendlyblob.mayhemandhell.server.model.actors;
 
+import com.friendlyblob.mayhemandhell.server.ai.AiData;
 import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 
+// TODO try to implement values as final
 public class CharacterTemplate {
 	
 	// Vital stats
-	private final int baseMaxHealth;
-	private final int baseMaxMana;
-	private final int baseMaxEnergy;
-	private final int baseMaxWeight;
+	private int baseMaxHealth;
+	private int baseMaxMana;
+	private int baseMaxEnergy;
+	private int baseMaxWeight;
 	
 	// Movement
-	private final int baseWalkingSpeed;
-	private final int baseRunningSpeed;
+	private int baseWalkingSpeed;
+	private int baseRunningSpeed;
 	
 	// Core stats
-	private final int baseStrength;
-	private final int baseDexterity;
-	private final int baseIntelligence;
-	private final int baseVitality;
-	private final int baseToughness;
+	private int baseStrength;
+	private int baseDexterity;
+	private int baseIntelligence;
+	private int baseVitality;
+	private int baseToughness;
 	
 	// Main damage
-	private final int basePhysicalDamage;
-	private final int baseMagicDamage;
-	private final int baseRangeDamage;
+	private int basePhysicalDamage;
+	private int baseMagicDamage;
+	private int baseRangeDamage;
 	
 	// Main defence
-	private final int basePhysicalDefence;
-	private final int baseMagicalDefence;
-	private final int baseRangeDefence;
+	private int basePhysicalDefence;
+	private int baseMagicalDefence;
+	private int baseRangeDefence;
 	
 	// Elemental resistance
-	private final int baseFireResistance;
-	private final int baseFrostResistance;
-	private final int baseElectricityResistance;
-	private final int basePoisonResistance;
-	private final int baseHolyResistance;
+	private int baseFireResistance;
+	private int baseFrostResistance;
+	private int baseElectricityResistance;
+	private int basePoisonResistance;
+	private int baseHolyResistance;
 	
 	// Elemental damage
-	private final int baseFireDamage;
-	private final int baseFrostDamage;
-	private final int baseElectricDamage;
-	private final int basePoisonDamage;
-	private final int baseHolyDamage;
+	private int baseFireDamage;
+	private int baseFrostDamage;
+	private int baseElectricDamage;
+	private int basePoisonDamage;
+	private int baseHolyDamage;
 	
 	public StatsSet set;
 	
+	protected AiData aiData = new AiData();
+	
 	public CharacterTemplate(StatsSet set) {
 		this.set = set;
-		
+		parseSetData();
+	}
+	
+	public void parseSetData() {
 		baseMaxHealth = set.getInteger("baseMaxHealth", 100);
 		baseMaxMana = set.getInteger("baseMaxMana", 100);
 		baseMaxEnergy = set.getInteger("baseMaxEnergy", 100);
@@ -275,6 +282,8 @@ public class CharacterTemplate {
 		return baseHolyDamage;
 	}
 	
-	
+	public AiData getAiData() {
+		return aiData;
+	}
 	
 }
