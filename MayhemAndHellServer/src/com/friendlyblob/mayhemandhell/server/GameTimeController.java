@@ -59,7 +59,7 @@ public class GameTimeController extends Thread{
 			
 			if (character.updatePosition(getGameTicks())) {
 				// Destination reached
-				movingObjects.remove(e.getKey());
+				stopMoving(character);
 			}
 		}
 	}
@@ -74,6 +74,10 @@ public class GameTimeController extends Thread{
 		}
 		
 		respawningMobs.putIfAbsent(mob.getObjectId(), mob);
+	}
+	
+	public final void stopMoving(GameCharacter character) {
+		movingObjects.remove(character.getObjectId());
 	}
 	
 	/**

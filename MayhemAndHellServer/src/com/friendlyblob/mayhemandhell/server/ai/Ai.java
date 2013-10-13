@@ -76,6 +76,12 @@ public abstract class Ai implements Control {
 	 * @param arg1
 	 */
 	public final void setIntention(Intention intention, Object arg0, Object arg1) {
+		
+		// Every intention, except for follow and attack, needs to break following
+		if (intention != Intention.FOLLOW && intention != Intention.ATTACK) {
+			stopFollowing();
+		}
+		
 		switch(intention) {
 			case IDLE:
 				onIntentionIdle();
@@ -249,18 +255,19 @@ public abstract class Ai implements Control {
 	 * @param offset
 	 */
 	public void moveToObject(GameObject object, int offset) {
-		if (!actor.isMovementDisabled()) {
+		if (actor.isMovementDisabled()) {
 			return;
 		}
-		
+
 		moving = true;
 		movingToObjectOffset = offset;
 		target = object;
-		
-		actor.moveCharacterTo((int)object.getPosition().getX(), (int)object.getPosition().getY());
+		actor.moveCharacterTo(object);
 	}
 	
 	public synchronized void startFollowing(GameCharacter target) {
+		System.out.println("[Ai start following]");
+		
 		if (followTask != null) {
 			followTask.cancel(false);
 			followTask = null;
@@ -288,6 +295,10 @@ public abstract class Ai implements Control {
 	
 	public void stopAiTask() {
 		stopFollowing();
+	}
+	
+	public boolean isFollowing() {
+		return followTask != null;
 	}
 	
 	private class FollowTask implements Runnable {
@@ -320,7 +331,7 @@ public abstract class Ai implements Control {
 					setIntention(Intention.IDLE);
 					return;
 				}
-				
+				System.out.println("[Ai About to move");
 				moveToObject(target, range);
 			}
 		}

@@ -8,8 +8,13 @@ public class ObjectPosition {
 	private float y;
 	
 	public ObjectPosition() {
-		x = 0;
-		y = 0;
+		this.x = 0;
+		this.y = 0;
+	}
+	
+	public ObjectPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	public int distanceTo(ObjectPosition target) {

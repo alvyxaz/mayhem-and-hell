@@ -2,6 +2,7 @@ package com.friendlyblob.mayhemandhell.server.ai;
 
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
+import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.skills.Skill;
 import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 

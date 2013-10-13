@@ -1,7 +1,9 @@
 package com.friendlyblob.mayhemandhell.server.network.packets.client;
 
+import com.friendlyblob.mayhemandhell.server.ai.Intention;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
+import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
 public class RequestMove extends ClientPacket{
 
@@ -17,11 +19,8 @@ public class RequestMove extends ClientPacket{
 
 	@Override
 	public void run() {
-		if(getClient().getPlayer().moveCharacterTo(x, y)) {
-			// TODO Have in mind that player might change speed while moving
-		} else {
-			// TODO Send a packet of failed action
-		}
+		// TODO Have in mind that player might change speed while moving
+		getClient().getPlayer().getAi().setIntention(Intention.MOVE_TO, new ObjectPosition(x, y));
 	}
 
 }

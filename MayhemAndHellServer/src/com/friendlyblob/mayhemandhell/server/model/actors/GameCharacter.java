@@ -110,17 +110,7 @@ public class GameCharacter extends GameObject{
 		
 		int dX = (int)(movement.destinationX - getPosition().getX());
 		int dY = (int)(movement.destinationY - getPosition().getY());
-		
-		// Updating destination if following a target
-		if (movement.isFollowing()) {
-			movement.updateDestination();
 			
-			if (!movement.isWalkingBy()) {
-				return false;
-			}
-			
-		}
-		
 		// Check if destination is reached
 		if (dX * dX + dY * dY <= distanceCovered * distanceCovered) {
 			getPosition().set(movement.destinationX, movement.destinationY);
@@ -160,12 +150,8 @@ public class GameCharacter extends GameObject{
 		return true;
 	}
 	
-	public void walkBy(GameObject character) {
-		MovementData movementData = new MovementData();
-		movementData.movementSpeed = getMovementSpeed();
-		movementData.timeStamp = GameTimeController.getInstance().getGameTicks();
-		movementData.follow(character, true);
-		moveCharacterTo(movementData);
+	public void moveCharacterTo(GameObject object) {
+		moveCharacterTo((int)object.getPosition().getX(), (int)object.getPosition().getY());
 	}
 	
 	/**
@@ -201,32 +187,6 @@ public class GameCharacter extends GameObject{
 		return (int) ((endX - f)*(endX - f) + (endY-g)*(endY-g));
 	}	
 	
-	public int getLinearYAtX(int x, int currentX, int currentY, int targetX, int targetY) {
-		System.out.println("LINEAR Y AT X");
-		System.out.println("x: " + x + " currentX: " + currentX + " currentY: " + currentY + " targetX: " + targetX + "targetY: " + targetY);
-		
-		int temp = (targetX-currentX);
-		
-		if (temp == 0) {
-			temp = 1;
-		}
-		
-		return (int)Math.abs((((targetY-currentY)/temp)*(x-currentX) + currentY));
-	}
-	
-	public int getLinearXAtY(int y, int currentX, int currentY, int targetX, int targetY) {
-		System.out.println("LINEAR X AT Y");
-		System.out.println("y: " + y + " currentX: " + currentX + " currentY: " + currentY + " targetX: " + targetX + "targetY: " + targetY);
-
-		int temp = (targetY-currentY);
-		
-		if (temp == 0) {
-			temp = 1;
-		}
-		
-		return (int)((targetX-currentX)*(y-currentY)/temp + currentX);
-	}
-	
 	public float angleBetween(int currentX, int currentY, int targetX, int targetY) {
 		return (float)Math.atan2(targetY-currentY, targetX-currentX);
 	}
@@ -240,33 +200,6 @@ public class GameCharacter extends GameObject{
 		public float destinationY;
 		public int movementSpeed;
 		public int timeStamp;
-
-		private boolean walkBy;
-		private GameObject targetToFollow;
-		
-		public void follow(GameObject character, boolean walkBy) {
-			this.walkBy = walkBy;
-			this.targetToFollow = character;
-			destinationX = character.getPosition().getX();
-			destinationY = character.getPosition().getY();
-		}
-		
-		public boolean isFollowing() {
-			return targetToFollow != null;
-		}
-		
-		public void updateDestination() {
-			destinationX = targetToFollow.getPosition().getX();
-			destinationY = targetToFollow.getPosition().getY();
-		}
-		
-		/**
-		 * Checks whether our intention is to walk by, or follow "forever"
-		 * @return true if walking by.
-		 */
-		public boolean isWalkingBy() {
-			return walkBy;
-		}
 	}
 	
 	/**
@@ -437,6 +370,7 @@ public class GameCharacter extends GameObject{
 		if (position != null) {
 			this.getPosition().set(position.getX(), position.getY());
 		}
+		GameTimeController.getInstance().stopMoving(this);
 		this.getRegion().broadcastToCloseRegions(new NotifyMovementStop(this));
 	}
 	
@@ -450,5 +384,9 @@ public class GameCharacter extends GameObject{
 	
 	public AiData getAiData() {
 		return template.getAiData();
+	}
+	
+	public boolean isFollowing() {
+		return getAi().isFollowing();
 	}
 }

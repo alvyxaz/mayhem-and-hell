@@ -2,6 +2,8 @@ package com.friendlyblob.mayhemandhell.server.model.actors;
 
 import com.friendlyblob.mayhemandhell.server.actions.GameActions;
 import com.friendlyblob.mayhemandhell.server.actions.GameActions.GameAction;
+import com.friendlyblob.mayhemandhell.server.ai.GameCharacterAi;
+import com.friendlyblob.mayhemandhell.server.ai.PlayerAi;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem.EquipmentSlot;
@@ -21,6 +23,8 @@ public class Player extends GameCharacter {
 		this.setName("PC " + this.getObjectId());
 		this.setType(GameObjectType.PLAYER);
 		equippedItems = new ItemInstance[EquipmentSlot.values().length];
+		
+		attachAi();
 	}
 
 	/**
@@ -137,6 +141,13 @@ public class Player extends GameCharacter {
 	 */
 	public boolean isActionAllowed(GameAction action) {
 		return true;
+	}
+	
+	@Override
+	public synchronized void attachAi() {
+		if (ai == null) {
+			ai = new PlayerAi(this);
+		}
 	}
 	
 }
