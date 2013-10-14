@@ -9,7 +9,7 @@ public class GameActions {
 	};
 	
 	public static GameAction[] hostineNpc = new GameAction[] {
-		GameAction.FOLLOW,
+		GameAction.ATTACK,
 	};
 	
 	public static enum GameAction {

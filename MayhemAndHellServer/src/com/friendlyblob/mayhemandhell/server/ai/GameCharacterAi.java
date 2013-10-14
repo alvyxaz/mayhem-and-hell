@@ -29,6 +29,7 @@ public class GameCharacterAi extends Ai {
 
 	@Override
 	protected void onEventThink() {
+		System.out.println("GameCharacter wrong think");
 	}
 
 	@Override
@@ -140,8 +141,10 @@ public class GameCharacterAi extends Ai {
 
 	@Override
 	protected void onIntentionAttack(GameCharacter target) {
-		// TODO Auto-generated method stub
-		
+		if (target != null) {
+			setAttackTarget(target);
+			onEventThink();
+		}
 	}
 
 	@Override

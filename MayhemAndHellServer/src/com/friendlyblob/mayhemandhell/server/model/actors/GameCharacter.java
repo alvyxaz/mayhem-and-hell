@@ -10,13 +10,16 @@ import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.logic.CollisionManager;
 import com.friendlyblob.mayhemandhell.server.model.logic.CollisionManager.Point;
+import com.friendlyblob.mayhemandhell.server.model.logic.Formulas;
 import com.friendlyblob.mayhemandhell.server.model.stats.BaseStats;
 import com.friendlyblob.mayhemandhell.server.model.stats.CharacterStats;
 import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
+import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterLeft;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.Attack;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyMovementStop;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.TargetInfoResponse;
@@ -41,6 +44,8 @@ public class GameCharacter extends GameObject{
 	private CharacterTemplate template;
 	
 	protected GameCharacterAi ai;
+	
+	private int attackEndTime;
 	
 	public GameCharacter(int objectId, CharacterTemplate template) {
 		this.objectId = objectId;
@@ -152,6 +157,7 @@ public class GameCharacter extends GameObject{
 	
 	public void moveCharacterTo(GameObject object) {
 		moveCharacterTo((int)object.getPosition().getX(), (int)object.getPosition().getY());
+		System.out.println("[GameCharacter moveToObject");
 	}
 	
 	/**
@@ -361,6 +367,83 @@ public class GameCharacter extends GameObject{
 	}
 	
 	/**
+	 * Launches a basic physical attack (sword, bow, etc.)
+	 * @param attackTarget
+	 */
+	public void attack(GameCharacter attackTarget) {
+		
+		if (isAttackingDisabled()) {
+			return;
+		}
+		
+		boolean critical = Formulas.landedCriticalPhysical(this);
+		int damage = getAttackDamage();
+		
+		int attackTime = 500;			// How long attack takes
+		int timeBetweenAttacks = 1000;	// Time until next attack
+		
+		attackEndTime = GameTimeController.getInstance().getGameTicks() + timeBetweenAttacks/GameTimeController.MILLIS_IN_TICK -1;
+		
+		Attack attack = new Attack();
+		
+		attack.setDamage(getAttackDamage());
+		
+		if (attackTarget.isPlayer()) {
+			attackTarget.sendPacket(attack);
+		}
+		
+		ThreadPoolManager.getInstance().scheduleAi(new HitTask(attackTarget, damage), attackTime);
+		
+		ThreadPoolManager.getInstance().scheduleAi(new NotifyAiTask(Event.READY_TO_ACT), attackTime + timeBetweenAttacks);
+	
+		System.out.println("[GameCharacter attack()");
+	}
+	
+	/**
+	 * Executes a hit to the target.
+	 * @param hitTarget
+	 * @param damage
+	 */
+	public void executeHit(GameCharacter hitTarget, int damage) {
+		hitTarget.addDamage(this, damage);
+		System.out.println("[GameCharacter executeHit");
+	}
+	
+	/**
+	 * Represents a hit task which applies a hit to the target.
+	 * This is the task that actually removes health from target that was hit.
+	 * @author Alvys
+	 *
+	 */
+	public class HitTask implements Runnable {
+
+		private GameCharacter target;
+		private int damage;
+		
+		public HitTask(GameCharacter target, int damage) {
+			this.target = target;
+			this.damage = damage;
+		}
+		
+		@Override
+		public void run() {
+			executeHit(target, damage);
+		}
+		
+	}
+	
+	public void addDamage(GameCharacter attacker, int damage) {
+		if (!isDead()) {
+			this.health -= damage;
+			this.getAi().notifyEvent(Event.ATTACKED, attacker, null);
+		}
+	}
+	
+	public boolean isDead() {
+		return !alive;
+	}
+	
+	/**
 	 * Stops server side movement and broadcasts a packet
 	 * indicating that character has stopped.
 	 * @param position
@@ -389,4 +472,53 @@ public class GameCharacter extends GameObject{
 	public boolean isFollowing() {
 		return getAi().isFollowing();
 	}
+	
+	/**
+	 * TODO implement
+	 * @return
+	 */
+	public int getAttackRange() {
+		return 10;
+	}
+	
+	/**
+	 * TODO implement
+	 * @return
+	 */
+	public int getAttackDamage() {
+		return 5;
+	}
+
+	public boolean isPlayer() {
+		return this instanceof Player;
+	}
+	
+	public boolean isAttacking() {
+		return attackEndTime > GameTimeController.getInstance().getGameTicks();
+	}
+	
+	public boolean isAttackingDisabled() {
+		return isAttacking();
+	}
+	
+	/**
+	 * Represents a scheduled notification
+	 * @author Alvys
+	 *
+	 */
+	public class NotifyAiTask implements Runnable {
+
+		private Event event;
+		
+		public NotifyAiTask(Event event) {
+			this.event = event;
+		}
+		
+		@Override
+		public void run() {
+			getAi().notifyEvent(event);
+		}
+		
+	}
+	
 }

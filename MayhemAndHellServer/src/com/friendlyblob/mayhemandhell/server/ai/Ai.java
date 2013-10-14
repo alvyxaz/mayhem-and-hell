@@ -76,7 +76,6 @@ public abstract class Ai implements Control {
 	 * @param arg1
 	 */
 	public final void setIntention(Intention intention, Object arg0, Object arg1) {
-		
 		// Every intention, except for follow and attack, needs to break following
 		if (intention != Intention.FOLLOW && intention != Intention.ATTACK) {
 			stopFollowing();
@@ -228,11 +227,13 @@ public abstract class Ai implements Control {
 	public void startAutoAttack() {
 		if (!isAutoAttacking()) {
 			setAutoAttacking(true);
+			
 			// Send a notification to nearby characters, indicating that auto attack was started.
 			actor.getRegion().broadcastToCloseRegions(
 					new AutoAttack(actor.getObjectId(), true));
+			
+			setIntention(Intention.ATTACK, actor.getTarget(), null);
 		}
-		// TODO start combat mode or something
 	}
 	
 	public void stopAutoAttack() {
@@ -266,8 +267,6 @@ public abstract class Ai implements Control {
 	}
 	
 	public synchronized void startFollowing(GameCharacter target) {
-		System.out.println("[Ai start following]");
-		
 		if (followTask != null) {
 			followTask.cancel(false);
 			followTask = null;

@@ -8,6 +8,18 @@ import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcInstance;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
 import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
+/**
+ * HOW IT WORKS:
+ * When player enters an area (region) where attackable NPC's are nearby,
+ * new AttackableAi instance is created and attached to NPC (every NPC has it's own instance).
+ * During the attachment, startAiTask() is executed.
+ * 
+ * aiTask calls onEventThink() method every second(REFRESH_RATE), allowing npc to
+ * think. When thinking, npc's Ai can analyze its intentions and act accordingly.
+ * 
+ * @author Alvys
+ *
+ */
 public class AttackableAi extends GameCharacterAi implements Runnable {
 
 	private Future<?> aiTask;
@@ -36,12 +48,26 @@ public class AttackableAi extends GameCharacterAi implements Runnable {
 				onThinkActive();
 				break;
 			case ATTACK:
+				onThinkAttack();
 				break;
 		}
 		
 		thinking = false;
 	}
 
+	public void onThinkAttack() {
+		if (attackTarget != null) {
+			
+			// If we need to get closer
+			if (!attackTarget.isInsideRadius(actor, actor.getAttackRange())) {
+				actor.moveCharacterTo(attackTarget);
+				return;
+			}
+			
+			actor.attack(attackTarget);
+		}
+	}
+	
 	/**
 	 * Thinking, when Ai is attached, but no particular "command" was given.
 	 * Most likely, Ai is waiting for someone to walk close to it or attack it.
@@ -60,7 +86,6 @@ public class AttackableAi extends GameCharacterAi implements Runnable {
 					actor.moveCharacterTo((int)destination.getX(), (int)destination.getY());
 					setIntention(Intention.MOVE_TO, destination);
 				}
-				
 			}
 		}
 	}
@@ -72,7 +97,7 @@ public class AttackableAi extends GameCharacterAi implements Runnable {
 	
 	public void startAiTask() {
 		if (aiTask == null) {
-			aiTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(this, 1000, REFRESH_RATE);
+			aiTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(this, REFRESH_RATE, REFRESH_RATE);
 		}
 	}
 	
