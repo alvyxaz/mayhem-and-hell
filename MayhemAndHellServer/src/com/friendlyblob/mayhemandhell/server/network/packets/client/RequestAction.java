@@ -30,7 +30,8 @@ public class RequestAction extends ClientPacket {
 			} else if (actions[actionIndex] == GameAction.ATTACK) {
 				// TODO implement range for different weapons and include
 				// it in follow calculations
-//				player.getAi().startAutoAttack();
+				player.getAi().startAutoAttack();
+//				player.getAi().stopAutoAttack();
 			}
 		} else {
 			getClient().sendPacket(new ActionFailedMessage("[RequestAction packet] Invalid action"));

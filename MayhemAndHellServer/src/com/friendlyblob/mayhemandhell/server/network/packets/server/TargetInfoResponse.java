@@ -17,6 +17,7 @@ public class TargetInfoResponse extends ServerPacket {
 	@Override
 	protected void write() {
 		writeC(0x07);
+		writeD(object.getObjectId());
 		writeS(object.getName());
 
 		// Available actions

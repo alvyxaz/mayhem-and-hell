@@ -34,6 +34,15 @@ public class PacketHandler {
 			case 0x07:
 				response = new TargetInfoResponse();
 				break;
+			case 0x09:
+				response = new AutoAttack();
+				break;
+			case 0x0A:
+				response = new Attack();
+				break;
+			case 0X0B:
+				response = new CharacterStatusUpdate();
+				break;
 			case 0xA0:
 				response = new ChatMessageNotify();
 				break;

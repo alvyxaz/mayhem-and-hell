@@ -14,6 +14,8 @@ public class TargetInfoResponse extends ReceivablePacket {
 	public boolean read() {
 		info.cleanup();
 		
+		info.objectId = readD();
+		
 		info.name = readS();
 		
 		actions = new String[readD()];
@@ -35,6 +37,7 @@ public class TargetInfoResponse extends ReceivablePacket {
 
 	@Override
 	public void run() {
+		GameWorld.getInstance().getPlayer().targetId = info.objectId;
 		GameWorld.getInstance().game.screenGame.guiManager.targetBar.showTarget(info, actions);
 	}
 

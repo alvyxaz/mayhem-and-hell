@@ -12,6 +12,8 @@ public class Player extends GameCharacter {
 	
 	private TextureRegion [] textures;
 	
+	public int targetId;
+	
 	public Player (int id, int x, int y){
 		super(id, x, y);
 

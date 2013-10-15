@@ -97,6 +97,8 @@ public class GameObject {
 	/**
 	 * Removes a target from this character, and removes
 	 * targetedBy of it's target
+	 * TODO Send a packet to client from here, instead of using onDead 
+	 *
 	 */
 	public void removeTarget() {
 		this.target.removeTargetedBy(this);

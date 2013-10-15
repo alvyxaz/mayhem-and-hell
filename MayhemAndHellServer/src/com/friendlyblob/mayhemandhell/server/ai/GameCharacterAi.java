@@ -29,7 +29,6 @@ public class GameCharacterAi extends Ai {
 
 	@Override
 	protected void onEventThink() {
-		System.out.println("GameCharacter wrong think");
 	}
 
 	@Override
@@ -73,10 +72,13 @@ public class GameCharacterAi extends Ai {
 		
 	}
 
+	/**
+	 * Called after character finishes whatever it was that it was doing
+	 * (e.g. after the attack was finished, and ready to do another one) 
+	 */
 	@Override
 	protected void onEventReadyToAct() {
-		// TODO Auto-generated method stub
-		
+		onEventThink();
 	}
 
 	@Override
@@ -123,8 +125,10 @@ public class GameCharacterAi extends Ai {
 
 	@Override
 	protected void onIntentionIdle() {
-		// TODO Auto-generated method stub
-		
+		overrideIntention(Intention.IDLE);
+		setAttackTarget(null);
+		stopMoving();
+		stopAutoAttack();
 	}
 
 	@Override
@@ -143,19 +147,21 @@ public class GameCharacterAi extends Ai {
 	protected void onIntentionAttack(GameCharacter target) {
 		if (target != null) {
 			setAttackTarget(target);
-			onEventThink();
+			overrideIntention(Intention.ATTACK);
+			notifyEvent(Event.THINK);
 		}
 	}
 
 	@Override
 	protected void onIntentionCast(Skill skill, GameCharacter target) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected void onIntentionMoveTo(ObjectPosition destination) {
+		stopAutoAttack();
 		actor.moveCharacterTo((int) destination.getX(), (int) destination.getY());
+		overrideIntention(Intention.MOVE_TO);
 	}
 
 	@Override

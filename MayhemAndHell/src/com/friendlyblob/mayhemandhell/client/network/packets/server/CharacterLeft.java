@@ -16,6 +16,10 @@ public class CharacterLeft extends ReceivablePacket {
 	@Override
 	public void run() {
 		GameWorld.getInstance().removeCharacter(characterId);
+		
+		if (GameWorld.getInstance().getPlayer().targetId == characterId) {
+			GameWorld.getInstance().game.screenGame.guiManager.targetBar.visible = false;
+		}
 	}
 
 }

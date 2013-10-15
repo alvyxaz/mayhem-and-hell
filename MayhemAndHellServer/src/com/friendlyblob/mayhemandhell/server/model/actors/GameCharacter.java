@@ -20,6 +20,7 @@ import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterLeft;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.Attack;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterStatusUpdate;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyMovementStop;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.TargetInfoResponse;
@@ -157,7 +158,6 @@ public class GameCharacter extends GameObject{
 	
 	public void moveCharacterTo(GameObject object) {
 		moveCharacterTo((int)object.getPosition().getX(), (int)object.getPosition().getY());
-		System.out.println("[GameCharacter moveToObject");
 	}
 	
 	/**
@@ -236,11 +236,11 @@ public class GameCharacter extends GameObject{
 		return getWalkingSpeed();
 	}
 	
-	private int getMaxHealth() {
+	public int getMaxHealth() {
 		return stats.getMaxHealth();
 	}
 	
-	private int getMaxMana() {
+	public int getMaxMana() {
 		return stats.getMaxMana();
 	}
 	
@@ -250,6 +250,18 @@ public class GameCharacter extends GameObject{
 	
 	private int getWalkingSpeed() {
 		return stats.getWalkingSpeed();
+	}
+	
+	/**
+	 * Sends a packet to every player who is targeting this object
+	 * @param packet
+	 */
+	public void sendPacketToTargetedBy(ServerPacket packet) {
+		for (GameObject object : getTargetedBy()) {
+			if (object instanceof Player) {
+				((Player) object).sendPacket(packet);
+			}
+		}
 	}
 	
 	public void sendPacket(ServerPacket packet) {
@@ -384,19 +396,16 @@ public class GameCharacter extends GameObject{
 		
 		attackEndTime = GameTimeController.getInstance().getGameTicks() + timeBetweenAttacks/GameTimeController.MILLIS_IN_TICK -1;
 		
-		Attack attack = new Attack();
+		Attack attack = new Attack(attackTarget.getObjectId());
 		
 		attack.setDamage(getAttackDamage());
 		
-		if (attackTarget.isPlayer()) {
-			attackTarget.sendPacket(attack);
-		}
+		// Send a packet with damage to nearby characters
+		attackTarget.getRegion().broadcastToCloseRegions(attack);
 		
 		ThreadPoolManager.getInstance().scheduleAi(new HitTask(attackTarget, damage), attackTime);
 		
 		ThreadPoolManager.getInstance().scheduleAi(new NotifyAiTask(Event.READY_TO_ACT), attackTime + timeBetweenAttacks);
-	
-		System.out.println("[GameCharacter attack()");
 	}
 	
 	/**
@@ -406,7 +415,6 @@ public class GameCharacter extends GameObject{
 	 */
 	public void executeHit(GameCharacter hitTarget, int damage) {
 		hitTarget.addDamage(this, damage);
-		System.out.println("[GameCharacter executeHit");
 	}
 	
 	/**
@@ -436,6 +444,12 @@ public class GameCharacter extends GameObject{
 		if (!isDead()) {
 			this.health -= damage;
 			this.getAi().notifyEvent(Event.ATTACKED, attacker, null);
+			this.sendPacketToTargetedBy(new CharacterStatusUpdate(this));
+			
+			if (this.health < 0) {
+				this.health = 0;
+//				onDeath();
+			}
 		}
 	}
 	
@@ -486,17 +500,26 @@ public class GameCharacter extends GameObject{
 	 * @return
 	 */
 	public int getAttackDamage() {
-		return 5;
+		return 40;
 	}
 
 	public boolean isPlayer() {
 		return this instanceof Player;
 	}
 	
+	/**
+	 * Checks if delay between attacks hasn't expired
+	 * @return
+	 */
 	public boolean isAttacking() {
 		return attackEndTime > GameTimeController.getInstance().getGameTicks();
 	}
 	
+	/**
+	 * Checks whether attacking is disabled (Character rooted,
+	 * stunned, etc.) TODO implement fully
+	 * @return
+	 */
 	public boolean isAttackingDisabled() {
 		return isAttacking();
 	}
@@ -519,6 +542,10 @@ public class GameCharacter extends GameObject{
 			getAi().notifyEvent(event);
 		}
 		
+	}
+	
+	public synchronized void cleanup() {
+		this.ai.stopAiTask();
 	}
 	
 }

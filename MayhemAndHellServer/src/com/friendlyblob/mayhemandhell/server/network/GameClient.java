@@ -5,9 +5,8 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import org.mmocore.network.MMOClient;
@@ -21,7 +20,6 @@ import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerClose;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.ActionFailed;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.KeyPacket;
 
 public class GameClient extends MMOClient<MMOConnection<GameClient>> implements Runnable{
 	protected static final Logger log = Logger.getLogger(GameClient.class.getName());
@@ -53,6 +51,8 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>> implements 
 	// Whether client is detached from his character.
 	// Happens when client disconnects
 	private boolean detached;	
+	
+	protected ScheduledFuture<?> cleanupTask = null;
 	
 	public GameClient(MMOConnection<GameClient> con) {
 		super(con);
@@ -207,10 +207,7 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>> implements 
 					if (getPlayer() != null) {
 						setDetached(true);
 						
-						// Removing player from zone
-						player.stopMoving(null);
-						player.getAi().stopAiTask();
-						World.getInstance().removePlayer(player);
+						cleanupCurrentPlayer();
 					}
 				}
 				
@@ -218,6 +215,35 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>> implements 
 		} catch (RejectedExecutionException e) {
 			
 		}
+	}
+	
+	protected void cleanupCurrentPlayer() {
+		try {
+			synchronized(this) {
+				if (cleanupTask == null) {
+					cleanupTask = ThreadPoolManager.getInstance().scheduleGeneral(new CleanupTask(), 5);
+				}
+			}
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	public class CleanupTask implements Runnable {
+
+		@Override
+		public void run() {
+			// TODO save to db
+			// Might be null on connection loss
+			if (getPlayer() != null) {
+				if (getPlayer().isOnline()) {
+					getPlayer().cleanup();
+				}
+			}
+			
+			setPlayer(null);
+		}
+		
 	}
 
 	@Override
@@ -356,5 +382,4 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>> implements 
 	public ClientStats getStats(){
 		return stats;
 	}
-	
 }

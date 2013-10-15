@@ -10,8 +10,12 @@ public class PlayerAi extends GameCharacterAi {
 	}
 	
 	@Override
+	protected void onEventReadyToAct() {
+		super.onEventReadyToAct();
+	}
+	
+	@Override
 	public void onEventThink() {
-		System.out.println("THINKING " + getIntention());
 		if (thinking) {
 			return;
 		}
@@ -19,21 +23,23 @@ public class PlayerAi extends GameCharacterAi {
 		thinking = true;
 		
 		switch(getIntention()) {
-		case ATTACK:
-			onThinkAttack();
-			System.out.println("PlayerAi thinking");
-			break;
+			case ATTACK:
+				onThinkAttack();
+				break;
 		}
 		
 		thinking = false;
 	}
 	
+	/**
+	 * Player Ai analyzes whether it should attack, walk to the target or else.
+	 * Following does not change intention.
+	 */
 	public void onThinkAttack() {
 		if (attackTarget != null) {
-			
 			// If we need to get closer
 			if (!attackTarget.isInsideRadius(actor, actor.getAttackRange())) {
-				actor.moveCharacterTo(attackTarget);
+				this.startFollowing(attackTarget, actor.getAttackRange());
 				return;
 			}
 			

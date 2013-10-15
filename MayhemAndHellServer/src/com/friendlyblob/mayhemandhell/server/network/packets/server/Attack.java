@@ -7,9 +7,17 @@ public class Attack extends ServerPacket {
 	private boolean critical;
 	private int damage;
 	
+	public int targetId;
+	
+	public Attack(int targetId) {
+		this.targetId = targetId;
+	}
+	
 	@Override
 	protected void write() {
 		writeC(0x0A);
+		writeD(targetId);
+		writeD(damage);
 	}
 
 	public boolean isCritical() {

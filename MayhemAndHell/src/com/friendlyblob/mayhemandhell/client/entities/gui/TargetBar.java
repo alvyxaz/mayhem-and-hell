@@ -100,8 +100,13 @@ public class TargetBar extends GuiElement {
 		manager.actionsBar.show(actions);
 	}
 	
+	public TargetInfo getTargetInfo() {
+		return this.targetInfo;
+	}
+	
 	public static class TargetInfo {
 		public String name;
+		public int objectId;
 		public GameObjectType objectType;
 		public int currentHealth;
 		public int maxHealth;

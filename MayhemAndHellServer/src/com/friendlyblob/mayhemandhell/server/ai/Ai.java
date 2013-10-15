@@ -81,6 +81,10 @@ public abstract class Ai implements Control {
 			stopFollowing();
 		}
 		
+//		if (actor.isPlayer()) {
+//			System.out.println("--[Ai intention " + intention);
+//		}
+		
 		switch(intention) {
 			case IDLE:
 				onIntentionIdle();
@@ -266,13 +270,18 @@ public abstract class Ai implements Control {
 		actor.moveCharacterTo(object);
 	}
 	
-	public synchronized void startFollowing(GameCharacter target) {
+	public void startFollowing(GameCharacter target) {
+		this.startFollowing(target, FollowTask.DEFAULT_RANGE);
+	}
+	
+	public synchronized void startFollowing(GameCharacter target, int range) {
 		if (followTask != null) {
 			followTask.cancel(false);
 			followTask = null;
 		}
 		followTarget = target;
-		followTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(new FollowTask(), 5, FOLLOW_INTERVAL);
+		int followInterval = getIntention() == Intention.ATTACK ? ATTACK_FOLLOW_INTERVAL  : FOLLOW_INTERVAL;
+		followTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(new FollowTask(range), 5, followInterval);
 	}
 	
 	public GameCharacter getFollowTarget() {
@@ -301,9 +310,11 @@ public abstract class Ai implements Control {
 	}
 	
 	private class FollowTask implements Runnable {
-		int range = 20;
+		public static final int DEFAULT_RANGE = 10;
+		int range;
 		
 		public FollowTask() {
+			range = DEFAULT_RANGE;
 		}
 		
 		public FollowTask(int range) {
@@ -330,7 +341,7 @@ public abstract class Ai implements Control {
 					setIntention(Intention.IDLE);
 					return;
 				}
-				System.out.println("[Ai About to move");
+
 				moveToObject(target, range);
 			}
 		}

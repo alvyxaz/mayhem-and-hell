@@ -3,7 +3,9 @@ package com.friendlyblob.mayhemandhell.server.model.actors;
 import com.friendlyblob.mayhemandhell.server.actions.GameActions;
 import com.friendlyblob.mayhemandhell.server.actions.GameActions.GameAction;
 import com.friendlyblob.mayhemandhell.server.ai.GameCharacterAi;
+import com.friendlyblob.mayhemandhell.server.ai.Intention;
 import com.friendlyblob.mayhemandhell.server.ai.PlayerAi;
+import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem.EquipmentSlot;
@@ -16,6 +18,8 @@ public class Player extends GameCharacter {
 	private GameClient client = null;
 
 	public ItemInstance [] equippedItems;
+	
+	private boolean online = true;
 	
 	public Player(int objectId, CharacterTemplate template) {
 		super(objectId, template);
@@ -148,6 +152,24 @@ public class Player extends GameCharacter {
 		if (ai == null) {
 			ai = new PlayerAi(this);
 		}
+	}
+	
+	public boolean isOnline() {
+		return online;
+	}
+	
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
+	
+	@Override
+	public void cleanup() {
+		setOnline(false);
+		
+		ai.setIntention(Intention.IDLE);
+		
+		World.getInstance().removePlayer(this);
+		super.cleanup();
 	}
 	
 }

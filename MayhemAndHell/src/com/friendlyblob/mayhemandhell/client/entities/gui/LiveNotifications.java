@@ -64,7 +64,7 @@ public class LiveNotifications {
 		Assets.defaultFont.setColor(Color.WHITE);
 	}
 	
-	public void addNotification (String notification, int x, int y, Color color) {
+	public synchronized void addNotification (String notification, float x, float y, Color color) {
 		int oldest = 0;
 		for (int i = 0; i < BUFFER_SIZE; i++) {
 			if (timers[i] < timers[oldest]) {
@@ -93,7 +93,7 @@ public class LiveNotifications {
 	 * @param x
 	 * @param y
 	 */
-	public void addHealthChangeNotification(int offset, int x, int y) {
+	public void addHealthChangeNotification(int offset, float x, float y) {
 		Color color = null;
 		
 		strBuilder.setLength(0);
