@@ -139,6 +139,10 @@ public class Region {
 	public void removeObject(GameObject object) {
 		removeSilently(object);
 		notifyPlayersAroundChange();
+		
+		if (object instanceof GameCharacter) {
+			broadcastToCloseRegions(new CharacterLeft(object.getObjectId()));
+		}
 	}
 
 	/**

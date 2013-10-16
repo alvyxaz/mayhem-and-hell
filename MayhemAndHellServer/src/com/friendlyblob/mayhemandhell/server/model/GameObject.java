@@ -74,7 +74,6 @@ public class GameObject {
 	 * from IdFactory.
 	 */
 	public void refreshId() {
-		this.zone.removeObject(this);
 		IdFactory.getInstance().releaseId(this.objectId);
 		this.objectId = IdFactory.getInstance().getNextId();
 	}
@@ -101,8 +100,10 @@ public class GameObject {
 	 *
 	 */
 	public void removeTarget() {
-		this.target.removeTargetedBy(this);
-		this.target = null;
+		if (this.target != null) {
+			this.target.removeTargetedBy(this);
+			this.target = null;
+		}
 	}
 	
 	/**

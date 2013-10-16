@@ -6,6 +6,7 @@ import com.friendlyblob.mayhemandhell.server.GameTimeController;
 import com.friendlyblob.mayhemandhell.server.ai.AiData;
 import com.friendlyblob.mayhemandhell.server.ai.Event;
 import com.friendlyblob.mayhemandhell.server.ai.GameCharacterAi;
+import com.friendlyblob.mayhemandhell.server.ai.Intention;
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.logic.CollisionManager;
@@ -315,11 +316,14 @@ public class GameCharacter extends GameObject{
 	 */
 	public void onDeath() {
 		this.alive = false;
+		this.ai.setIntention(Intention.IDLE);
+		this.ai.stopAiTask();
+		this.ai.stopAutoAttack();
+		this.ai.stopFollowing();
+		this.stopMoving(null);
+		
 		this.removeTarget();
 		this.clearTargetedBy();
-		
-		// TODO maybe show a body for some time before removing from region.
-		this.getRegion().broadcastToCloseRegions(new CharacterLeft(this.getObjectId()));
 	}
 	
 	/**
@@ -388,6 +392,11 @@ public class GameCharacter extends GameObject{
 			return;
 		}
 		
+		if (attackTarget.isDead() || attackTarget == null) {
+			getAi().setIntention(Intention.ACTIVE);
+			return;
+		}
+		
 		boolean critical = Formulas.landedCriticalPhysical(this);
 		int damage = getAttackDamage();
 		
@@ -448,7 +457,7 @@ public class GameCharacter extends GameObject{
 			
 			if (this.health < 0) {
 				this.health = 0;
-//				onDeath();
+				onDeath();
 			}
 		}
 	}

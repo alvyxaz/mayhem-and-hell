@@ -27,7 +27,7 @@ public class Player extends GameCharacter {
 		this.setName("PC " + this.getObjectId());
 		this.setType(GameObjectType.PLAYER);
 		equippedItems = new ItemInstance[EquipmentSlot.values().length];
-		
+		this.alive = true;
 		attachAi();
 	}
 

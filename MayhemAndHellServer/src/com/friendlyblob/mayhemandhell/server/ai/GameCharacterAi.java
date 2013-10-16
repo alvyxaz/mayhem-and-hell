@@ -133,13 +133,14 @@ public class GameCharacterAi extends Ai {
 
 	@Override
 	protected void onIntentionActive() {
-		// TODO Auto-generated method stub
-		
+		overrideIntention(Intention.ACTIVE);
+		setAttackTarget(null);
+		stopMoving();
+		stopAutoAttack();
 	}
 
 	@Override
 	protected void onIntentionRest() {
-		// TODO Auto-generated method stub
 		
 	}
 

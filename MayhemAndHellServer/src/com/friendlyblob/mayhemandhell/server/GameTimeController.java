@@ -54,6 +54,11 @@ public class GameTimeController extends Thread{
 				tail = movingObjects.tail(); (e = e.getNext()) != tail;) {
 			character = e.getValue();
 			
+			if (character.isDead()) {
+				stopMoving(character);
+				continue;
+			}
+			
 			// Update character region if necessary
 			character.getZone().updateRegion(character);
 			

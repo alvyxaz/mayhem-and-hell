@@ -88,7 +88,9 @@ public class Spawn {
 		
 		currentCount--;
 		
-		ThreadPoolManager.getInstance().scheduleGeneral(new SpawnTask(npc), 1000);
+		World.getInstance().removeObject(npc);
+		
+		ThreadPoolManager.getInstance().scheduleGeneral(new SpawnTask(npc), 2000);
 	}
 	
 	public void respawn(NpcInstance npc) {
