@@ -1,5 +1,6 @@
 package com.friendlyblob.mayhemandhell.client.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +16,7 @@ public class Player extends GameCharacter {
 	public int targetId;
 	
 	public Player (int id, int x, int y){
-		super(id, x, y);
+		super(id, x, y, 0);
 
 		int width = 32;
 		int height = 32;
@@ -43,11 +44,13 @@ public class Player extends GameCharacter {
 		spriteBatch.draw(Assets.px, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		spriteBatch.setColor(Color.WHITE);
 
-		if (isMoving()) {
-			spriteBatch.draw(textures[this.direction*3 + calculateFrame()], hitBox.x, hitBox.y);
-		} else {
-			spriteBatch.draw(textures[this.direction*3], hitBox.x, hitBox.y);
-		}
+		spriteBatch.draw(animationHandler.getFrame(Gdx.graphics.getDeltaTime()), hitBox.x, hitBox.y);
+		
+//		if (isMoving()) {
+//			spriteBatch.draw(textures[this.direction*3 + calculateFrame()], hitBox.x, hitBox.y);
+//		} else {
+//			spriteBatch.draw(textures[this.direction*3], hitBox.x, hitBox.y);
+//		}
 	}
 	
 	public void requestMovementDestination(int x, int y) {

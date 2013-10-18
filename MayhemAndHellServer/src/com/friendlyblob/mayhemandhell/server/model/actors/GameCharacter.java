@@ -71,6 +71,7 @@ public class GameCharacter extends GameObject{
 		ai = null;
 	}
 	
+	// TODO Threw a null pointer exception (Region.removeObject -> ..)
 	public void prepareToDetachAi() {
 		ai.prepareToDetach();
 	}

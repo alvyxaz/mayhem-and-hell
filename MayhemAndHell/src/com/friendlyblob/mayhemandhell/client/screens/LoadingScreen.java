@@ -3,6 +3,7 @@ package com.friendlyblob.mayhemandhell.client.screens;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.friendlyblob.mayhemandhell.client.MyGame;
+import com.friendlyblob.mayhemandhell.client.animations.AnimationParser;
 import com.friendlyblob.mayhemandhell.client.gameworld.MapData;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 
@@ -14,7 +15,7 @@ public class LoadingScreen extends BaseScreen{
 		super(game);
 		Assets.manager.load("textures/atlas/textures.atlas", TextureAtlas.class);
 		
-		Assets.manager.load("textures/characters/characters.png", Texture.class);
+		AnimationParser.loadAll();
 	}
 
 	@Override

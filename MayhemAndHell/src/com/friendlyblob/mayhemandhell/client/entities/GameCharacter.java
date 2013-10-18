@@ -1,10 +1,16 @@
 package com.friendlyblob.mayhemandhell.client.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.friendlyblob.mayhemandhell.client.MyGame;
+import com.friendlyblob.mayhemandhell.client.animations.Animation;
+import com.friendlyblob.mayhemandhell.client.animations.Animation.AnimationData;
+import com.friendlyblob.mayhemandhell.client.animations.AnimationParser;
+import com.friendlyblob.mayhemandhell.client.animations.CharacterAnimation;
+import com.friendlyblob.mayhemandhell.client.animations.CharacterAnimation.CharacterAnimationType;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
@@ -32,10 +38,23 @@ public class GameCharacter extends GameObject {
 	int frameCount = 4;
 	protected int currentFrame;
 	
-	public GameCharacter(int id, int x, int y){
+	protected CharacterAnimation animationHandler;
+	
+	public GameCharacter(int id, int x, int y, int animationId){
 		super(id);
 		position.set(x, y);
 		hitBox = new Rectangle(x, y, 15, 28);
+		
+		animationHandler = new CharacterAnimation();
+		
+		prepareAnimations(animationId);
+	}
+	
+	public void prepareAnimations(int animationId) {
+		for (AnimationData animation : AnimationParser.getCollection(animationId).values()) {
+			animationHandler.setAnimation(CharacterAnimationType.valueOf(animation.type), 
+					new Animation(animation, animationHandler));
+		}
 	}
 	
 	public void update(float deltaTime) {
@@ -47,6 +66,7 @@ public class GameCharacter extends GameObject {
 			if (Math.abs(targetX - position.x) < movementSpeed * deltaTime && Math.abs(targetY - position.y) < movementSpeed * deltaTime) {
 				state = IDLE;
 				setPosition(targetX, targetY);
+				onArrived();
 				return;
 			}
 						
@@ -73,6 +93,23 @@ public class GameCharacter extends GameObject {
 		currentFrame = (int)(( animationCycle /timePerFrame)) % frameCount;
 	}
 	
+	public void onArrived() {
+		switch(direction) {
+			case 0: // UP
+				animationHandler.play(CharacterAnimationType.IDLE_UP);
+				break;
+			case 1: // RIGHT
+				animationHandler.play(CharacterAnimationType.IDLE_RIGHT);
+				break;
+			case 2: // DOWN
+				animationHandler.play(CharacterAnimationType.IDLE_DOWN);
+				break;
+			case 3: // LEFT
+				animationHandler.play(CharacterAnimationType.IDLE_LEFT);
+				break;
+		}
+	}
+	
 	public void moveBy(float x, float y) {
 		position.x += x;
 		position.y += y;
@@ -88,9 +125,11 @@ public class GameCharacter extends GameObject {
 	}
 	
 	public void draw(SpriteBatch spriteBatch){
-		spriteBatch.setColor(1f, 1f, 1f, 0.5f);
+		spriteBatch.setColor(1f, 1f, 1f, 0.3f);
 		spriteBatch.draw(Assets.px, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		spriteBatch.setColor(Color.WHITE);
+		
+		spriteBatch.draw(animationHandler.getFrame(Gdx.graphics.getDeltaTime()), hitBox.x, hitBox.y);
 	}
 	
 	/**
@@ -114,12 +153,16 @@ public class GameCharacter extends GameObject {
 		// Calculate direction
 		if (angle >= -Math.PI/4 && angle <= Math.PI/4) {
 			direction = MovementDirection.RIGHT.value;
+			animationHandler.play(CharacterAnimationType.WALKING_RIGHT);
 		} else if (angle >= Math.PI/4 && angle <= Math.PI*3/4) {
 			direction = MovementDirection.UP.value;
+			animationHandler.play(CharacterAnimationType.WALKING_UP);
 		} else if (angle >= -Math.PI*3/4 && angle <= -Math.PI/4) {
 			direction = MovementDirection.DOWN.value;
+			animationHandler.play(CharacterAnimationType.WALKING_DOWN);
 		} else {
 			direction = MovementDirection.LEFT.value;
+			animationHandler.play(CharacterAnimationType.WALKING_LEFT);
 		}
 	}
 	

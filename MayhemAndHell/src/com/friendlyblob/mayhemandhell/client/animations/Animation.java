@@ -3,33 +3,25 @@ package com.friendlyblob.mayhemandhell.client.animations;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
- * Represents a basic animation
+ * Represents a basic animation instance
  * @author Alvys
  *
  */
 public class Animation {
-	// Frame data
-	private TextureRegion[] frames;
-	private float[] frameStartMarks;
-	
 	// General animation data
 	private AnimationHandler handler;
-	private boolean looped;
-	private float animationDuration;
-	private int frameCount;
 	
 	// Animation state data
 	private float currentTime;
 	private int currentFrame;
 
-	public Animation(float animationDuration, AnimationHandler handler, int frameCount) {
-		this.animationDuration = animationDuration;
+	public AnimationData data;
+	
+	public Animation(AnimationData animationData, AnimationHandler handler) {
+		this.data = animationData;
 		this.handler = handler;
-		this.frameCount = frameCount;
 		currentTime = 0;
 		currentFrame = 0;
-		frames = new TextureRegion[frameCount];
-		frameStartMarks = new float[frameCount];
 	}
 	
 	/**
@@ -40,47 +32,55 @@ public class Animation {
 	 */
 	public TextureRegion getFrame(float deltaTime) {
 		currentTime += deltaTime;
-		if (currentTime > animationDuration) {
+		if (currentTime > this.data.duration) {
 			
-			if (!looped) {
+			if (!this.data.looped) {
 				currentTime = 0;
 				currentFrame = 0;
 				handler.onAnimationFinished();
 			}
 			
-			currentTime -= animationDuration;
+			currentTime -= this.data.duration;
 		}
-		return null;
+		return getFrame();
 	}
 	
 	/**
-	 * Ads a new frame to the next free spot.
-	 * @param texture
-	 * @param startMark
+	 * Restores animation to the start
 	 */
-	public void addFrame(TextureRegion texture, float startMark) {
-		for (int i = 0; i < frameStartMarks.length; i++) {
-			if (frames[i] == null) {
-				frames[i] = texture;
-				frameStartMarks[i] = startMark;
-				return;
-			}
-		}
+	public void restart() {
+		currentTime = 0;
+		currentFrame = 0;
 	}
+
 	
 	/**
 	 * Returns current frame, does not affect animation flow.
 	 * @return
 	 */
 	public TextureRegion getFrame() {
-		for (int i = 0; i < frameStartMarks.length; i++) {
-			if (frameStartMarks[i]*animationDuration >= currentTime) {
+		for (int i = 0; i < data.frameStartMarks.length; i++) {
+			if (data.frameStartMarks[i]*this.data.duration <= currentTime) {
 				currentFrame = i;
 			} else {
-				return frames[currentFrame];
+				return data.frames[currentFrame];
 			}
 		}
-		return frames[0];
+		return data.frames[currentFrame];
+	}
+	
+	/**
+	 * Repesents a static animation data holder
+	 * @author Alvys
+	 *
+	 */
+	public static class AnimationData {
+		public String type;
+		public TextureRegion[] frames;
+		public float[] frameStartMarks;
+		public boolean looped;
+		public float duration;
+		public int frameCount;
 	}
 	
 }
