@@ -5,6 +5,8 @@ import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 
 // TODO try to implement values as final
 public class CharacterTemplate {
+	private static final int DEFAULT_SPRITE = 0;
+	private int sprite = DEFAULT_SPRITE;
 	
 	// Vital stats
 	private int baseMaxHealth;
@@ -92,7 +94,14 @@ public class CharacterTemplate {
 		baseHolyDamage = set.getInteger("baseHolyDamage", 0);
 	}
 	
-
+	public void setSprite(int sprite) {
+		this.sprite = sprite;
+	}
+	
+	public int getSprite() {
+		return this.sprite;
+	}
+	
 	/**
 	 * @return the baseMaxHealth
 	 */

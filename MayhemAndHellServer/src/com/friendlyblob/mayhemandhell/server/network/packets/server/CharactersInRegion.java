@@ -25,6 +25,7 @@ public class CharactersInRegion extends ServerPacket{
 			writeD((int)character.getPosition().getX());	// X position
 			writeD((int)character.getPosition().getY());	// X position
 			writeD(character.getMovementSpeed());			// Movement speed
+			writeD(character.getSprite());					// Sprite (animation)
 		}
 	}
 

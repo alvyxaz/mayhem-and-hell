@@ -24,6 +24,7 @@ public class CharactersInRegion extends ReceivablePacket {
 				int x = readD();
 				int y = readD();
 				int speed = readD();
+				int sprite = readD();
 				
 				// TODO player id doesn't work
 				if(playerId == objectId) {
@@ -34,7 +35,7 @@ public class CharactersInRegion extends ReceivablePacket {
 					// TODO some sort of interpolation
 					// world.getCharacter(objectId).moveTo(x, y, speed);
 				} else {
-					world.putCharacter(new GameCharacter(objectId, x, y, 1));
+					world.putCharacter(new GameCharacter(objectId, x, y, sprite));
 				}
 			}
 		} catch (Exception e) {

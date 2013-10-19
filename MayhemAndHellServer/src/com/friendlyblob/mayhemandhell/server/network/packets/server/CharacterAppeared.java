@@ -17,6 +17,7 @@ public class CharacterAppeared extends ServerPacket {
 		writeD(character.getObjectId());
 		writeD((int) character.getPosition().getX());
 		writeD((int) character.getPosition().getY());
+		writeD(character.getSprite());
 	}
 	
 

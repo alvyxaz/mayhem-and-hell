@@ -64,6 +64,7 @@ public class NpcDataParser extends DataParser {
 		int npcId = Integer.parseInt(npcNode.getAttributes().getNamedItem("id").getNodeValue());
 		String npcName = npcNode.getAttributes().getNamedItem("name").getNodeValue();
 		String type = npcNode.getAttributes().getNamedItem("type").getNodeValue();
+		int npcSprite = Integer.parseInt(npcNode.getAttributes().getNamedItem("sprite").getNodeValue());
 		
 		NpcTemplate npc = new NpcTemplate();
 		currentNpc = npc;
@@ -71,6 +72,7 @@ public class NpcDataParser extends DataParser {
 		npc.npcId = npcId;
 		npc.name = npcName;
 		npc.setType(type);
+		npc.setSprite(npcSprite);
 		
 		for (npcNode = npcNode.getFirstChild(); npcNode != null; 
 				npcNode = npcNode.getNextSibling()) {

@@ -11,12 +11,15 @@ public class CharacterAppeared extends ReceivablePacket {
 	int characterId;
 	int x;
 	int y;
+	int sprite;
 	
 	@Override
 	public boolean read() {
 		characterId = readD();
 		x = readD();
 		y = readD();
+		sprite = readD();
+		
 		return true;
 	}
 
@@ -29,7 +32,7 @@ public class CharacterAppeared extends ReceivablePacket {
 		}
 		
 		if (!world.characters.containsKey(characterId)) {
-			world.putCharacter(new GameCharacter(characterId, x, y, 1));
+			world.putCharacter(new GameCharacter(characterId, x, y, sprite));
 		}
 	}
 

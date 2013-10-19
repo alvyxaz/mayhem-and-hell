@@ -76,6 +76,10 @@ public class GameCharacter extends GameObject{
 		ai.prepareToDetach();
 	}
 	
+	public int getSprite() {
+		return template.getSprite();
+	}
+	
 	public GameCharacterAi getAi() {
 		GameCharacterAi tempAi = ai;
 		
