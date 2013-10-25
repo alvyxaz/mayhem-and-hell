@@ -26,7 +26,7 @@ public class PacketHandler {
 				response = new CharactersInRegion();
 				break;
 			case 0x05:
-				response = new CharacterLeft();
+				response = new CharactersLeft();
 				break;
 			case 0x06:
 				response = new NotifyCharacterMovement();

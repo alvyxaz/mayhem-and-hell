@@ -7,7 +7,7 @@ import java.util.List;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterLeft;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersLeft;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersInRegion;
 
 import javolution.util.FastMap;
@@ -141,7 +141,7 @@ public class Region {
 		notifyPlayersAroundChange();
 		
 		if (object instanceof GameCharacter) {
-			broadcastToCloseRegions(new CharacterLeft(object.getObjectId()));
+			broadcastToCloseRegions(new CharactersLeft(object.getObjectId()));
 		}
 	}
 

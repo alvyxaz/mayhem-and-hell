@@ -19,7 +19,7 @@ import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterLeft;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersLeft;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.Attack;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterStatusUpdate;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;

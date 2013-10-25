@@ -9,8 +9,9 @@ import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterAppeared;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterLeft;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersLeft;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersInRegion;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
 
 /**
  * Represents zones that have no connection with each other,
@@ -112,9 +113,9 @@ public class Zone {
 				
 				// Notify players at farthest side, indicating that this character left visible area
 				oldRegion.broadcastToSide(getRegionSideByOffsetX(oldRegion.regionX, regionX, true), 
-						new CharacterLeft(character.getObjectId()));
+						new CharactersLeft(character.getObjectId()));
 				oldRegion.broadcastToSide(getRegionSideByOffsetY(oldRegion.regionY, regionY, true), 
-						new CharacterLeft(character.getObjectId()));
+						new CharactersLeft(character.getObjectId()));
 				
 				// Notify players at newly visible side, indicating that a new character is now visible
 				regions[regionY][regionX].broadcastToSide(getRegionSideByOffsetX(oldRegion.regionX, regionX, false), 
@@ -122,8 +123,23 @@ public class Zone {
 				regions[regionY][regionX].broadcastToSide(getRegionSideByOffsetY(oldRegion.regionY, regionY, false), 
 						new CharacterAppeared(character));
 				
+				// If character is moving, send movement data to regions
+				if (character.isMoving()) {
+					regions[regionY][regionX].broadcastToSide(getRegionSideByOffsetX(oldRegion.regionX, regionX, false), 
+							new NotifyCharacterMovement(character));
+					regions[regionY][regionX].broadcastToSide(getRegionSideByOffsetY(oldRegion.regionY, regionY, false), 
+							new NotifyCharacterMovement(character));
+				}
+				
 				// Send player data about newly visible players in a newly visible side
-				character.sendPacket(new CharactersInRegion(character.getRegion().getVisibleCharacters()));
+				character.sendPacket(new CharactersInRegion(regions[regionY][regionX].getVisibleCharacters()));
+				
+				// Send player data about characters that are no longer visible
+				character.sendPacket(new CharactersLeft(oldRegion.getVisibleCharactersAtSide(
+								getRegionSideByOffsetX(oldRegion.regionX, regionX, true))));
+				character.sendPacket(new CharactersLeft(oldRegion.getVisibleCharactersAtSide(
+								getRegionSideByOffsetY(oldRegion.regionY, regionY, true))));
+				
 			}
 			
 			character.setRegion(regions[regionY][regionX]); 	// Set new region to current
@@ -185,7 +201,7 @@ public class Zone {
 		
 		if (object instanceof GameCharacter) {
 			object.getRegion().broadcastToCloseRegions(
-					new CharacterLeft(object.getObjectId()));
+					new CharactersLeft(object.getObjectId()));
 		}
 		
 		object.getRegion().removeObject(object);

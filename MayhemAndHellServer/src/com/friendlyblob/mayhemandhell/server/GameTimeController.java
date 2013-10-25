@@ -1,7 +1,5 @@
 package com.friendlyblob.mayhemandhell.server;
 
-import java.util.Calendar;
-
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.MobInstance;
 
