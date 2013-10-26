@@ -2,13 +2,10 @@ package com.friendlyblob.mayhemandhell.client.gameworld;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
-import javolution.util.FastMap;
-
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector3;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
@@ -16,13 +13,8 @@ import com.friendlyblob.mayhemandhell.client.entities.EnvironmentObject;
 import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
-import com.friendlyblob.mayhemandhell.client.entities.gui.TargetBar.TargetInfo;
 import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditor;
-import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
-import com.friendlyblob.mayhemandhell.client.screens.BaseScreen;
-import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
-import com.friendlyblob.mayhemandhell.client.screens.ZoneLoadingScreen;
 
 public class GameWorld {
 	public static GameWorld instance;
@@ -35,8 +27,8 @@ public class GameWorld {
 	
 	public MyGame game;
 	
-	public FastMap<Integer,GameCharacter> characters = new FastMap<Integer,GameCharacter>().shared();
-	public FastMap<Integer,GameObject> gameObjects = new FastMap<Integer,GameObject>().shared();
+	public ConcurrentHashMap<Integer,GameCharacter> characters = new ConcurrentHashMap<Integer,GameCharacter>();
+	public ConcurrentHashMap<Integer,GameObject> gameObjects = new ConcurrentHashMap<Integer,GameObject>();
 	
 	private static ArrayList<EnvironmentObject> environmentObjects = new ArrayList<EnvironmentObject>();
 	

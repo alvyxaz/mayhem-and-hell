@@ -65,6 +65,7 @@ public class Chat extends GuiElement implements InputProcessor{
 		tempMsg = new StringBuilder();
 		
 		Gdx.input.setInputProcessor(this);
+		visible = false;
 	}
 	
 	public void addMessage (Message message) {
