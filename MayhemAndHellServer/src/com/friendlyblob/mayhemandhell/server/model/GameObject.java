@@ -170,8 +170,18 @@ public class GameObject {
 		this.objectId = id;
 	}
 	
+	/**
+	 * Does not calculate precisely, because we're ignoring widths and heights of entities.
+	 * (Update: Not ignoring, but using in a "cheaty" and "bugged" way. )
+	 * Possible fixes: 
+	 * Make sure that attack range is at least the size of targets width and attackers width
+	 * Or find a better way to calculate minimum distance between two centers so that two hitboxes do not collide
+	 * @param target
+	 * @param radius
+	 * @return
+	 */
 	public boolean isInsideRadius(GameObject target, int radius) {
-		return this.getPosition().distanceTo(target.getPosition()) <= radius;
+		return this.getPosition().distanceTo(target.getPosition())- (target.getWidth() + target.getHeight())/2 <= radius;
 	}
 	
 	/**
@@ -182,4 +192,18 @@ public class GameObject {
 		buffer.put((byte) type.value);
 	}
 	
+	/**
+	 * TODO implement
+	 * @return
+	 */
+	public int getWidth() {
+		return 16;
+	}
+	
+	/**
+	 * TODO implement
+	 */
+	public int getHeight() {
+		return 5;
+	}
 }

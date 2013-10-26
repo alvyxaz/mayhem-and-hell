@@ -23,7 +23,7 @@ public class Player extends GameCharacter {
 	
 	public Player(int objectId, CharacterTemplate template) {
 		super(objectId, template);
-		this.setObjectId((int)(Math.random()*2000)); // TODO remove
+		this.setObjectId((int)(5000 + Math.random()*2000)); // TODO remove
 		this.setName("PC " + this.getObjectId());
 		this.setType(GameObjectType.PLAYER);
 		equippedItems = new ItemInstance[EquipmentSlot.values().length];

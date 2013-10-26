@@ -8,18 +8,10 @@ import com.friendlyblob.mayhemandhell.server.ai.Event;
 import com.friendlyblob.mayhemandhell.server.ai.GameCharacterAi;
 import com.friendlyblob.mayhemandhell.server.ai.Intention;
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
-import com.friendlyblob.mayhemandhell.server.model.World;
-import com.friendlyblob.mayhemandhell.server.model.logic.CollisionManager;
-import com.friendlyblob.mayhemandhell.server.model.logic.CollisionManager.Point;
 import com.friendlyblob.mayhemandhell.server.model.logic.Formulas;
-import com.friendlyblob.mayhemandhell.server.model.stats.BaseStats;
 import com.friendlyblob.mayhemandhell.server.model.stats.CharacterStats;
-import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
-import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
-import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersLeft;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.Attack;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterStatusUpdate;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
@@ -163,7 +155,32 @@ public class GameCharacter extends GameObject{
 	}
 	
 	public void moveCharacterTo(GameObject object) {
-		moveCharacterTo((int)object.getPosition().getX(), (int)object.getPosition().getY());
+		int x = (int)object.getPosition().getX();
+		int y = (int)object.getPosition().getY();
+		
+		// Horizontal movement
+		if (getPosition().getX() < object.getPosition().getX()) {
+			// Target is at the right side
+			x -=  (object.getWidth() + getWidth())/2; // Remove half of targets and half of our width
+		} else if (getPosition().getX() > object.getPosition().getX() + object.getWidth()){
+			// Target is at the left side
+			x += (object.getWidth() + getWidth())/2; // Add half of targets and half of our width
+		} else {
+			// If we're within a target (x wise), no need to change current position
+			x = (int) getPosition().getX();
+		}
+		
+		// Vertical movement
+		if (getPosition().getY() < object.getPosition().getY()) {
+			y -= (object.getHeight() + getHeight())/2;
+		} else if (getPosition().getY() > object.getPosition().getY() + object.getHeight()) {
+			y += (object.getHeight() + getHeight())/2;
+		} else {
+			// If we're within a target (y wise), no need to change current position
+			y = (int) getPosition().getY();
+		}
+		
+		moveCharacterTo(x, y);
 	}
 	
 	/**

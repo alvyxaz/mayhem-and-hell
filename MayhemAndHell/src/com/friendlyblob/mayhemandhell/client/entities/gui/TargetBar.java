@@ -88,7 +88,6 @@ public class TargetBar extends GuiElement {
 	
 	public void removeTarget() {
 		this.visible = false;
-		this.targetInfo = null;
 		manager.actionsBar.hide();
 		MyGame.connection.sendPacket(new RequestTarget(-1));
 	}

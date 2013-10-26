@@ -43,7 +43,7 @@ public class GameCharacter extends GameObject {
 	public GameCharacter(int id, int x, int y, int animationId){
 		super(id);
 		position.set(x, y);
-		hitBox = new Rectangle(x, y, 15, 28);
+		hitBox = new Rectangle(x-7.5f, y, 15, 28);
 		
 		animationHandler = new CharacterAnimation();
 		
@@ -129,7 +129,7 @@ public class GameCharacter extends GameObject {
 		spriteBatch.draw(Assets.px, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		spriteBatch.setColor(Color.WHITE);
 		
-		spriteBatch.draw(animationHandler.getFrame(Gdx.graphics.getDeltaTime()), hitBox.x, hitBox.y);
+		spriteBatch.draw(animationHandler.getFrame(Gdx.graphics.getDeltaTime()), position.x - animationHandler.getFrameWidth()/2, position.y);
 	}
 	
 	/**

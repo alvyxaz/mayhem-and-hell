@@ -59,4 +59,8 @@ public class ServerStatistics {
 	public static long getUsedMemoryMB(){
 		return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024*1024); // ;
 	}
+	
+	public static String getActiveThreads() {
+		return Integer.toString(Thread.activeCount());
+	}
 }

@@ -114,6 +114,8 @@ public class GUI extends SwingWorker<String, Object> {
 			
 			drawStat(g2d, "Memory usage:", ServerStatistics.getMemoryUsage(),startAtX, startAtY + line*lineHeight);
 			line++;
+			drawStat(g2d, "Active threads: ", ServerStatistics.getActiveThreads(), startAtX, startAtY + line*lineHeight);
+			line++;
 			line++;
 			
 			drawStat(g2d, "Packets sent:", ServerStatistics.getPacketsSent(),startAtX, startAtY + line*lineHeight);

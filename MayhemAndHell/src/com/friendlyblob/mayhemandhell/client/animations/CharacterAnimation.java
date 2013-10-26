@@ -85,4 +85,11 @@ public class CharacterAnimation implements AnimationHandler {
 		play(lastLooped);
 	}
 	
+	public int getFrameWidth() {
+		if (current == null) {
+			return 0;
+		}
+		return current.getFrame().getRegionWidth();
+	}
+	
 }
