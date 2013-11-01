@@ -231,7 +231,7 @@ public abstract class Ai implements Control {
 	public void startAutoAttack() {
 		if (!isAutoAttacking()) {
 			setAutoAttacking(true);
-			
+
 			// Send a notification to nearby characters, indicating that auto attack was started.
 			actor.getRegion().broadcastToCloseRegions(
 					new AutoAttack(actor.getObjectId(), true));

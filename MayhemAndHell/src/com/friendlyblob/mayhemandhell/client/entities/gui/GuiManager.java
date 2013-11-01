@@ -23,6 +23,7 @@ public class GuiManager {
 	public TargetBar targetBar;
 	public Inventory inventory;
 	public ActionsBar actionsBar;
+	public PlayerStatus playerStatus;
 	
 	public Chat chat;
 	
@@ -43,6 +44,10 @@ public class GuiManager {
 		
 		chat = new Chat();
 		addGuiElement(chat, GuiPositionHorizontal.LEFT, GuiPositionVertical.BOTTOM);
+		
+		playerStatus = new PlayerStatus();
+		addGuiElement(playerStatus, GuiPositionHorizontal.LEFT, GuiPositionVertical.TOP);
+		
 	}
 	
 	/**

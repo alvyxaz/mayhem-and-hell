@@ -40,7 +40,6 @@ public class AttackableAi extends GameCharacterAi implements Runnable {
 		if (thinking) {
 			return;
 		}
-		
 		thinking = true;
 		
 		switch(getIntention()) {
@@ -60,7 +59,7 @@ public class AttackableAi extends GameCharacterAi implements Runnable {
 			
 			// If we need to get closer
 			if (!attackTarget.isInsideRadius(actor, actor.getAttackRange())) {
-				actor.moveCharacterTo(attackTarget);
+				startFollowing(attackTarget, actor.getAttackRange());
 				return;
 			}
 			

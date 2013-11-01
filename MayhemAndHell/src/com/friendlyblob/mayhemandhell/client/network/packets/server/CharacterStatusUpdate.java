@@ -20,6 +20,12 @@ public class CharacterStatusUpdate extends ReceivablePacket {
 
 	@Override
 	public void run() {
+		
+		if (objectId == GameWorld.getInstance().player.objectId ) {
+			GameWorld.getInstance().game.screenGame.guiManager.playerStatus.setHealth(currentHealth, maxHealth);
+			return;
+		}
+		
 		TargetInfo info = GameWorld.getInstance().game.screenGame.guiManager.targetBar.getTargetInfo();
 	
 		if (info != null) {

@@ -409,7 +409,6 @@ public class GameCharacter extends GameObject{
 	 * @param attackTarget
 	 */
 	public void attack(GameCharacter attackTarget) {
-		
 		if (isAttackingDisabled()) {
 			return;
 		}
@@ -475,7 +474,16 @@ public class GameCharacter extends GameObject{
 		if (!isDead()) {
 			this.health -= damage;
 			this.getAi().notifyEvent(Event.ATTACKED, attacker, null);
-			this.sendPacketToTargetedBy(new CharacterStatusUpdate(this));
+			
+			CharacterStatusUpdate packet = new CharacterStatusUpdate(this);
+			
+			// Send packet to everyone who can see targets health
+			this.sendPacketToTargetedBy(packet);
+			
+			// If target is player, send update to him too.
+			if (isPlayer()) {
+				this.sendPacket(packet);
+			}
 			
 			if (this.health < 0) {
 				this.health = 0;
@@ -531,7 +539,7 @@ public class GameCharacter extends GameObject{
 	 * @return
 	 */
 	public int getAttackDamage() {
-		return 40;
+		return 5;
 	}
 
 	public boolean isPlayer() {

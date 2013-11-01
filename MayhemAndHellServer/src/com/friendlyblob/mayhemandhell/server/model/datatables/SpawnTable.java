@@ -59,8 +59,6 @@ public class SpawnTable {
 				spawn.setRespawnTime(resultSet.getInt("respawn_time"));
 				spawn.setZoneId(resultSet.getInt("zone_id"));
 				spawn.setMaximumCount(resultSet.getInt("npc_count"));
-//				System.out.println("[SpawnTable maximum count uncomment");
-//				spawn.setMaximumCount(150);
 				spawn.initialize();
 			}
 			

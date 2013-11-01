@@ -42,7 +42,6 @@ public class PlayerAi extends GameCharacterAi {
 				this.startFollowing(attackTarget, actor.getAttackRange());
 				return;
 			}
-			
 			actor.attack(attackTarget);
 		}
 	}

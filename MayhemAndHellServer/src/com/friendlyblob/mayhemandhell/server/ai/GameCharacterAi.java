@@ -44,8 +44,10 @@ public class GameCharacterAi extends Ai {
 
 	@Override
 	protected void onEventAttacked(GameCharacter attacker) {
-		// TODO Auto-generated method stub
-		
+		if (!isAutoAttacking()) {
+			actor.setTarget(attacker);
+			startAutoAttack();
+		}
 	}
 
 	@Override

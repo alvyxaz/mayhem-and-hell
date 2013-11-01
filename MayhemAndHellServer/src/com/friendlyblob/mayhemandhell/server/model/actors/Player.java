@@ -26,6 +26,9 @@ public class Player extends GameCharacter {
 		this.setObjectId((int)(5000 + Math.random()*2000)); // TODO remove
 		this.setName("PC " + this.getObjectId());
 		this.setType(GameObjectType.PLAYER);
+		
+		this.setHealth(template.getBaseMaxHealth());
+		
 		equippedItems = new ItemInstance[EquipmentSlot.values().length];
 		this.alive = true;
 		attachAi();

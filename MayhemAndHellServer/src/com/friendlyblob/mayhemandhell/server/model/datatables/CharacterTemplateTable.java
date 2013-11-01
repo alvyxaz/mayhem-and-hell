@@ -15,6 +15,7 @@ public class CharacterTemplateTable {
 	public CharacterTemplateTable() {
 		// TODO implement reading from file
 		StatsSet set = new StatsSet();
+		set.set("baseMaxHealth", 100);
 		characterTemplates.put("player", new CharacterTemplate(set));
 	}
 	

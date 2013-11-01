@@ -20,7 +20,13 @@ public class Attack extends ReceivablePacket {
 
 	@Override
 	public void run() {
-		GameCharacter character = GameWorld.getInstance().characters.get(targetId);
+		GameCharacter character = null;
+		
+		if (targetId == GameWorld.instance.getPlayer().objectId) {
+			character = GameWorld.instance.getPlayer();
+		} else {
+			character = GameWorld.getInstance().characters.get(targetId);
+		}
 		
 		// TODO start an animation, after which display damage
 		if (character != null) {
