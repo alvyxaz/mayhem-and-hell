@@ -15,6 +15,7 @@ import com.friendlyblob.mayhemandhell.server.model.datatables.CharacterTemplateT
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.GameClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.DeathNotification;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.LoginSuccessful;
 
 public class LoginPacket extends ClientPacket{
@@ -74,6 +75,11 @@ public class LoginPacket extends ClientPacket{
 									player.getObjectId(),
 									(int) player.getPosition().getX(),
 									(int) player.getPosition().getY()));
+					
+					if (player.isDead()) {
+						player.sendPacket(new DeathNotification());
+					}
+					
 					break;
 				}
 			}

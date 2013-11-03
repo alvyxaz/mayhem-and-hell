@@ -8,12 +8,14 @@ import com.friendlyblob.mayhemandhell.server.ai.Event;
 import com.friendlyblob.mayhemandhell.server.ai.GameCharacterAi;
 import com.friendlyblob.mayhemandhell.server.ai.Intention;
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
+import com.friendlyblob.mayhemandhell.server.model.Zone;
 import com.friendlyblob.mayhemandhell.server.model.logic.Formulas;
 import com.friendlyblob.mayhemandhell.server.model.stats.CharacterStats;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.Attack;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterStatusUpdate;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.DeathNotification;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyMovementStop;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.TargetInfoResponse;
@@ -154,6 +156,20 @@ public class GameCharacter extends GameObject{
 		return true;
 	}
 	
+	public void teleportTo(Zone zone, int x, int y) {
+		if (this.getZone() != zone) {
+			this.getZone().removeObject(this);
+			this.setPosition(x, y);
+			zone.addObject(this);
+			return;
+		}
+		
+		this.setPosition(x, y);
+		zone.updateRegion(this, true);
+		this.movement = new MovementData().fillWithCurrent(this);
+		getRegion().broadcastToCloseRegions(new NotifyCharacterMovement(this, true));
+	}
+	
 	public void moveCharacterTo(GameObject object) {
 		int x = (int)object.getPosition().getX();
 		int y = (int)object.getPosition().getY();
@@ -229,6 +245,19 @@ public class GameCharacter extends GameObject{
 		public float destinationY;
 		public int movementSpeed;
 		public int timeStamp;
+		
+		/**
+		 * Fills moevement data with characters current position.
+		 * @param character
+		 * @return
+		 */
+		public MovementData fillWithCurrent(GameCharacter character) {
+			destinationX = (int) character.getPosition().getX();
+			destinationY = (int) character.getPosition().getY();
+			movementSpeed = 0;
+			timeStamp = 0;
+			return this;
+		}
 	}
 	
 	/**
@@ -346,6 +375,10 @@ public class GameCharacter extends GameObject{
 		
 		this.removeTarget();
 		this.clearTargetedBy();
+		
+		if (isPlayer()) {
+			this.sendPacket(new DeathNotification());
+		}
 	}
 	
 	/**
@@ -421,10 +454,10 @@ public class GameCharacter extends GameObject{
 		boolean critical = Formulas.landedCriticalPhysical(this);
 		int damage = getAttackDamage();
 		
-		int attackTime = 500;			// How long attack takes
+		int attackTime = 500;			// How long attack (animation) takes
 		int timeBetweenAttacks = 1000;	// Time until next attack
 		
-		attackEndTime = GameTimeController.getInstance().getGameTicks() + timeBetweenAttacks/GameTimeController.MILLIS_IN_TICK -1;
+		attackEndTime = GameTimeController.getInstance().getGameTicks() + (timeBetweenAttacks + attackTime)/GameTimeController.MILLIS_IN_TICK -1;
 		
 		Attack attack = new Attack(attackTarget.getObjectId());
 		
@@ -444,7 +477,10 @@ public class GameCharacter extends GameObject{
 	 * @param damage
 	 */
 	public void executeHit(GameCharacter hitTarget, int damage) {
-		hitTarget.addDamage(this, damage);
+		// Don't make the hit if I'm dead
+		if (!isDead()) {
+			hitTarget.addDamage(this, damage);
+		}
 	}
 	
 	/**
@@ -539,7 +575,7 @@ public class GameCharacter extends GameObject{
 	 * @return
 	 */
 	public int getAttackDamage() {
-		return 5;
+		return 40;
 	}
 
 	public boolean isPlayer() {

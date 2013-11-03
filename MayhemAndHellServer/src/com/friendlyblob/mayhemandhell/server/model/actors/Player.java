@@ -12,6 +12,7 @@ import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem.Equipment
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterStatusUpdate;
 
 public class Player extends GameCharacter {
 	
@@ -175,4 +176,10 @@ public class Player extends GameCharacter {
 		super.cleanup();
 	}
 	
+	public void resurrect() {
+		this.restoreVitals();
+		this.sendPacket(new CharacterStatusUpdate(this));
+		this.teleportTo(this.getZone(), 10, 10);
+		this.alive = true;
+	}
 }

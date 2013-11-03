@@ -19,8 +19,9 @@ public class RequestMove extends ClientPacket{
 
 	@Override
 	public void run() {
-		// TODO Have in mind that player might change speed while moving
-		getClient().getPlayer().getAi().setIntention(Intention.MOVE_TO, new ObjectPosition(x, y));
+		if (!getClient().getPlayer().isDead()) {
+			getClient().getPlayer().getAi().setIntention(Intention.MOVE_TO, new ObjectPosition(x, y));
+		}
 	}
 
 }

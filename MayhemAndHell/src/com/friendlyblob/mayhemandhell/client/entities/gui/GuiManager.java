@@ -24,6 +24,7 @@ public class GuiManager {
 	public Inventory inventory;
 	public ActionsBar actionsBar;
 	public PlayerStatus playerStatus;
+	public Resurrection resurrection;
 	
 	public Chat chat;
 	
@@ -48,6 +49,8 @@ public class GuiManager {
 		playerStatus = new PlayerStatus();
 		addGuiElement(playerStatus, GuiPositionHorizontal.LEFT, GuiPositionVertical.TOP);
 		
+		resurrection = new Resurrection();
+		addGuiElement(resurrection, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.MIDDLE);
 	}
 	
 	/**

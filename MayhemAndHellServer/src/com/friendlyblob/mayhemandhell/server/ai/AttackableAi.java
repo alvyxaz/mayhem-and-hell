@@ -53,10 +53,9 @@ public class AttackableAi extends GameCharacterAi implements Runnable {
 		
 		thinking = false;
 	}
-
+	
 	public void onThinkAttack() {
-		if (attackTarget != null) {
-			
+		if (attackTarget != null && !actor.isAttackingDisabled()) {
 			// If we need to get closer
 			if (!attackTarget.isInsideRadius(actor, actor.getAttackRange())) {
 				startFollowing(attackTarget, actor.getAttackRange());

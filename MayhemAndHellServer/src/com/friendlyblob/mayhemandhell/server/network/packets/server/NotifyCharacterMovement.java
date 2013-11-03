@@ -15,6 +15,7 @@ public class NotifyCharacterMovement extends ServerPacket {
 	private int objectId;
 	private MovementData movement;
 	private ObjectPosition position;
+	private boolean teleport;
 	
 	/**
 	 * Character movement packet
@@ -23,9 +24,14 @@ public class NotifyCharacterMovement extends ServerPacket {
 	 * @param position
 	 */
 	public NotifyCharacterMovement(GameCharacter character) {
+		this(character, false);
+	}
+	
+	public NotifyCharacterMovement(GameCharacter character, boolean teleport) {
 		this.objectId = character.getObjectId();
 		this.movement = character.getMovement();
 		this.position = character.getPosition();
+		this.teleport = teleport;
 	}
 	
 	@Override
@@ -37,6 +43,7 @@ public class NotifyCharacterMovement extends ServerPacket {
 		writeD((int) movement.destinationX); 	// Destination X
 		writeD((int) movement.destinationY); 	// Destination Y
 		writeD(movement.movementSpeed);			// Movement Speed
+		writeD(teleport ? 1 : 0);				// Whether or not teleport
 	}
 
 }

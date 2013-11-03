@@ -46,6 +46,9 @@ public class PacketHandler {
 			case 0X0B:
 				response = new CharacterStatusUpdate();
 				break;
+			case 0X0C:
+				response = new DeathNotification();
+				break;
 			case 0xA0:
 				response = new ChatMessageNotify();
 				break;

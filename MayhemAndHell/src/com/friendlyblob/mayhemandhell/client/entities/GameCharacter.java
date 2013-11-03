@@ -138,6 +138,11 @@ public class GameCharacter extends GameObject {
 	 * @param yOffset
 	 */
 	public void easeByOffset(float xOffset, float yOffset, float time) {
+		if (Math.abs(xOffset) > 40 || Math.abs(yOffset) > 40) {
+			moveBy(xOffset, yOffset);
+			return;
+		}
+		
 		this.easeTime = time;
 		this.easeX = xOffset / easeTime;
 		this.easeY = yOffset / easeTime;
@@ -169,6 +174,11 @@ public class GameCharacter extends GameObject {
 	public void moveTo (int x, int y, int speed) {
 		this.movementSpeed = speed;
 		moveTo(x, y);
+	}
+	
+	public void teleportTo (int x, int y) {
+		this.setPosition(x, y);
+		this.state = IDLE;
 	}
 	
 	public boolean isMoving() {

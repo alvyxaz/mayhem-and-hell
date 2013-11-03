@@ -92,10 +92,14 @@ public class Zone {
 		return (y/(template.getTileHeight()/2))/template.getRegionHeight();
 	}
 	
+	public void updateRegion(GameCharacter character) {
+		this.updateRegion(character, false);
+	}
+	
 	/**
 	 * Check whether character has moved out of current region and joined another.
 	 */
-	public void updateRegion(GameCharacter character) {
+	public void updateRegion(GameCharacter character, boolean teleport) {
 		int regionX = getRegionX((int)(character.getPosition().getX()));
 		int regionY = getRegionY((int)(character.getPosition().getY()));
 		
@@ -126,9 +130,9 @@ public class Zone {
 				// If character is moving, send movement data to regions
 				if (character.isMoving()) {
 					regions[regionY][regionX].broadcastToSide(getRegionSideByOffsetX(oldRegion.regionX, regionX, false), 
-							new NotifyCharacterMovement(character));
+							new NotifyCharacterMovement(character, teleport));
 					regions[regionY][regionX].broadcastToSide(getRegionSideByOffsetY(oldRegion.regionY, regionY, false), 
-							new NotifyCharacterMovement(character));
+							new NotifyCharacterMovement(character, teleport));
 				}
 				
 				// Send player data about newly visible players in a newly visible side

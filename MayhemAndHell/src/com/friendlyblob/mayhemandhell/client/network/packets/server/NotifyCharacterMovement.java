@@ -14,6 +14,7 @@ public class NotifyCharacterMovement extends ReceivablePacket {
 	int destinationX;
 	int destinationY;
 	int movementSpeed;
+	boolean teleport;
 	
 	@Override
 	public boolean read() {
@@ -23,24 +24,34 @@ public class NotifyCharacterMovement extends ReceivablePacket {
 		destinationX = readD();
 		destinationY = readD();
 		movementSpeed = readD();
+		teleport = readD() == 1 ? true : false;
 		return true;
 	}
 
 	@Override
 	public void run() {
 		Player player = GameWorld.getInstance().player;
+		
 		if (player.objectId == objectId) {
 			player.easeByOffset(
 					currentX - player.position.x, 
 					currentY - player.position.y, 0.5f);
-			player.moveTo(destinationX, destinationY, movementSpeed);
+			if (teleport) {
+				player.teleportTo(currentX, currentY);
+			} else {
+				player.moveTo(destinationX, destinationY, movementSpeed);
+			}
 		} else {
 			GameCharacter character = GameWorld.getInstance().characters.get(objectId);
 			if (character != null) {
-				character.easeByOffset(
-						currentX - character.position.x, 
-						currentY - character.position.y, 0.5f);
-				character.moveTo(destinationX, destinationY, movementSpeed);
+				if (teleport) {
+					character.teleportTo(currentX, currentY);
+				} else {
+					character.easeByOffset(
+							currentX - character.position.x, 
+							currentY - character.position.y, 0.5f);
+					character.moveTo(destinationX, destinationY, movementSpeed);
+				}
 			}
 		}
 	}
