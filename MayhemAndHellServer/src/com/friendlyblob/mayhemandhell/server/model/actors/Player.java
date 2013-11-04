@@ -137,6 +137,8 @@ public class Player extends GameCharacter {
 					return GameActions.friendlyPlayer;
 				case HOSTILE_NPC:
 					return GameActions.hostineNpc;
+				case FRIENDLY_NPC:
+					return GameActions.friendlyNpc;
 			}
 		}
 		return null;

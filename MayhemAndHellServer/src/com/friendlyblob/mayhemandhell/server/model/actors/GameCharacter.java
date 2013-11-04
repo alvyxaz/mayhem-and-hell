@@ -425,7 +425,7 @@ public class GameCharacter extends GameObject{
 	@Override
 	public void fillInfo(ByteBuffer buffer) {
 		super.fillInfo(buffer);
-		buffer.putInt(this.health);
+		buffer.putInt(this.getHealth());
 		buffer.putInt(this.getMaxHealth());
 	}
 	
@@ -575,7 +575,7 @@ public class GameCharacter extends GameObject{
 	 * @return
 	 */
 	public int getAttackDamage() {
-		return 40;
+		return 15;
 	}
 
 	public boolean isPlayer() {

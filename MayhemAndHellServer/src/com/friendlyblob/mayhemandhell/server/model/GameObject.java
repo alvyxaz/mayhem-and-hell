@@ -19,7 +19,7 @@ public class GameObject {
 	public static enum GameObjectType {
 		OTHER(0),
 		PLAYER(1),
-		FIENDLY_NPC(2),	// Non mobile object (Most likely a character you can "Talk" to)
+		FRIENDLY_NPC(2),	// Non mobile object (Most likely a character you can "Talk" to)
 		HOSTILE_NPC(3),
 		ITEM(4),
 		RESOURCE(5); // Mining, crafting and other resources

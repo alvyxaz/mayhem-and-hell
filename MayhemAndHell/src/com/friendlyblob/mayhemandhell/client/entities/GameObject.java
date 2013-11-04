@@ -47,7 +47,7 @@ public abstract class GameObject {
 		
 		// Checks whether entity should have health points
 		public static boolean hasHealth(GameObjectType type) {
-			return type == GameObjectType.HOSTILE_NPC || type == GameObjectType.PLAYER;
+			return type == GameObjectType.HOSTILE_NPC || type == GameObjectType.PLAYER || type == GameObjectType.FIENDLY_NPC;
 		}
 	}
 	

@@ -2,6 +2,10 @@ package com.friendlyblob.mayhemandhell.server.actions;
 
 public class GameActions {
 
+	public static GameAction[] friendlyNpc = new GameAction[] {
+		GameAction.TALK
+	};
+	
 	public static GameAction[] friendlyPlayer = new GameAction[]{
 		GameAction.FOLLOW,
 		GameAction.TRADE,
@@ -16,7 +20,8 @@ public class GameActions {
 		ATTACK("Attack"),
 		TRADE("Trade"),
 		WHISPER("Whisper"),
-		FOLLOW("Follow");
+		FOLLOW("Follow"),
+		TALK("Talk");
 		
 		private String name;
 		

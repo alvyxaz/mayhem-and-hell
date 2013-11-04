@@ -146,6 +146,18 @@ public class GameWorld {
 			worldCam.position.y -= (worldCam.position.y - MyGame.SCREEN_HEIGHT*0.15f) - player.hitBox.y;
 		}
 		
+		// BOUNDS
+		
+		// Bottom
+		if (worldCam.position.y - worldCam.viewportHeight/2 < 0) {
+			worldCam.position.y = worldCam.viewportHeight/2;
+		}
+		
+		// Left
+		if (worldCam.position.x - worldCam.viewportWidth/2 < 0) {
+			worldCam.position.x = worldCam.viewportWidth/2;
+		}
+		
 		worldCam.update();
 	}
 	

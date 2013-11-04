@@ -140,5 +140,14 @@
 		
 		
 	</character>
+	
+	<character id="100"> <!--  SMITH -->
+	
+		<animation type="DEFAULT" file="characters/characters.png" 
+		    	frameWidth="32" frameHeight="32" looped="true" duration="1">
+			<frame startX="0" startY="256" startMark="0" />
+		</animation>
+		
+	</character>
     
 </characters>

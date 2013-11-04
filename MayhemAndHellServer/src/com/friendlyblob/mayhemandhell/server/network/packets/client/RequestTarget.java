@@ -1,6 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.network.packets.client;
 
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
+import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcFriendlyInstance;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.ActionFailedMessage;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.TargetInfoResponse;
