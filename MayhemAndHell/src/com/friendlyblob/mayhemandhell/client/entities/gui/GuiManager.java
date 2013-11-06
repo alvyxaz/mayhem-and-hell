@@ -22,6 +22,7 @@ public class GuiManager {
 	
 	public TargetBar targetBar;
 	public Inventory inventory;
+	public InventoryIcon inventoryIcon;
 	public ActionsBar actionsBar;
 	public PlayerStatus playerStatus;
 	public Resurrection resurrection;
@@ -51,6 +52,9 @@ public class GuiManager {
 		
 		resurrection = new Resurrection();
 		addGuiElement(resurrection, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.MIDDLE);
+		
+		inventoryIcon = new InventoryIcon();
+		addGuiElement(inventoryIcon, GuiPositionHorizontal.RIGHT, GuiPositionVertical.TOP);
 	}
 	
 	/**
