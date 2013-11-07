@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
+import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ZoneTable;
 
 public class World {
@@ -44,6 +45,12 @@ public class World {
 	public void removeObject(GameObject object) {
 		allObjects.remove(object);
 		object.getZone().removeObject(object);
+	}
+	
+	public void addObject(GameObject object) {
+		allObjects.put(object.getObjectId(), object);
+		
+		allZones.get(0).addObject(object);
 	}
 	
 	public GameObject getObject(int id) {

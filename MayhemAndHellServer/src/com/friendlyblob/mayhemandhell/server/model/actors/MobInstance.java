@@ -1,7 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.model.actors;
 
 import com.friendlyblob.mayhemandhell.server.GameTimeController;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersLeft;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectsLeft;
 
 /**
  * Represents an enemy unit

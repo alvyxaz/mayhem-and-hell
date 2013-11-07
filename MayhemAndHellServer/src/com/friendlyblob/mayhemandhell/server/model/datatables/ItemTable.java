@@ -5,7 +5,6 @@ import java.util.Map;
 import javolution.util.FastMap;
 
 import com.friendlyblob.mayhemandhell.server.data.ItemDataParser;
-import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
 
 public class ItemTable {	
@@ -34,10 +33,10 @@ public class ItemTable {
 		itemParser.load();
 		
 		for (Item item : itemParser.getItems()) {
-			if (highest < item.itemId) {
-				highest = item.itemId;
+			if (highest < item.getItemId()) {
+				highest = item.getItemId();
 			}
-			items.put(item.itemId, item);
+			items.put(item.getItemId(), item);
 		}
 		
 		buildLookupTable(highest);

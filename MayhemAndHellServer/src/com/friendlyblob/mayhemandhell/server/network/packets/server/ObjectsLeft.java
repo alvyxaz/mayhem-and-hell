@@ -2,25 +2,26 @@ package com.friendlyblob.mayhemandhell.server.network.packets.server;
 
 import java.util.List;
 
+import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 
-public class CharactersLeft extends ServerPacket{
+public class ObjectsLeft extends ServerPacket{
 	private int[] ids;
 	
-	public CharactersLeft(int id) {
+	public ObjectsLeft(int id) {
 		ids = new int[1];
 		ids[0] = id;
 	}
 	
-	public CharactersLeft(List<GameCharacter> characters) {
-		if (characters == null) {
+	public ObjectsLeft(List<GameObject> objects) {
+		if (objects == null) {
 			return;
 		}
-		ids = new int[characters.size()];
+		ids = new int[objects.size()];
 		int index = 0;
-		for (GameCharacter character : characters) {
-			ids[index++] = character.getObjectId();
+		for (GameObject object : objects) {
+			ids[index++] = object.getObjectId();
 		}
 	}
 	

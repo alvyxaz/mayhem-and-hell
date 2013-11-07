@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.stats.StatModifier;
+import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 
 /**
  * Represents an item that can be equiped
@@ -42,7 +43,8 @@ public class EquipableItem extends Item {
 	private EquipmentSlot slot;
 	private StatModifier [] modifiers;
 	
-	public EquipableItem() {
+	public EquipableItem(int itemId, String name, StatsSet set) {
+		super(itemId, name, set);
 		modifiers = new StatModifier[0];
 	}
 	

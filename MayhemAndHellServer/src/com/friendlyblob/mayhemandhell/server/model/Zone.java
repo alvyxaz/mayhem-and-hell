@@ -4,13 +4,14 @@ import java.util.Map;
 
 import javolution.util.FastMap;
 
+import com.friendlyblob.mayhemandhell.server.model.GameObject.GameObjectType;
 import com.friendlyblob.mayhemandhell.server.model.Region.RegionSide;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterAppeared;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersLeft;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersInRegion;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectAppeared;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectsLeft;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectsInRegion;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
 
 /**
@@ -72,6 +73,8 @@ public class Zone {
 				regions[getRegionY((int)object.getPosition().getY())][getRegionX((int)object.getPosition().getX())]);
 		object.getRegion().addObject(object);
 		allObjects.put(object.getObjectId(), object);
+		
+		object.getRegion().broadcast(new ObjectAppeared(object));
 	}
 	
 	/**
@@ -117,15 +120,15 @@ public class Zone {
 				
 				// Notify players at farthest side, indicating that this character left visible area
 				oldRegion.broadcastToSide(getRegionSideByOffsetX(oldRegion.regionX, regionX, true), 
-						new CharactersLeft(character.getObjectId()));
+						new ObjectsLeft(character.getObjectId()));
 				oldRegion.broadcastToSide(getRegionSideByOffsetY(oldRegion.regionY, regionY, true), 
-						new CharactersLeft(character.getObjectId()));
+						new ObjectsLeft(character.getObjectId()));
 				
 				// Notify players at newly visible side, indicating that a new character is now visible
 				regions[regionY][regionX].broadcastToSide(getRegionSideByOffsetX(oldRegion.regionX, regionX, false), 
-						new CharacterAppeared(character));
+						new ObjectAppeared(character));
 				regions[regionY][regionX].broadcastToSide(getRegionSideByOffsetY(oldRegion.regionY, regionY, false), 
-						new CharacterAppeared(character));
+						new ObjectAppeared(character));
 				
 				// If character is moving, send movement data to regions
 				if (character.isMoving()) {
@@ -136,12 +139,12 @@ public class Zone {
 				}
 				
 				// Send player data about newly visible players in a newly visible side
-				character.sendPacket(new CharactersInRegion(regions[regionY][regionX].getVisibleCharacters()));
+				character.sendPacket(new ObjectsInRegion(regions[regionY][regionX].getVisibleObjects()));
 				
 				// Send player data about characters that are no longer visible
-				character.sendPacket(new CharactersLeft(oldRegion.getVisibleCharactersAtSide(
+				character.sendPacket(new ObjectsLeft(oldRegion.getVisibleObjectsAtSide(
 								getRegionSideByOffsetX(oldRegion.regionX, regionX, true))));
-				character.sendPacket(new CharactersLeft(oldRegion.getVisibleCharactersAtSide(
+				character.sendPacket(new ObjectsLeft(oldRegion.getVisibleObjectsAtSide(
 								getRegionSideByOffsetY(oldRegion.regionY, regionY, true))));
 				
 			}
@@ -151,8 +154,8 @@ public class Zone {
 			
 			// If it's the first appearance, notify nearby regions that a new character is visible
 			if (firstAppearance) {
-				character.getRegion().broadcastToCloseRegions(new CharacterAppeared(character));
-				character.sendPacket(new CharactersInRegion(character.getRegion().getVisibleCharacters()));
+				character.getRegion().broadcastToCloseRegions(new ObjectAppeared(character));
+				character.sendPacket(new ObjectsInRegion(character.getRegion().getVisibleObjects()));
 			}
 			
 			if (character instanceof Player) {
@@ -205,7 +208,7 @@ public class Zone {
 		
 		if (object instanceof GameCharacter) {
 			object.getRegion().broadcastToCloseRegions(
-					new CharactersLeft(object.getObjectId()));
+					new ObjectsLeft(object.getObjectId()));
 		}
 		
 		object.getRegion().removeObject(object);
@@ -219,6 +222,7 @@ public class Zone {
 	/**
 	 * Sends data about nearby characters to all players
 	 */
+	@Deprecated
 	public void nearbyCharactersBroadcast() {
 		for(int y = 0; y < template.getRegionsCountY(); y++) {
 			for(int x = 0; x < template.getRegionsCountX(); x++) {

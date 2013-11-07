@@ -3,24 +3,42 @@ package com.friendlyblob.mayhemandhell.server.network.packets.server;
 import java.util.List;
 
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
+import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
+import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 
-public class ObjectsInRegion extends ServerPacket {
+public class ObjectsInRegion extends ServerPacket{
 
-	private List<GameObject> closeObjects;
+	List<GameObject> closeObjects;
 	
-	public ObjectsInRegion(List<GameObject> objects) {
-		this.closeObjects = objects;
+	public ObjectsInRegion (List<GameObject> list) {
+		closeObjects = list;
 	}
 	
 	@Override
 	protected void write() {
-		writeC(0x06);
+		writeC(0x04);
 		
-		writeH(closeObjects.size()); // Object count
-		
-		for(GameObject object: closeObjects) {
-			// TODO save object data
+		writeH(closeObjects.size()); // Player count
+
+		// Writing characters
+		for(GameObject object : closeObjects) {
+			writeD(object.getObjectId());				// Object id
+			writeD((int)object.getPosition().getX());	// X position
+			writeD((int)object.getPosition().getY());	// X position
+			writeH(object.getType().value);
+			
+			switch (object.getType()) {
+				case PLAYER:
+				case FRIENDLY_NPC:
+				case HOSTILE_NPC:
+					writeD(((GameCharacter) object).getMovementSpeed());			// Movement speed
+					writeD(((GameCharacter) object).getSprite());					// Sprite (animation)
+					break;
+				case ITEM:
+					writeD(((ItemInstance) object).getItemId());
+					break;
+			}
 		}
 	}
 

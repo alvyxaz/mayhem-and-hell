@@ -4,10 +4,10 @@ import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 
 public class Item {
 	
-	public int itemId;
-	public String name;
-	public String type;
-	public StatsSet set;
+	private int itemId;
+	private String name;
+	private String type;
+	private StatsSet set;
 	
 	public static enum ItemType {
 		CONSUMABLE,
@@ -16,11 +16,41 @@ public class Item {
 		OTHER
 	}
 	
+	public Item(int itemId, String name, StatsSet set) {
+		this.itemId = itemId;
+		this.name = name;
+		this.set = set;
+	}
+	
 	/**
 	 * @return the itemId
 	 */
 	public int getItemId() {
 		return itemId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public StatsSet getStatsSet() {
+		return set;
+	}
+
+	public void setStatsSet(StatsSet set) {
+		this.set = set;
 	}
 
 	/**
@@ -31,5 +61,6 @@ public class Item {
 	public boolean isStackable() {
 		return false;
 	}
+	
 	
 }

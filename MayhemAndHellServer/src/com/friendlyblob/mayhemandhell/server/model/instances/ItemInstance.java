@@ -10,7 +10,8 @@ public class ItemInstance extends GameObject {
 
 	private Item template;
 	
-	public ItemInstance(Item template) {
+	public ItemInstance(int objectId, Item template) {
+		super(objectId);
 		this.template = template;
 	}
 	

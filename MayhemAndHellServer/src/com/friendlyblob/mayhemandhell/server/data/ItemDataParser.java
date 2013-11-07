@@ -1,6 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.data;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -77,15 +78,13 @@ public class ItemDataParser extends DataParser {
 		Item item = null;
 		
 		try {
-			item = (Item) Class.forName("com.friendlyblob.mayhemandhell.server.model.items." + className).newInstance();
+			Constructor<?> constructor = Class.forName("com.friendlyblob.mayhemandhell.server.model.items." + className).getDeclaredConstructor(new Class[] { int.class, String.class, StatsSet.class });
+			item = (Item) constructor.newInstance(itemId, itemName, new StatsSet());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-		
-		item.itemId = itemId;
-		item.name = itemName;
-		item.set = new StatsSet();
 		
 		for (itemNode = itemNode.getFirstChild(); itemNode != null; 
 				itemNode = itemNode.getNextSibling()) {
@@ -96,7 +95,7 @@ public class ItemDataParser extends DataParser {
 			}
 			
 			if ("set".equalsIgnoreCase(itemNode.getNodeName())) {
-				parseSetPair(itemNode, item.set);
+				parseSetPair(itemNode, item.getStatsSet());
 			} else if ("modifiers".equalsIgnoreCase(itemNode.getNodeName())) {
 				parseModifiers(itemNode, item);
 			}

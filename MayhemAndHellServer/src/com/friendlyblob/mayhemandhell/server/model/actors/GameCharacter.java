@@ -7,8 +7,13 @@ import com.friendlyblob.mayhemandhell.server.ai.AiData;
 import com.friendlyblob.mayhemandhell.server.ai.Event;
 import com.friendlyblob.mayhemandhell.server.ai.GameCharacterAi;
 import com.friendlyblob.mayhemandhell.server.ai.Intention;
+import com.friendlyblob.mayhemandhell.server.factories.ItemFactory;
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
+import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.Zone;
+import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
+import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
+import com.friendlyblob.mayhemandhell.server.model.items.Item;
 import com.friendlyblob.mayhemandhell.server.model.logic.Formulas;
 import com.friendlyblob.mayhemandhell.server.model.stats.CharacterStats;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
@@ -378,6 +383,15 @@ public class GameCharacter extends GameObject{
 		
 		if (isPlayer()) {
 			this.sendPacket(new DeathNotification());
+		}
+		
+		if (getType() == GameObjectType.HOSTILE_NPC) {
+			// else drop loot
+			Item it = ItemTable.getInstance().getItem(1);
+			ItemInstance ii = ItemFactory.getInstance().createItem(it);
+			ii.setPosition(getPosition());
+			
+			World.getInstance().getZone(0).addObject(ii);		
 		}
 	}
 	

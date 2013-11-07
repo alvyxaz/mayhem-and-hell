@@ -45,6 +45,10 @@ public class GameObject {
 	
 	private String name;
 	
+	public GameObject(int objectId) {
+		this.objectId = objectId;
+	}
+	
 	public void setType(GameObjectType type) {
 		this.type = type;
 	}

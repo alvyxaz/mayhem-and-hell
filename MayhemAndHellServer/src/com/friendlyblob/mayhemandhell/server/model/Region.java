@@ -7,8 +7,8 @@ import java.util.List;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersLeft;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.CharactersInRegion;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectsLeft;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectsInRegion;
 
 import javolution.util.FastMap;
 
@@ -141,7 +141,7 @@ public class Region {
 		notifyPlayersAroundChange();
 		
 		if (object instanceof GameCharacter) {
-			broadcastToCloseRegions(new CharactersLeft(object.getObjectId()));
+			broadcastToCloseRegions(new ObjectsLeft(object.getObjectId()));
 		}
 	}
 
@@ -241,14 +241,15 @@ public class Region {
 	/**
 	 * Sends data about nearby characters to all players
 	 */
+	@Deprecated
 	public void updateNearbyPlayersData() {
 		// If there's no one to update data for
-		if (this.characters.size() == 0 ) return;
+		if (this.characters.size() == 0) return;
 		
-		List<GameCharacter> visibleCharacters = getVisibleCharacters();
-		
-		CharactersInRegion packet = new CharactersInRegion(visibleCharacters);
-		broadcast(packet); 
+//		List<GameObject> visibleCharacters = getVisibleCharacters();
+//		
+//		ObjectsInRegion packet = new ObjectsInRegion(visibleCharacters);
+//		broadcast(packet); 
 	}
 	
 	/**
@@ -315,34 +316,34 @@ public class Region {
 	 * @param side
 	 * @return
 	 */
-	public List<GameCharacter> getVisibleCharactersAtSide(RegionSide side) {
-		List<GameCharacter> visibleCharacters = new ArrayList<GameCharacter>();
+	public List<GameObject> getVisibleObjectsAtSide(RegionSide side) {
+		List<GameObject> visibleObjects = new ArrayList<GameObject>();
 		
 		for(int i = 0; i < closeRegions.length; i++) {
 			switch(side) {
 				case LEFT:
 					if (regionX > closeRegions[i].regionX) {
-						visibleCharacters.addAll(closeRegions[i].getCharacters().values());
+						visibleObjects.addAll(closeRegions[i].getObjects().values());
 					}
 					break;
 				case RIGHT:
 					if (regionX < closeRegions[i].regionX) {
-						visibleCharacters.addAll(closeRegions[i].getCharacters().values());
+						visibleObjects.addAll(closeRegions[i].getObjects().values());
 					}
 					break;
 				case TOP:
 					if (regionY < closeRegions[i].regionY) {
-						visibleCharacters.addAll(closeRegions[i].getCharacters().values());
+						visibleObjects.addAll(closeRegions[i].getObjects().values());
 					}
 					break;
 				case BOTTOM:
 					if (regionY > closeRegions[i].regionY) {
-						visibleCharacters.addAll(closeRegions[i].getCharacters().values());
+						visibleObjects.addAll(closeRegions[i].getObjects().values());
 					}
 					break;
 			}
 		}
-		return visibleCharacters;
+		return visibleObjects;
 	}
 	
 	/**
