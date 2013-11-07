@@ -3,7 +3,7 @@ package com.friendlyblob.mayhemandhell.client.network.packets.server;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 
-public class CharactersLeft extends ReceivablePacket {
+public class ObjectsLeft extends ReceivablePacket {
 
 	private int[] ids;
 	

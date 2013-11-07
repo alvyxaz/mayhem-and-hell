@@ -66,6 +66,14 @@ public class GameWorld {
 		gameObjects.remove(id);
 	}
 	
+	public void putObject(GameObject object) {
+		gameObjects.put(object.objectId, object);
+	}
+	
+	public void removeObject(int id) {
+		gameObjects.remove(id);
+	}
+	
 	public boolean characterExists(int id) {
 		return characters.containsKey(id);
 	}
@@ -116,10 +124,12 @@ public class GameWorld {
 		spriteBatch.setProjectionMatrix(worldCam.combined);
 
 		map.drawBelow(spriteBatch);
-		
-		player.draw(spriteBatch);
-		
+
 		for (EnvironmentObject go : environmentObjects) {
+			go.draw(spriteBatch);
+		}
+		
+		for (GameObject go : gameObjects.values()) {
 			go.draw(spriteBatch);
 		}
 		
@@ -127,6 +137,9 @@ public class GameWorld {
 		for (GameCharacter character : characters.values()) {
 			character.draw(spriteBatch);
 		}
+		
+		player.draw(spriteBatch);
+		
 		
 		map.drawAbove(spriteBatch);
 	}

@@ -25,7 +25,7 @@ public abstract class GameObject {
 	public static enum GameObjectType {
 		OTHER(0),
 		PLAYER(1),
-		FIENDLY_NPC(2),	// Non mobile object (Most likely a character you can "Talk" to)
+		FRIENDLY_NPC(2),	// Non mobile object (Most likely a character you can "Talk" to)
 		HOSTILE_NPC(3),
 		ITEM(4),
 		RESOURCE(5); // Mining, crafting and other resources
@@ -47,7 +47,7 @@ public abstract class GameObject {
 		
 		// Checks whether entity should have health points
 		public static boolean hasHealth(GameObjectType type) {
-			return type == GameObjectType.HOSTILE_NPC || type == GameObjectType.PLAYER || type == GameObjectType.FIENDLY_NPC;
+			return type == GameObjectType.HOSTILE_NPC || type == GameObjectType.PLAYER || type == GameObjectType.FRIENDLY_NPC;
 		}
 	}
 	
@@ -62,6 +62,7 @@ public abstract class GameObject {
 	}
 	
 	public abstract void draw(SpriteBatch sb);
+	public abstract void update(float deltaTime);
 	
 	public void setType(GameObjectType type) {
 		this.type = type;

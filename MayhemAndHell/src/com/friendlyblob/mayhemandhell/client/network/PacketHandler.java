@@ -20,13 +20,13 @@ public class PacketHandler {
 				response = new LoginSuccessful();
 				break;
 			case 0x03:
-				response = new CharacterAppeared();
+				response = new ObjectAppeared();
 				break;
 			case 0x04:
-				response = new CharactersInRegion();
+				response = new ObjectsInRegion();
 				break;
 			case 0x05:
-				response = new CharactersLeft();
+				response = new ObjectsLeft();
 				break;
 			case 0x06:
 				response = new NotifyCharacterMovement();
