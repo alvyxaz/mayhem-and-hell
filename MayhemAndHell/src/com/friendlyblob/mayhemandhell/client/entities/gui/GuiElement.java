@@ -81,4 +81,12 @@ public abstract class GuiElement implements Comparable<GuiElement>{
 		this.manager = manager;
 	}
 	
+	public void show() {
+		this.visible = true;
+	}
+	
+	public void hide() {
+		this.visible = false;
+	}
+	
 }

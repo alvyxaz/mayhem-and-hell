@@ -15,30 +15,51 @@ textures2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+gui/ingame/icon_chat
+  rotate: false
+  xy: 130, 2
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+gui/ingame/icon_quest
+  rotate: false
+  xy: 142, 2
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+gui/ingame/icon_store
+  rotate: false
+  xy: 161, 20
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
 gui/ingame/inventory_slot
   rotate: false
-  xy: 104, 2
+  xy: 104, 6
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 gui/ingame/skill_slot
   rotate: false
-  xy: 130, 10
+  xy: 130, 14
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 gui/ingame/target_background
   rotate: false
-  xy: 2, 6
+  xy: 2, 10
   size: 100, 20
   orig: 100, 20
   offset: 0, 0
   index: -1
 gui/ingame/window
   rotate: false
-  xy: 161, 19
+  xy: 173, 23
   size: 7, 7
   split: 3, 3, 3, 3
   orig: 7, 7
@@ -46,14 +67,14 @@ gui/ingame/window
   index: -1
 gui/ingame/window_title
   rotate: false
-  xy: 170, 12
+  xy: 154, 3
   size: 1, 14
   orig: 1, 14
   offset: 0, 0
   index: -1
 gui/ingame/x
   rotate: false
-  xy: 148, 15
+  xy: 148, 19
   size: 11, 11
   orig: 11, 11
   offset: 0, 0
@@ -132,8 +153,8 @@ repeat: none
 icons/sword
   rotate: false
   xy: 2, 2
-  size: 18, 19
-  orig: 18, 19
+  size: 24, 24
+  orig: 24, 24
   offset: 0, 0
   index: -1
 

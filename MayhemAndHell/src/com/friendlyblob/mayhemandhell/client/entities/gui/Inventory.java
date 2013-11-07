@@ -55,6 +55,7 @@ public class Inventory extends GuiWindow {
 		.setName("Another sword")
 		.setDescription("Not so cool, but still pretty cool sword");
 		slotObjects[5] = item;
+		visible = false;
 	}
 	
 	public void show() {

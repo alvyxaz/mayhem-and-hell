@@ -79,6 +79,9 @@ public class GamePacketHandler implements IPacketHandler<GameClient>,
 					case 0x05:
 						response = new RequestResurrection();
 						break;
+					case 0x06:
+						response = new RequestDialogAction();
+						break;
 				}
 				break;
 		}

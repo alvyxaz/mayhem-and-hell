@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "type" should be a classname of the npc without Instance postfix  !-->
+<list>
+	<dialog id="1" >
+		<page id="0">
+			<text>Two nuns are sitting on a park bench. A man in a trench coat runs up and flashes them. The first nun has a stroke. The second nun tried but she couldn't reach.
+			</text>
+			<links>
+				<link type="page" target="1">I'd like to hear more</link>
+				<link type="quest" target="0">Where do I sign up</link>
+				<link type="shop" target="0">Show me your goods!</link>
+			</links>
+		</page>
+		<page id="1">
+			<text>
+				This is the super mega second page. Yup. It is.
+			</text>
+			<links>
+				<link type="page" target="0">Wait, what??</link>
+			</links>
+		</page>
+	</dialog>
+</list>

@@ -1,6 +1,5 @@
 package com.friendlyblob.mayhemandhell.server.model.items;
 
-import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 
 public class Item {

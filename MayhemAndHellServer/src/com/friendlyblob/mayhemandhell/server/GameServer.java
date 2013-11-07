@@ -14,6 +14,7 @@ import com.friendlyblob.mayhemandhell.server.data.ItemDataParser;
 import com.friendlyblob.mayhemandhell.server.factories.IdFactory;
 import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.datatables.CharacterTemplateTable;
+import com.friendlyblob.mayhemandhell.server.model.datatables.DialogTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.NpcTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.SpawnTable;
@@ -53,8 +54,9 @@ public class GameServer{
     	// Loading gameserver data (items and etc)
     	ZoneTable.initialize();
     	ItemTable.initialize();
-    	NpcTable.initialize(); // Depends on items
-    	SpawnTable.initialize(); // Depends on npc's
+    	DialogTable.initialize();
+    	NpcTable.initialize(); 		// Depends on items, dialogs
+    	SpawnTable.initialize(); 	// Depends on npc's
     	CharacterTemplateTable.initialize();
     	
     	ThreadPoolManager.getInstance();

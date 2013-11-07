@@ -3,6 +3,6 @@
 <!-- ONLY NPC'S THAT ARE NOT ATTACKABLE  !-->
 <list>
 	<npc id="100" type="NpcFriendly" name="Smith" sprite="100">
-
+		<set name="dialog" val="1" />
 	</npc>
 </list>

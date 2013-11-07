@@ -22,6 +22,7 @@ public class GuiManager {
 	
 	public TargetBar targetBar;
 	public Inventory inventory;
+	public Dialog dialog;
 	public InventoryIcon inventoryIcon;
 	public ActionsBar actionsBar;
 	public PlayerStatus playerStatus;
@@ -55,6 +56,9 @@ public class GuiManager {
 		
 		inventoryIcon = new InventoryIcon();
 		addGuiElement(inventoryIcon, GuiPositionHorizontal.RIGHT, GuiPositionVertical.TOP);
+		
+		dialog = new Dialog();
+		addGuiElement(dialog, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.MIDDLE);
 	}
 	
 	/**

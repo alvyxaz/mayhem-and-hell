@@ -22,7 +22,7 @@ public abstract class GuiWindow extends GuiElement {
 	private Rectangle xRectangle;
 	
 	private TextureRegion titleTexture;
-	private Rectangle titleBox;
+	public Rectangle titleBox;
 	
 	private String title = "Window";
 
