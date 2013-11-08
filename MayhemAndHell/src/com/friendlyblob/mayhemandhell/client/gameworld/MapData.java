@@ -74,7 +74,7 @@ public class MapData {
 	
 	public void readFromFile() {
 		XmlReader xmlReader = new XmlReader();
-		FileHandle file = Gdx.files.internal("./data/zones/" + mapId + ".tmx");
+		FileHandle file = Gdx.files.internal("data/zones/" + mapId + ".tmx");
 		
 		if (!file.exists()) {
 			// TODO send request to server and download a map

@@ -20,7 +20,7 @@ public class AnimationParser {
 		XmlReader reader = new XmlReader();
 		try {
 			Element charactersXml = reader
-					.parse(Gdx.files.local("data/animations/characters.xml"));
+					.parse(Gdx.files.internal("data/animations/characters.xml"));
 			for(int i = 0; i < charactersXml.getChildCount(); i++){
 				Element character = charactersXml.getChild(i);
 
