@@ -15,18 +15,16 @@ public class AnimationParser {
 	private static HashMap<Integer, HashMap<String, AnimationData>> animationCollections;
 	
 	public static void loadAll() {
-		animationCollections = new HashMap<>();
+		animationCollections = new HashMap<Integer, HashMap<String, AnimationData>>();
 		
 		XmlReader reader = new XmlReader();
-		
 		try {
 			Element charactersXml = reader
 					.parse(Gdx.files.local("data/animations/characters.xml"));
-			
 			for(int i = 0; i < charactersXml.getChildCount(); i++){
 				Element character = charactersXml.getChild(i);
 
-				HashMap<String, AnimationData> animations = new HashMap<>();
+				HashMap<String, AnimationData> animations = new HashMap<String, AnimationData>();
 				
 				for (int j = 0; j < character.getChildCount(); j++) {
 					parseAnimation(character.getChild(j), animations);
@@ -45,7 +43,6 @@ public class AnimationParser {
 	
 	public static void parseAnimation(Element xml, HashMap<String, AnimationData> collection) {
 		AnimationData animation = new AnimationData();
-		
 		animation.type = xml.getAttribute("type");
 		animation.looped = xml.getBooleanAttribute("looped", false);
 		animation.duration = xml.getFloatAttribute("duration", 1);

@@ -1,22 +1,17 @@
 package com.friendlyblob.mayhemandhellandroid;
 
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
+// tag:^(?!.*(Netlink|HWC|gralloc)).*$
 
-public class MainActivity extends Activity {
+import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.friendlyblob.mayhemandhell.client.ActionResolverDesktop;
+import com.friendlyblob.mayhemandhell.client.GoogleDesktop;
+import com.friendlyblob.mayhemandhell.client.MyGame;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+public class MainActivity extends AndroidApplication {
+
+	public void onCreate (android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		initialize(new MyGame(new GoogleDesktop(), new ActionResolverDesktop()), true);
 	}
 
 }

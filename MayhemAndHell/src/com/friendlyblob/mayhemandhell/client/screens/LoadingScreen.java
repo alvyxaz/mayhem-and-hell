@@ -14,7 +14,6 @@ public class LoadingScreen extends BaseScreen{
 	public LoadingScreen(MyGame game) {
 		super(game);
 		Assets.manager.load("textures/atlas/textures.atlas", TextureAtlas.class);
-		
 		AnimationParser.loadAll();
 	}
 

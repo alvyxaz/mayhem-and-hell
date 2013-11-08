@@ -90,14 +90,14 @@ public class Connection extends Thread {
 		
 		crypt = new GameCrypt();
 		
-		bufferPool = new FastList<>();
+		bufferPool = new FastList<ByteBuffer>();
 		
 		DIRECT_WRITE_BUFFER = ByteBuffer.allocateDirect(WRITE_BUFFER_SIZE).order(BYTE_ORDER);
 		WRITE_BUFFER = ByteBuffer.wrap(new byte[WRITE_BUFFER_SIZE]).order(BYTE_ORDER);
 		READ_BUFFER = ByteBuffer.wrap(new byte[READ_BUFFER_SIZE]).order(BYTE_ORDER);
 		STRING_BUFFER = new NioNetStringBuffer(64 * 1024);
 		
-		sendQueue = new NioNetStackList<>();
+		sendQueue = new NioNetStackList<SendablePacket>();
 		
 		this.packetHandler = packetHandler;
 	}
