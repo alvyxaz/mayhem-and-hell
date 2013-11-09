@@ -60,17 +60,6 @@ public class InventoryView extends GuiWindow {
 		visible = false;
 	}
 	
-	public boolean addItem(Item item) {
-		for (int i = 0; i < slots.length; i++) {
-			if (inventory.getItemAt(i) == null) {
-				inventory.setItemAt(i, item);
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
 	public void setDataSource(Inventory inventory) {
 		this.inventory = inventory;
 	}
