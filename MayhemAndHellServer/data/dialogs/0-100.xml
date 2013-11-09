@@ -12,8 +12,7 @@
 			</links>
 		</page>
 		<page id="1">
-			<text>
-				This is the super mega second page. Yup. It is.
+			<text>This is the super mega second page. Yup. It is.
 			</text>
 			<links>
 				<link type="page" target="0">Wait, what??</link>

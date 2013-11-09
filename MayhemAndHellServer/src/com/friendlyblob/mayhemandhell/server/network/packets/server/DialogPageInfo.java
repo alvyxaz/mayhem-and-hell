@@ -19,6 +19,7 @@ public class DialogPageInfo extends ServerPacket {
 		writeC(0x0D);
 		writeS(npcName);							// NPC talking
 		writeS(page.getText());						// Page text
+		writeD(page.getId());						// Current page id
 		
 		DialogLink[] links = page.getLinks();		
 		

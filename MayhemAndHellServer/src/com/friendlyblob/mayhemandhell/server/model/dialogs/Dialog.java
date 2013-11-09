@@ -60,6 +60,14 @@ public class Dialog {
 		public DialogLink[] getLinks() {
 			return links;
 		}
+		
+		public DialogLink getLink(int index) {
+			if (index >= 0 && index < links.length){
+				return links[index];
+			}
+			return null;
+		}
+		
 		public void setLinks(DialogLink[] links) {
 			this.links = links;
 		}

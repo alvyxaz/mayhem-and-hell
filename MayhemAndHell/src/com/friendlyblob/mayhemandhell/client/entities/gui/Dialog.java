@@ -22,6 +22,8 @@ public class Dialog extends GuiWindow {
 	private String[] linkTexts;
 	private TextureRegion[] linkIcons;
 	
+	private int pageId;
+	
 	public Dialog() {
 		super();
 		visible = false;
@@ -29,20 +31,8 @@ public class Dialog extends GuiWindow {
 		
 		goodbye = new Rectangle(0, 0, 70, 20);
 		
-		links = new Rectangle[3];
-		for (int i = 0; i < links.length; i++) {
-			links[i] = new Rectangle(contentPaddingLeft, 4 + 18*(links.length-1-i), WIDTH, 16);
-		}
-		
 		linkTexts = new String[3];
-		linkTexts[0] = "I'd like to hear more";
-		linkTexts[1] = "Where do I sign up";
-		linkTexts[2] = "Show me your goods";
-
 		linkIcons = new TextureRegion[3];
-		linkIcons[0] = Assets.getTextureRegion("gui/ingame/icon_store");
-		linkIcons[1] = Assets.getTextureRegion("gui/ingame/icon_quest");
-		linkIcons[2] = Assets.getTextureRegion("gui/ingame/icon_chat");
 		
 		setWindowSize(WIDTH, HEIGHT);
 	}
@@ -51,7 +41,7 @@ public class Dialog extends GuiWindow {
 	public void onContentRelease(float x, float y) {
 		for (int i = 0; i < links.length; i++) {
 			if (links[i].contains(x, y)) {
-				MyGame.connection.sendPacket(new RequestDialogAction(i));
+				MyGame.connection.sendPacket(new RequestDialogAction(i, pageId));
 				return;
 			}
 		}
@@ -101,10 +91,16 @@ public class Dialog extends GuiWindow {
 		}
 	}
 	
-	public void updateDialog(String name, String text, String[] linkTexts, int[] linkTypes) {
+	public void updateDialog(String name, String text, String[] linkTexts, int[] linkTypes, int pageId) {
 		this.setTitle(name + " says:");
 		this.text = text;
 		this.linkTexts = linkTexts;
+		this.pageId = pageId;
+		
+		links = new Rectangle[linkTexts.length];
+		for (int i = 0; i < links.length; i++) {
+			links[i] = new Rectangle(contentPaddingLeft, 4 + 18*(links.length-1-i), WIDTH, 16);
+		}
 		
 		TextureRegion[] tempLinkIcons = new TextureRegion[linkTypes.length];
 		

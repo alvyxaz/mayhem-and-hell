@@ -9,12 +9,14 @@ public class DialogPageInfo extends ReceivablePacket{
 	private String text;
 	private String[] linkTexts;
 	private int[] linkTypes;
+	private int pageId;
 	
 	@Override
 	public boolean read() {
 		
 		name = readS();
 		text = readS();
+		pageId = readD();
 		
 		int linkCount = readD();
 
@@ -31,7 +33,7 @@ public class DialogPageInfo extends ReceivablePacket{
 
 	@Override
 	public void run() {
-		GameWorld.getInstance().game.screenGame.guiManager.dialog.updateDialog(name, text, linkTexts, linkTypes);
+		GameWorld.getInstance().game.screenGame.guiManager.dialog.updateDialog(name, text, linkTexts, linkTypes, pageId);
 	}
 
 }
