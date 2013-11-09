@@ -6,14 +6,21 @@ public class Item {
 	
 	private int itemId;
 	private String name;
-	private String type;
+	private ItemType type;
 	private StatsSet set;
 	
 	public static enum ItemType {
-		CONSUMABLE,
+		USABLE,
 		EQUIPMENT,
 		MATERIAL,
-		OTHER
+		OTHER,
+	}
+	
+	public static enum ExpirationType {
+		NONE,
+		GAMEPLAY,
+		TIMESPAN,
+		EXACT,
 	}
 	
 	public Item(int itemId, String name, StatsSet set) {
@@ -37,11 +44,11 @@ public class Item {
 		this.name = name;
 	}
 
-	public String getType() {
+	public ItemType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(ItemType type) {
 		this.type = type;
 	}
 
@@ -61,6 +68,4 @@ public class Item {
 	public boolean isStackable() {
 		return false;
 	}
-	
-	
 }

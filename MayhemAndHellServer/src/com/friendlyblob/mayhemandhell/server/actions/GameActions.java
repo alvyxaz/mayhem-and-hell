@@ -12,8 +12,16 @@ public class GameActions {
 		GameAction.WHISPER
 	};
 	
-	public static GameAction[] hostineNpc = new GameAction[] {
+	public static GameAction[] hostileNpc = new GameAction[] {
 		GameAction.ATTACK,
+	};
+	
+	public static GameAction[] item = new GameAction[] {
+		GameAction.PICK_UP,
+	};
+	
+	public static GameAction[] resource = new GameAction[] {
+		GameAction.PICK_UP,
 	};
 	
 	public static enum GameAction {
@@ -21,7 +29,8 @@ public class GameActions {
 		TRADE("Trade"),
 		WHISPER("Whisper"),
 		FOLLOW("Follow"),
-		TALK("Talk");
+		TALK("Talk"),
+		PICK_UP("Pick up");
 		
 		private String name;
 		

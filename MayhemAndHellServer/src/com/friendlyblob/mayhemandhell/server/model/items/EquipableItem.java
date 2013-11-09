@@ -30,7 +30,7 @@ public class EquipableItem extends Item {
 		LEGS,
 		
 		// Weapons
-		MAIN_HAIND,
+		MAIN_HAND,
 		OFF_HAND,
 		
 		// Etc
@@ -42,6 +42,8 @@ public class EquipableItem extends Item {
 	
 	private EquipmentSlot slot;
 	private StatModifier [] modifiers;
+	
+	private int durability;
 	
 	public EquipableItem(int itemId, String name, StatsSet set) {
 		super(itemId, name, set);
@@ -78,5 +80,13 @@ public class EquipableItem extends Item {
 	 */
 	public boolean canEquip(Player player) {
 		return true;
+	}
+
+	public int getDurability() {
+		return durability;
+	}
+
+	public void setDurability(int durability) {
+		this.durability = durability;
 	}
 }

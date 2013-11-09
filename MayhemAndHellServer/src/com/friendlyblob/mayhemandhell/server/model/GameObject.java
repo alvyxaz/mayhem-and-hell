@@ -1,5 +1,6 @@
 package com.friendlyblob.mayhemandhell.server.model;
 
+import java.awt.Rectangle;
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -47,6 +48,11 @@ public class GameObject {
 	
 	public GameObject(int objectId) {
 		this.objectId = objectId;
+	}
+	
+	public GameObject() {
+		name = "Unknown";
+		position = new ObjectPosition();
 	}
 	
 	public void setType(GameObjectType type) {
@@ -147,11 +153,6 @@ public class GameObject {
 	
 	public Region getRegion() {
 		return region;
-	}
-	
-	public GameObject() {
-		name = "Unknown";
-		position = new ObjectPosition();
 	}
 	
 	public ObjectPosition getPosition() {

@@ -18,8 +18,8 @@ public class MobInstance extends GameCharacter {
 	
 	private int spawnZoneX;
 	private int spawnZoneY;
-	private int wonderingWidth;
-	private int wonderingHeight;
+	private int wanderingWidth;
+	private int wanderingHeight;
 
 	private int spawnInterval; // Milliseconds
 	private int spawnAtTick;
@@ -51,8 +51,8 @@ public class MobInstance extends GameCharacter {
 	public void respawn() {
 		this.restoreHealth();
 		// Reset position
-		this.setPosition(spawnZoneX+(int)(Math.random()*wonderingWidth), 
-				spawnZoneY+(int)(Math.random()*wonderingHeight));
+		this.setPosition(spawnZoneX+(int)(Math.random()*wanderingWidth), 
+				spawnZoneY+(int)(Math.random()*wanderingHeight));
 		
 		// Update region if changed (automatically notifies nearby)
 		this.getZone().updateRegion(this);

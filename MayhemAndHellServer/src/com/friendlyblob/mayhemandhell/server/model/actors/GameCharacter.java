@@ -121,7 +121,7 @@ public class GameCharacter extends GameObject{
 		
 		int dX = (int)(movement.destinationX - getPosition().getX());
 		int dY = (int)(movement.destinationY - getPosition().getY());
-			
+
 		// Check if destination is reached
 		if (dX * dX + dY * dY <= distanceCovered * distanceCovered) {
 			getPosition().set(movement.destinationX, movement.destinationY);
@@ -388,7 +388,7 @@ public class GameCharacter extends GameObject{
 		if (getType() == GameObjectType.HOSTILE_NPC) {
 			// else drop loot
 			Item it = ItemTable.getInstance().getItem(1);
-			ItemInstance ii = ItemFactory.getInstance().createItem(it);
+			ItemInstance ii = ItemFactory.getInstance().createEquipableItem(it);
 			ii.setPosition(getPosition());
 			
 			World.getInstance().getZone(0).addObject(ii);		

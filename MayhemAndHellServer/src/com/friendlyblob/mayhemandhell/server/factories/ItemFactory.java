@@ -1,6 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.factories;
 
 import com.friendlyblob.mayhemandhell.server.model.GameObject.GameObjectType;
+import com.friendlyblob.mayhemandhell.server.model.instances.EquipableItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
 
@@ -19,11 +20,9 @@ public class ItemFactory {
 		return instance;
 	}
 	
-	public ItemInstance createItem(Item template) {
-		ItemInstance newItem = new ItemInstance(IdFactory.getInstance().getNextId(), template);
-		newItem.setType(GameObjectType.ITEM);
+	public EquipableItemInstance createEquipableItem(Item template) {
+		EquipableItemInstance newItem = new EquipableItemInstance(IdFactory.getInstance().getNextId(), template);
 		
 		return newItem;
 	}
-	
 }

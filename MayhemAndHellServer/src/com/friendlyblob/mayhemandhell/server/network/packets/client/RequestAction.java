@@ -2,14 +2,18 @@ package com.friendlyblob.mayhemandhell.server.network.packets.client;
 
 import com.friendlyblob.mayhemandhell.server.actions.GameActions.GameAction;
 import com.friendlyblob.mayhemandhell.server.ai.Intention;
+import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcInstance;
 import com.friendlyblob.mayhemandhell.server.model.datatables.DialogTable;
+import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogPage;
+import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.ActionFailedMessage;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DialogPageInfo;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ItemPickedUp;
 
 public class RequestAction extends ClientPacket {
 	int actionIndex;
@@ -42,6 +46,17 @@ public class RequestAction extends ClientPacket {
 						player.sendPacket(new DialogPageInfo(player.getTarget().getName(), 
 								DialogTable.getInstance().getDialog(dialog).getPage(0)));
 					}
+				}
+			} else if (actions[actionIndex] == GameAction.PICK_UP) {
+				// TODO range checking
+				if (player.getTarget() instanceof ItemInstance) {
+					ItemInstance item = (ItemInstance) player.getTarget();
+					
+					if (player.getInventory().addItem(item)) {
+						World.getInstance().removeObject(item);
+					}
+
+					getClient().sendPacket(new ItemPickedUp(item));
 				}
 			}
 		} else {

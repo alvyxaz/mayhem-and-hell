@@ -4,15 +4,13 @@ import java.util.Map;
 
 import javolution.util.FastMap;
 
-import com.friendlyblob.mayhemandhell.server.model.GameObject.GameObjectType;
 import com.friendlyblob.mayhemandhell.server.model.Region.RegionSide;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
-import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectAppeared;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectsLeft;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectsInRegion;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectAppeared;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectsInRegion;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ObjectsLeft;
 
 /**
  * Represents zones that have no connection with each other,
@@ -206,7 +204,7 @@ public class Zone {
 			players.remove(object.getObjectId());
 		}
 		
-		if (object instanceof GameCharacter) {
+		if (object instanceof GameObject) {
 			object.getRegion().broadcastToCloseRegions(
 					new ObjectsLeft(object.getObjectId()));
 		}

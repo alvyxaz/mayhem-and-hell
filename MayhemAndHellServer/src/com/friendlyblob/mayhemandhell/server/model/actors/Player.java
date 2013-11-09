@@ -22,6 +22,8 @@ public class Player extends GameCharacter {
 	
 	private boolean online = true;
 	
+	private Inventory inventory;
+	
 	public Player(int objectId, CharacterTemplate template) {
 		super(objectId, template);
 		this.setObjectId((int)(5000 + Math.random()*2000)); // TODO remove
@@ -33,6 +35,8 @@ public class Player extends GameCharacter {
 		equippedItems = new ItemInstance[EquipmentSlot.values().length];
 		this.alive = true;
 		attachAi();
+		
+		inventory = new Inventory();
 	}
 
 	/**
@@ -42,7 +46,6 @@ public class Player extends GameCharacter {
 	 */
 	public synchronized boolean equipItem(ItemInstance item) {
 		if (item.isEquipable() && item.canEquip(this)) {
-			
 			unequipItem(equippedItems[item.getSlotIndex()]);
 			
 			// Equipping new item
@@ -53,6 +56,7 @@ public class Player extends GameCharacter {
 			
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -68,14 +72,8 @@ public class Player extends GameCharacter {
 		}
 	}
 	
-	/**
-	 * Checks whether an item exists in inventory
-	 * @param itemId
-	 * @return
-	 */
-	public ItemInstance itemInInventory(int itemId) {
-		// TODO Make an inventory
-		return null;
+	public Inventory getInventory() {
+		return inventory;
 	}
 	
 	/**
@@ -84,7 +82,7 @@ public class Player extends GameCharacter {
 	 * @return
 	 */
 	public boolean equipItem (int itemId) {
-		ItemInstance item = itemInInventory(itemId);
+		ItemInstance item = inventory.getItemAt(itemId);
 		
 		if (item != null && item.isEquipable()) {
 			return equipItem(item);
@@ -136,9 +134,13 @@ public class Player extends GameCharacter {
 				case PLAYER:
 					return GameActions.friendlyPlayer;
 				case HOSTILE_NPC:
-					return GameActions.hostineNpc;
+					return GameActions.hostileNpc;
 				case FRIENDLY_NPC:
 					return GameActions.friendlyNpc;
+				case ITEM:
+					return GameActions.item;
+				case RESOURCE:
+					return GameActions.resource;
 			}
 		}
 		return null;
