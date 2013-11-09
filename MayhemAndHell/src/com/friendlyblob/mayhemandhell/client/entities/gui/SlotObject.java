@@ -13,7 +13,7 @@ public class SlotObject extends Rectangle {
 
 	public int iconId;
 	
-	public TextureRegion texture = Assets.getTextureRegion("icons/sword");
+	private TextureRegion texture = Assets.getTextureRegion("icons/sword");
 	
 	@Override
 	public Rectangle setPosition(float x, float y) {
@@ -21,5 +21,9 @@ public class SlotObject extends Rectangle {
 		this.y = y - height/2;
 		
 		return this;
+	}
+	
+	public TextureRegion getTexture() {
+		return texture;
 	}
 }

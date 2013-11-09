@@ -32,14 +32,14 @@ public class GameScreen extends BaseScreen{
 		
 		notifications = new LiveNotifications();
 		
-		// Temporary GUI implementation 
-		guiManager = new GuiManager();
-		
 		GameWorld.initialize();
 		world = GameWorld.getInstance();
 		world.setGame(game);
 		
 		game.connectToServer();
+		
+		// Temporary GUI implementation 
+		guiManager = new GuiManager();
 	}
 
 	@Override
@@ -58,10 +58,6 @@ public class GameScreen extends BaseScreen{
 		 */
 		spriteBatch.begin();
 		spriteBatch.setProjectionMatrix(guiCam.combined);
-		
-//		if (MapEditor.enabled){
-//			MapEditor.drawInfo(spriteBatch);
-//		}
 
 		guiManager.draw(spriteBatch);
 		

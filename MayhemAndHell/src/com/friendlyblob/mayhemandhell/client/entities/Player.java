@@ -1,9 +1,6 @@
 package com.friendlyblob.mayhemandhell.client.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
@@ -14,6 +11,8 @@ public class Player extends GameCharacter {
 	private TextureRegion [] textures;
 	
 	public int targetId;
+	
+	public Inventory inventory = new Inventory();
 	
 	public Player (int id, int x, int y){
 		super(id, x, y, 0);
@@ -37,6 +36,8 @@ public class Player extends GameCharacter {
 	public void requestMovementDestination(int x, int y) {
 		MyGame.connection.sendPacket(new RequestMove(x, y));
 	}
-
 	
+	public Inventory getInventory() {
+		return inventory;
+	}
 }

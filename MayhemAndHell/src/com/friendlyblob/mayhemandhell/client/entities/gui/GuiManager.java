@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
+import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 
 /**
  * Takes care of GuiElement placement on screen
@@ -21,7 +22,7 @@ public class GuiManager {
 	private GuiElement [] guiElements;
 	
 	public TargetBar targetBar;
-	public Inventory inventory;
+	public InventoryView inventory;
 	public Dialog dialog;
 	public InventoryIcon inventoryIcon;
 	public ActionsBar actionsBar;
@@ -39,7 +40,8 @@ public class GuiManager {
 		targetBar = new TargetBar();
 		addGuiElement(targetBar, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.TOP);
 		
-		inventory = new Inventory();
+		inventory = new InventoryView();
+		inventory.setDataSource(GameWorld.getInstance().getPlayer().getInventory());
 		addGuiElement(inventory, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.MIDDLE);
 		
 		actionsBar = new ActionsBar();
