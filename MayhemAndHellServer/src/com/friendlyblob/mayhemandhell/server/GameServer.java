@@ -1,5 +1,6 @@
 package com.friendlyblob.mayhemandhell.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -19,10 +20,12 @@ import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.NpcTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.SpawnTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ZoneTable;
+import com.friendlyblob.mayhemandhell.server.model.quests.QuestManager;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.GamePacketHandler;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
 import com.friendlyblob.mayhemandhell.server.network.utils.IPv4Filter;
+import com.friendlyblob.mayhemandhell.server.scripting.ScriptEngineAdapter;
 
 public class GameServer{
 	private static final Logger log = Logger.getLogger(GameServer.class.getName());
@@ -30,7 +33,7 @@ public class GameServer{
     
     private final SelectorThread<GameClient> selectorThread;
     private final GamePacketHandler gamePacketHandler;
-    
+
     public long getUsedMemoryMB(){
 		return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576; // ;
 	}
@@ -39,14 +42,16 @@ public class GameServer{
 		return selectorThread;
 	}
     
-    public GamePacketHandler getGamePacketHandler()
-	{
+    public GamePacketHandler getGamePacketHandler() {
 		return gamePacketHandler;
 	}
     
     public GameServer() throws Exception{
     	gameServer = this;
     	log.finest(getClass().getSimpleName() + ": used mem:" + getUsedMemoryMB() + "MB");
+    	
+    	// Loading engines
+    	ScriptEngineAdapter.initialize();
     	
     	// Loading factories
     	IdFactory.initialize();
@@ -58,6 +63,16 @@ public class GameServer{
     	NpcTable.initialize(); 		// Depends on items, dialogs
     	SpawnTable.initialize(); 	// Depends on npc's
     	CharacterTemplateTable.initialize();
+    	
+    	// Script managers
+    	QuestManager.initialize();
+    	
+    	// Loading scripts
+    	try {
+    		ScriptEngineAdapter.getInstance().executeScriptList(new File("data/scripts/autoload.cfg"));
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
     	
     	ThreadPoolManager.getInstance();
     	

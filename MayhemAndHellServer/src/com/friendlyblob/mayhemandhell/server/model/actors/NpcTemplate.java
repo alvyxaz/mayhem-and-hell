@@ -1,9 +1,16 @@
 package com.friendlyblob.mayhemandhell.server.model.actors;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
+import javolution.util.FastMap;
+
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
+import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
+import com.friendlyblob.mayhemandhell.server.model.quests.Quest.QuestEventType;
 import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 
 /**
@@ -24,6 +31,8 @@ public class NpcTemplate extends CharacterTemplate {
 	private ItemDrop[] itemDropList;
 	
 	private int respawnTime; // Respawn time in milliseconds;
+	
+	private final Map<QuestEventType, List<Quest>> questEvents = new FastMap<>();
 	
 	public NpcTemplate(StatsSet set) {
 		super(set);
@@ -72,6 +81,21 @@ public class NpcTemplate extends CharacterTemplate {
 		ItemDrop [] temp = Arrays.copyOf(itemDropList, itemDropList.length+1);
 		temp[temp.length-1] = new ItemDrop(item, chance, min, max);
 		itemDropList = temp;
+	}
+	
+	/**
+	 * Attaches a quest event which is called when certain action happens.
+	 * @param type quest event type
+	 * @param quest quest to be added
+	 */
+	public void addQuestEvent(QuestEventType type, Quest quest) {
+		if (!questEvents.containsKey(type)) {
+			List<Quest> list = new ArrayList<>();
+			list.add(quest);
+			questEvents.put(type, list);
+		} else {
+			questEvents.get(type).add(quest);
+		}
 	}
 	
 	/**
