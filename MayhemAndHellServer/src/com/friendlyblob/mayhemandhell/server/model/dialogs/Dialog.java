@@ -1,6 +1,13 @@
 package com.friendlyblob.mayhemandhell.server.model.dialogs;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import com.friendlyblob.mayhemandhell.server.model.actors.NpcTemplate;
+import com.friendlyblob.mayhemandhell.server.model.actors.Player;
+import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcInstance;
+import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
 
 /**
  * Represents a whole dialog. Dialogs are made of pages, 
@@ -13,14 +20,21 @@ public class Dialog {
 	private int id;
 	private DialogPage[] pages;
 	
+	private boolean questDialog;
+	
 	public Dialog(int id) {
 		this.id = id;
 		pages = new DialogPage[0];
 	}
 	
+	public void markAsQuestDialog() {
+		questDialog = true;
+	}
+	
 	public void addPage(DialogPage page) {
 		if (page != null) {
 			pages = Arrays.copyOf(pages, pages.length+1);
+			page.setDialog(this);
 			pages[pages.length-1] = page;
 		}
 	}
@@ -36,6 +50,14 @@ public class Dialog {
 		return id;
 	}
 	
+	public List<DialogLink> getLinksInPage(int page, Player player) {
+		if (page >= 0 && page < pages.length){
+			return pages[page].getLinks(player);
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * Represents a single page in a dialog.
 	 * @author Alvys
@@ -45,6 +67,8 @@ public class Dialog {
 		private int id;
 		private String text;
 		private DialogLink[] links;
+		private Dialog dialog;
+		
 		public int getId() {
 			return id;
 		}
@@ -57,6 +81,50 @@ public class Dialog {
 		public void setText(String text) {
 			this.text = text;
 		}
+		
+		public List<DialogLink> getLinks(Player player) {
+			return getLinks(player, true);
+		}
+		
+		public List<DialogLink> getLinks(Player player, boolean includeQuests) {
+			List<DialogLink> links = new ArrayList<DialogLink>();
+			DialogLink[] generalLinks = getLinks();
+			
+			// Adding general links
+			if (generalLinks != null) {
+				for(DialogLink link : generalLinks) {
+					links.add(link);
+				}
+			}
+			
+			if (!includeQuests) {
+				return links;
+			}
+			
+			NpcTemplate npc = null;
+			
+			if (player.getTarget() instanceof NpcInstance) {
+				npc = (NpcTemplate) ((NpcInstance)player.getTarget()).getTemplate();
+			}
+			
+			if (npc == null || (dialog != null && dialog.questDialog)) {
+				return links;
+			}
+			
+			// If it's the main page, add quest related links 
+			// TODO find a way to not do this when current dialog is quest dialog
+			if (id == 0) {
+				List<Quest> questList = npc.getQuestsToStart(player);
+				if (questList != null) {
+					for(Quest quest : questList) {
+						links.add(quest.getQuestStartLink());
+					}
+				}
+			}
+			
+			return links;
+		}
+		
 		public DialogLink[] getLinks() {
 			return links;
 		}
@@ -71,15 +139,21 @@ public class Dialog {
 		public void setLinks(DialogLink[] links) {
 			this.links = links;
 		}
-		
+		public Dialog getDialog() {
+			return dialog;
+		}
+		public void setDialog(Dialog dialog) {
+			this.dialog = dialog;
+		}
 		
 	}
 	
 	public static enum DialogLinkType {
 		UNKNOWN(0),
 		PAGE(1),
-		QUEST(2),
-		SHOP(3);
+		QUEST_START(2),
+		QUEST_COMPLETE(3),
+		SHOP(4);
 		
 		private int val;
 		

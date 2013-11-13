@@ -43,8 +43,9 @@ public class RequestAction extends ClientPacket {
 				if (player.getTarget() instanceof NpcInstance) {
 					int dialog = ((NpcInstance) player.getTarget()).getTemplate().set.getInteger("dialog", -1);
 					if (dialog != -1) {
+						player.setDialog(DialogTable.getInstance().getDialog(dialog));
 						player.sendPacket(new DialogPageInfo(player.getTarget().getName(), 
-								DialogTable.getInstance().getDialog(dialog).getPage(0)));
+								player.getDialog().getPage(0), player.getDialog().getPage(0).getLinks(player)));
 					}
 				}
 			} else if (actions[actionIndex] == GameAction.PICK_UP) {

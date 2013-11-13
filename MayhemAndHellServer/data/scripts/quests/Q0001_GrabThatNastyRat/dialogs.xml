@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+    <dialog id="0">
+		<page id="0">
+			<text>These rats are bugging me. One of them even smiled at me!. And I'm against smiles. Do what needs to be done.</text>
+		</page> 
+    </dialog>
+	<dialog id="1" >
+		<page id="0">
+			<text>You did it! Here's your reward :*
+			</text>
+		</page>
+	</dialog>
+</list>

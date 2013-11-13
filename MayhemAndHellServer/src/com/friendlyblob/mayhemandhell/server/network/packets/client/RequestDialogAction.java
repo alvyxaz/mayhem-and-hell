@@ -7,6 +7,8 @@ import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogLink;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogLinkType;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogPage;
+import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
+import com.friendlyblob.mayhemandhell.server.model.quests.QuestManager;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DialogPageInfo;
 
@@ -18,34 +20,49 @@ public class RequestDialogAction extends ClientPacket {
 		int currentPage = readD();
 		
 		Player player = getClient().getPlayer();
+		Dialog dialog = player.getDialog();
 		
-		if (player.getTarget() instanceof NpcInstance) {
-			int dialogId = ((NpcInstance) player.getTarget()).getTemplate().set.getInteger("dialog", -1);
-			if (dialogId != -1) {
-				Dialog dialog = DialogTable.getInstance().getDialog(dialogId);
-				DialogLink link = dialog.getPage(currentPage).getLink(index);
-				if (link != null && link.getType() == DialogLinkType.PAGE) {
-					DialogPage page = dialog.getPage(link.getTarget());
-					if (page != null) {
-						getClient().sendPacket(new DialogPageInfo( player.getTarget().getName(), page));
+		if (dialog != null) {
+			DialogLink link = player.getDialog().getPage(currentPage).getLinks(player).get(index);
+			
+			DialogPage page = null;
+			
+			if (link != null) {
+				switch(link.getType()) {
+					case PAGE:
+						page = dialog.getPage(link.getTarget());
+						break;
+					case QUEST_START:
+						Quest quest = QuestManager.getInstance().getQuest(link.getTarget());
+						if (quest != null) {
+							dialog = quest.getDialogStart();
+							page = dialog.getPage(0);
+						}
+						break;
+					case QUEST_COMPLETE:
+						break;
+					case SHOP:
+						break;
+					case UNKNOWN:
+						break;
+					default:
+						break;
 					}
-				}
 			}
+			
+			// After the switch, either page or dialog can be changed
+			// If the dialog is changed, we need to make sure players last dialog
+			// is updated
+			player.setDialog(dialog);
+			
+			if (page != null) {
+				getClient().sendPacket(
+						new DialogPageInfo(player.getTarget().getName(), 
+								page, 
+								page.getLinks(player)));
+			}
+			
 		}
-		
-//		int index = readD();
-//		Player player = getClient().getPlayer();
-//		if (player.getTarget() instanceof NpcInstance) {
-//			int dialog = ((NpcInstance) player.getTarget()).getTemplate().set.getInteger("dialog", -1);
-//			if (dialog != -1) {
-//				DialogPage page = DialogTable.getInstance().getDialog(dialog).getPage(index);
-//				if (page != null) {
-//					player.sendPacket(new DialogPageInfo(player.getTarget().getName(), page));
-//				}
-//				
-//			}
-//		}
-		
 		return false;
 	}
 

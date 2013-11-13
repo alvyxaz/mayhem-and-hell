@@ -6,10 +6,12 @@ import com.friendlyblob.mayhemandhell.server.ai.GameCharacterAi;
 import com.friendlyblob.mayhemandhell.server.ai.Intention;
 import com.friendlyblob.mayhemandhell.server.ai.PlayerAi;
 import com.friendlyblob.mayhemandhell.server.model.World;
+import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem.EquipmentSlot;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
+import com.friendlyblob.mayhemandhell.server.model.quests.QuestState;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterStatusUpdate;
@@ -23,6 +25,12 @@ public class Player extends GameCharacter {
 	private boolean online = true;
 	
 	private Inventory inventory;
+	
+	private Dialog dialog; // The last (current) dialog a player was interacting with
+	
+	public QuestState getQuestState(String questName) {
+		return null;
+	}
 	
 	public Player(int objectId, CharacterTemplate template) {
 		super(objectId, template);
@@ -160,6 +168,14 @@ public class Player extends GameCharacter {
 		if (ai == null) {
 			ai = new PlayerAi(this);
 		}
+	}
+	
+	public void setDialog(Dialog dialog) {
+		this.dialog = dialog;
+	}
+	
+	public Dialog getDialog() {
+		return dialog;
 	}
 	
 	public boolean isOnline() {

@@ -1,4 +1,5 @@
 import com.friendlyblob.mayhemandhell.server.model.quests.*;
+import java.io.File;
 
 public class Q0001_GrabThatNastyRat extends Quest{
 	
@@ -8,6 +9,10 @@ public class Q0001_GrabThatNastyRat extends Quest{
 	
 	def Q0001_GrabThatNastyRat(int questId, String name, String scriptFilePath) {
 		super(questId, name, scriptFilePath);
+		
+		setStartDialog(0);
+		setCompleteDialog(1);
+		
 		addStartNpc(SMITH);
 		addKillNpc(RAT);
 	}

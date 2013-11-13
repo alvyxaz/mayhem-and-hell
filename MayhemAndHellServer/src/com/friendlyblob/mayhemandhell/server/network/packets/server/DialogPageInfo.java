@@ -1,5 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.network.packets.server;
 
+import java.util.List;
+
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogLink;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogPage;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
@@ -8,10 +10,12 @@ public class DialogPageInfo extends ServerPacket {
 
 	private String npcName;
 	private DialogPage page;
+	private List<DialogLink> links;
 	
-	public DialogPageInfo(String npcName, DialogPage page) {
+	public DialogPageInfo(String npcName, DialogPage page, List<DialogLink> links) {
 		this.npcName = npcName;
 		this.page = page;
+		this.links = links;
 	}
 	
 	@Override
@@ -21,13 +25,16 @@ public class DialogPageInfo extends ServerPacket {
 		writeS(page.getText());						// Page text
 		writeD(page.getId());						// Current page id
 		
-		DialogLink[] links = page.getLinks();		
+		if (links == null) {
+			writeD(0);
+			return;
+		}
 		
-		writeD(links.length);						// Number of links
+		writeD(links.size());						// Number of links
 		
-		for (int i = 0; i < links.length; i++) {
-			writeD(links[i].getType().getVal());	// Type id
-			writeS(links[i].getText());				// Link text
+		for (int i = 0; i < links.size(); i++) {
+			writeD(links.get(i).getType().getVal());	// Type id
+			writeS(links.get(i).getText());				// Link text
 		}
 	}
 

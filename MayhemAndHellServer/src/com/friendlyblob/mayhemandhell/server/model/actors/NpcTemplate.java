@@ -11,6 +11,7 @@ import javolution.util.FastMap;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
 import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
 import com.friendlyblob.mayhemandhell.server.model.quests.Quest.QuestEventType;
+import com.friendlyblob.mayhemandhell.server.model.quests.QuestState;
 import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 
 /**
@@ -43,6 +44,29 @@ public class NpcTemplate extends CharacterTemplate {
 	public void parseSetData() {
 		super.parseSetData();
 		respawnTime = set.getInteger("respawnTime", 1000);
+	}
+	
+	public boolean hasQuestsToStart(Player player) {
+		return getQuestsToStart(player).size() > 0;
+	}
+	
+	public List<Quest> getQuestsToStart(Player player) {
+		List<Quest> startsQuests = questEvents.get(QuestEventType.QUEST_START);
+		List<Quest> quests = new ArrayList<Quest>(); 
+		
+		// If there are no quest starts attached
+		if (startsQuests == null) {
+			return quests;
+		}
+		
+		for(Quest quest : startsQuests) {
+			QuestState state = player.getQuestState(quest.getName());
+			if (state == null) {
+				quests.add(quest);
+			}
+		}
+		
+		return quests;
 	}
 	
 	/**

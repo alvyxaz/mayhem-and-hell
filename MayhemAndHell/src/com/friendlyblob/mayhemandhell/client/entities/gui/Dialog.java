@@ -109,7 +109,10 @@ public class Dialog extends GuiWindow {
 			case 2: 
 				tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_quest");
 				break;
-			case 3:
+			case 3: 
+				tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_quest");
+				break;
+			case 4:
 				tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_store");
 				break;
 			default:

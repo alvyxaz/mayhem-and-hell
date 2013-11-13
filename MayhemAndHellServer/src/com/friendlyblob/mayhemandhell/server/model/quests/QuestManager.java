@@ -10,7 +10,11 @@ public class QuestManager extends ScriptManager<Quest> {
 
 	private static QuestManager instance;
 	
-	private final Map<String, Quest> quests = new FastMap<>();
+	private final Map<Integer, Quest> quests = new FastMap<Integer, Quest>().shared();
+	
+	public Quest getQuest(int id) {
+		return quests.get(id);
+	}
 	
 	public static QuestManager getInstance() {
 		return instance;
@@ -21,7 +25,17 @@ public class QuestManager extends ScriptManager<Quest> {
 	}
 	
 	public void addQuest(Quest quest) {
+		if (quest == null ) {
+			throw new IllegalArgumentException("Quest argument cannot be null");
+		}
 		
+		Quest oldQuest = quests.get(quest.getName());
+		
+		if (oldQuest != null) {
+			oldQuest.unload();
+		}
+		
+		quests.put(quest.getQuestId(), quest);
 	}
 	
 	@Override

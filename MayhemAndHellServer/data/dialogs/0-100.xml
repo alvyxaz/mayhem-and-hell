@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- "type" should be a classname of the npc without Instance postfix  !-->
 <list>
+    <dialog id="0">
+		<page id="0">
+			<text>I'm a default text for quest that has no dialog specified</text>
+		</page> 
+    </dialog>
 	<dialog id="1" >
 		<page id="0">
 			<text>Two nuns are sitting on a park bench. A man in a trench coat runs up and flashes them. The first nun has a stroke. The second nun tried but she couldn't reach.

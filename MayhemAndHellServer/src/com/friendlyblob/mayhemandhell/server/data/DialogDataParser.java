@@ -34,27 +34,31 @@ public class DialogDataParser extends DataParser {
 	 * and adds them to itemsInFile  list
 	 */
 	public void load() {
+		File folder = new File(folderUrl);
+		File [] files = folder.listFiles();
+		
+		for (int fileIndex = 0; fileIndex < files.length; fileIndex++) {
+			dialogsInFile.addAll(parseDialogsFile(files[fileIndex]));
+		}
+	}
+	
+	public List<Dialog> parseDialogsFile(File file) {
+		List<Dialog> list = new FastList<Dialog>();
 		try {
-			File folder = new File(folderUrl);
-			File [] files = folder.listFiles();
-			
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(file);
 			
-			for (int fileIndex = 0; fileIndex < files.length; fileIndex++) {
-				Document doc = dBuilder.parse(files[fileIndex]);
-				doc.getDocumentElement().normalize();
-				
-				NodeList dialogs = doc.getElementsByTagName("dialog");
-				
-				for (int i = 0; i < dialogs.getLength(); i++) {
-					dialogsInFile.add(parseDialog(dialogs.item(i)));
-				}
+			NodeList dialogs = doc.getElementsByTagName("dialog");
+			
+			for (int i = 0; i < dialogs.getLength(); i++) {
+				list.add(parseDialog(dialogs.item(i)));
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		return list;
 	}
 	
 	/**
@@ -115,5 +119,13 @@ public class DialogDataParser extends DataParser {
 			}
 		}
 		return links;
+	}
+	
+	public static DialogDataParser getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	public static class SingletonHolder {
+		public static final DialogDataParser INSTANCE = new DialogDataParser();
 	}
 }
