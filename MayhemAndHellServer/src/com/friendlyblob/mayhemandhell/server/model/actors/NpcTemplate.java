@@ -60,7 +60,7 @@ public class NpcTemplate extends CharacterTemplate {
 		}
 		
 		for(Quest quest : startsQuests) {
-			QuestState state = player.getQuestState(quest.getName());
+			QuestState state = player.getQuestState(quest.getQuestId());
 			if (state == null) {
 				quests.add(quest);
 			}
