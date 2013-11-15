@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.friendlyblob.mayhemandhell.server.data.DialogDataParser;
 import com.friendlyblob.mayhemandhell.server.model.actors.NpcTemplate;
+import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.datatables.DialogTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.NpcTable;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog;
@@ -48,7 +49,7 @@ public class Quest extends Script{
 		
 		if (tempDialogs != null) {
 			for(Dialog dialog : tempDialogs) {
-				dialog.markAsQuestDialog();
+				dialog.setQuest(this);
 				dialogs.put(dialog.getId(), dialog);
 			}
 		}
@@ -138,6 +139,13 @@ public class Quest extends Script{
 		ON_ATTACK,
 		ON_KILL,
 		ON_SPAWN,
+	}
+	
+	public void startQuest(Player player) {
+		QuestState state = player.getQuestState(getQuestId());
+		if (state == null) {
+			state = new QuestState(this);
+		}
 	}
 
 	@Override

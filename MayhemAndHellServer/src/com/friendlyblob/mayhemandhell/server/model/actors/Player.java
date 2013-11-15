@@ -1,5 +1,8 @@
 package com.friendlyblob.mayhemandhell.server.model.actors;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.friendlyblob.mayhemandhell.server.actions.GameActions;
 import com.friendlyblob.mayhemandhell.server.actions.GameActions.GameAction;
 import com.friendlyblob.mayhemandhell.server.ai.GameCharacterAi;
@@ -11,6 +14,7 @@ import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem;
 import com.friendlyblob.mayhemandhell.server.model.items.EquipableItem.EquipmentSlot;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
+import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
 import com.friendlyblob.mayhemandhell.server.model.quests.QuestState;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
@@ -28,8 +32,10 @@ public class Player extends GameCharacter {
 	
 	private Dialog dialog; // The last (current) dialog a player was interacting with
 	
-	public QuestState getQuestState(String questName) {
-		return null;
+	private Map<Integer, QuestState> quests = new HashMap<Integer, QuestState>();
+	
+	public QuestState getQuestState(int questId) {
+		return quests.get(questId);
 	}
 	
 	public Player(int objectId, CharacterTemplate template) {

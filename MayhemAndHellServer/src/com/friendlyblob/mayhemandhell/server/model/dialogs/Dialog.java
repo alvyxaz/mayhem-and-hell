@@ -19,7 +19,7 @@ import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
 public class Dialog {
 	private int id;
 	private DialogPage[] pages;
-	
+	private Quest quest;
 	private boolean questDialog;
 	
 	public Dialog(int id) {
@@ -31,6 +31,15 @@ public class Dialog {
 		questDialog = true;
 	}
 	
+	public Quest getQuest() {
+		return quest;
+	}
+
+	public void setQuest(Quest quest) {
+		this.quest = quest;
+		markAsQuestDialog();
+	}
+
 	public void addPage(DialogPage page) {
 		if (page != null) {
 			pages = Arrays.copyOf(pages, pages.length+1);
@@ -68,6 +77,7 @@ public class Dialog {
 		private String text;
 		private DialogLink[] links;
 		private Dialog dialog;
+		private boolean acceptEnabled;
 		
 		public int getId() {
 			return id;
@@ -139,11 +149,21 @@ public class Dialog {
 		public void setLinks(DialogLink[] links) {
 			this.links = links;
 		}
+		
 		public Dialog getDialog() {
 			return dialog;
 		}
+		
 		public void setDialog(Dialog dialog) {
 			this.dialog = dialog;
+		}
+		
+		public boolean isAcceptEnabled() {
+			return acceptEnabled;
+		}
+		
+		public void setAcceptEnabled(boolean acceptEnabled) {
+			this.acceptEnabled = acceptEnabled;
 		}
 		
 	}

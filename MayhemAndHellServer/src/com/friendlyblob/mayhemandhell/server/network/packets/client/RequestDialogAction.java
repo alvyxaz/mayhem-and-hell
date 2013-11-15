@@ -16,10 +16,26 @@ public class RequestDialogAction extends ClientPacket {
 
 	@Override
 	protected boolean read() {
+		Player player = getClient().getPlayer();
 		int index = readD();
 		int currentPage = readD();
 		
-		Player player = getClient().getPlayer();
+		// Checking if any of bottom buttons were clicked
+		if (index < 0) {
+			if (index == -1) {
+				// Goodbye
+				player.setDialog(null);
+			} else if (index == -2) {
+				// Accept
+				if (player.getDialog() != null) {
+					if (player.getDialog().getQuest() != null) {
+						player.getDialog().getQuest().startQuest(player);
+					}
+				}
+			}
+			return false;
+		}
+		
 		Dialog dialog = player.getDialog();
 		
 		if (dialog != null) {

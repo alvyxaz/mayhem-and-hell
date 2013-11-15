@@ -24,6 +24,7 @@ public class DialogPageInfo extends ServerPacket {
 		writeS(npcName);							// NPC talking
 		writeS(page.getText());						// Page text
 		writeD(page.getId());						// Current page id
+		writeC(page.isAcceptEnabled() ? 1 : 0);		// 1 if accept button is enabled
 		
 		if (links == null) {
 			writeD(0);
