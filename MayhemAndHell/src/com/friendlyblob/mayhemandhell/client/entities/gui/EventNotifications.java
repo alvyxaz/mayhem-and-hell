@@ -1,0 +1,96 @@
+package com.friendlyblob.mayhemandhell.client.entities.gui;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.friendlyblob.mayhemandhell.client.MyGame;
+import com.friendlyblob.mayhemandhell.client.helpers.Assets;
+
+/**
+ * Manages live notifications buffer
+ * @author Alvys
+ *
+ */
+public class EventNotifications {
+	
+	private static final Color REGULAR_COLOR = new Color(0f, 0f, 0f, 1);// Color(1f, 0.8f, 0, 1f);
+	
+	private static final int BUFFER_SIZE = 5;
+	private static final float MAX_TIMER = 2; 
+	
+	private String[] notifications;
+	private Color[] colors;
+	private float[] timers;
+	private float[] y;
+	
+	private StringBuilder strBuilder;
+	private int count;
+	
+	private BitmapFont font;
+	
+	public EventNotifications() {
+		font = Assets.defaultFont;
+		notifications = new String[BUFFER_SIZE];
+		colors = new Color[BUFFER_SIZE];
+		timers = new float[BUFFER_SIZE];
+		y = new float[BUFFER_SIZE];
+		
+		for (int i = 0; i < BUFFER_SIZE; i++) {
+			notifications[i] = "";
+			colors[i] = Color.WHITE;
+		}
+		
+		strBuilder = new StringBuilder(128);
+		count = 0;
+	}
+	
+	public void draw(SpriteBatch spriteBatch, float deltaTime) {
+		if (count <= 0) {
+			return;
+		}
+		
+		for (int i = 0; i < BUFFER_SIZE; i++) {
+			if (timers[i] > 0) {
+				//-------------------------------------
+				// UPDATE
+				timers[i] -= deltaTime;
+//				y[i] += deltaTime*verticalSpeed;
+				if (timers[i] <= 0) {
+					count--;
+				}
+				//-------------------------------------
+				// DRAW
+				Assets.defaultFont.setColor(colors[i]);
+				Assets.defaultFont.drawWrapped(spriteBatch, notifications[i], 0, y[i], 
+						MyGame.SCREEN_WIDTH, HAlignment.CENTER);
+			}
+		}
+		// Restore regular color
+		Assets.defaultFont.setColor(Color.WHITE);
+	}
+	
+	public synchronized void addNotification (String notification, Color color) {
+		int oldest = 0;
+		for (int i = 0; i < BUFFER_SIZE; i++) {
+			if (timers[i] < timers[oldest]) {
+				oldest = i;
+			}
+			if (timers[i] > 0) {
+				y[i] += Assets.defaultFont.getLineHeight();
+			}
+		}
+		
+		// Pushing notification
+		this.timers[oldest] = MAX_TIMER;
+		this.notifications[oldest] = notification;
+		this.colors[oldest] = color;
+		this.y[oldest] = MyGame.SCREEN_HEIGHT * 0.75f;
+		count++;
+	}
+	
+	public void addRegularNotification(String notification) {
+		addNotification(notification, REGULAR_COLOR);
+	}
+	
+}

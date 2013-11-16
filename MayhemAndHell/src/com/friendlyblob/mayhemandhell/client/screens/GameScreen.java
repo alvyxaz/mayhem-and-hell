@@ -8,6 +8,7 @@ import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.entities.gui.Chat.ChatMessageType;
+import com.friendlyblob.mayhemandhell.client.entities.gui.EventNotifications;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiElement.GuiPriority;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager.GuiPositionHorizontal;
@@ -26,11 +27,13 @@ public class GameScreen extends BaseScreen{
 	public GuiManager guiManager;
 	
 	public LiveNotifications notifications;
+	public EventNotifications eventNotifications;
 	
 	public GameScreen(MyGame game) {
 		super(game);
 		
 		notifications = new LiveNotifications();
+		eventNotifications = new EventNotifications();
 		
 		GameWorld.initialize();
 		world = GameWorld.getInstance();
@@ -62,6 +65,8 @@ public class GameScreen extends BaseScreen{
 		guiManager.draw(spriteBatch);
 		
 		Assets.defaultFont.draw(spriteBatch, fpsText, 20, 20);
+		
+		eventNotifications.draw(spriteBatch, deltaTime);
 		
 		spriteBatch.end();
 	}

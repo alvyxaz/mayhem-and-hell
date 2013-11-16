@@ -12,6 +12,7 @@ import com.friendlyblob.mayhemandhell.server.model.datatables.NpcTable;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogLink;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogLinkType;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.EventNotification;
 import com.friendlyblob.mayhemandhell.server.scripting.Script;
 import com.friendlyblob.mayhemandhell.server.scripting.ScriptManager;
 
@@ -145,6 +146,8 @@ public class Quest extends Script{
 		QuestState state = player.getQuestState(getQuestId());
 		if (state == null) {
 			state = new QuestState(this);
+			player.putQuestState(state);
+			player.sendPacket(new EventNotification("'" + name + "' started"));
 		}
 	}
 

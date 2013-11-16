@@ -38,6 +38,10 @@ public class Player extends GameCharacter {
 		return quests.get(questId);
 	}
 	
+	public void putQuestState(QuestState state) {
+		quests.put(state.getQuestId(), state);
+	}
+	
 	public Player(int objectId, CharacterTemplate template) {
 		super(objectId, template);
 		this.setObjectId((int)(5000 + Math.random()*2000)); // TODO remove

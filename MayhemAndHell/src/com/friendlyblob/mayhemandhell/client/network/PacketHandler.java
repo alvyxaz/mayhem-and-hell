@@ -55,10 +55,12 @@ public class PacketHandler {
 			case 0x0E:
 				response = new ItemPickedUp();
 				break;
+			case 0x0F:
+				response = new EventNotification();
+				break;
 			case 0xA0:
 				response = new ChatMessageNotify();
 				break;
-			// Don't add any packets below this line
 			case 0xFF:
 				response = new ActionFailedMessage();
 				break;

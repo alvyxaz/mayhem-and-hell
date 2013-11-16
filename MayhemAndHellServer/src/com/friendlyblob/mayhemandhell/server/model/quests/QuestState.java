@@ -14,6 +14,10 @@ public class QuestState {
 		questId = quest.getQuestId();
 	}
 	
+	public int getQuestId() {
+		return questId;
+	}
+	
 	private String getValue(String key) {
 		return values.get(key);
 	}
