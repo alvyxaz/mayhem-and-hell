@@ -1,7 +1,11 @@
 import com.friendlyblob.mayhemandhell.server.model.quests.*;
+import com.friendlyblob.mayhemandhell.server.model.actors.*;
 import java.io.File;
 
 public class Q0001_GrabThatNastyRat extends Quest{
+	
+	final RATS_KILLED = "rats";
+	final RATS_REQUIRED = 5;
 	
 	// NPC id's
 	final SMITH = 100;
@@ -16,6 +20,30 @@ public class Q0001_GrabThatNastyRat extends Quest{
 		addStartNpc(SMITH);
 		addKillNpc(RAT);
 	}
+	
+	def String onQuestStarted(Player player, QuestState state) {
+		state.setInt(RATS_KILLED, 0);
+		return null;
+	}
+	
+	def String onKill(GameCharacter target, Player killer) {
+		QuestState state =  killer.getQuestState(getQuestId());
+		
+		if (state != null && !state.isTurnIn() && !state.isCompleted()) {
+			int ratsKilled = state.getInt(RATS_KILLED, 0) +1;
+			
+			killer.sendEventNotification("Rats killed (" + ratsKilled + "/" + RATS_REQUIRED + ")");
+			
+			if (ratsKilled >= RATS_REQUIRED) {
+				state.setTurnIn();
+				killer.sendEventNotification("'"+ getName() + "' completed");
+			}
+			state.setInt(RATS_KILLED, ratsKilled);
+		}
+		
+		return null;
+	}
+	
 }
 
 QuestManager.getInstance().addQuest(

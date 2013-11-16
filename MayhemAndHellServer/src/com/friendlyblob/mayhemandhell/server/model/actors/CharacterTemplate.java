@@ -1,6 +1,14 @@
 package com.friendlyblob.mayhemandhell.server.model.actors;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javolution.util.FastMap;
+
 import com.friendlyblob.mayhemandhell.server.ai.AiData;
+import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
+import com.friendlyblob.mayhemandhell.server.model.quests.Quest.QuestEventType;
 import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
 
 // TODO try to implement values as final
@@ -53,9 +61,30 @@ public class CharacterTemplate {
 	
 	protected AiData aiData = new AiData();
 	
+	private final Map<QuestEventType, List<Quest>> questEvents = new FastMap<>();
+	
 	public CharacterTemplate(StatsSet set) {
 		this.set = set;
 		parseSetData();
+	}
+	
+	/**
+	 * Attaches a quest event which is called when certain action happens.
+	 * @param type quest event type
+	 * @param quest quest to be added
+	 */
+	public void addQuestEvent(QuestEventType type, Quest quest) {
+		if (!questEvents.containsKey(type)) {
+			List<Quest> list = new ArrayList<>();
+			list.add(quest);
+			questEvents.put(type, list);
+		} else {
+			questEvents.get(type).add(quest);
+		}
+	}
+	
+	public List<Quest> getQuestEvents(QuestEventType type) {
+		return questEvents.get(type);
 	}
 	
 	public void parseSetData() {

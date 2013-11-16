@@ -2,6 +2,8 @@
 <!-- "type" should be a classname of the npc without Instance postfix  !-->
 <list>
 	<npc id="1" type="NpcAttackable" name="Rat" sprite="1">
+		<set name="baseStrength" val="1" />
+		<set name="baseMaxHealth" val="25" />
 	    <set name="baseWalkingSpeed" val="20" />
 		<itemDropList>
 			<item id="1" min="1" max="1" chance="100" />

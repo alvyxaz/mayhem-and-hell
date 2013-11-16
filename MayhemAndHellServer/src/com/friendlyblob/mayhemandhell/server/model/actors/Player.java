@@ -19,6 +19,7 @@ import com.friendlyblob.mayhemandhell.server.model.quests.QuestState;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterStatusUpdate;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.EventNotification;
 
 public class Player extends GameCharacter {
 	
@@ -211,5 +212,9 @@ public class Player extends GameCharacter {
 		this.sendPacket(new CharacterStatusUpdate(this));
 		this.teleportTo(this.getZone(), 10, 10);
 		this.alive = true;
+	}
+	
+	public void sendEventNotification(String notification) {
+		sendPacket(new EventNotification(notification));
 	}
 }

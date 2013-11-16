@@ -33,8 +33,6 @@ public class NpcTemplate extends CharacterTemplate {
 	
 	private int respawnTime; // Respawn time in milliseconds;
 	
-	private final Map<QuestEventType, List<Quest>> questEvents = new FastMap<>();
-	
 	public NpcTemplate(StatsSet set) {
 		super(set);
 		itemDropList = new ItemDrop[0];
@@ -51,7 +49,7 @@ public class NpcTemplate extends CharacterTemplate {
 	}
 	
 	public List<Quest> getQuestsToStart(Player player) {
-		List<Quest> startsQuests = questEvents.get(QuestEventType.QUEST_START);
+		List<Quest> startsQuests = getQuestEvents(QuestEventType.QUEST_START);
 		List<Quest> quests = new ArrayList<Quest>(); 
 		
 		// If there are no quest starts attached
@@ -105,21 +103,6 @@ public class NpcTemplate extends CharacterTemplate {
 		ItemDrop [] temp = Arrays.copyOf(itemDropList, itemDropList.length+1);
 		temp[temp.length-1] = new ItemDrop(item, chance, min, max);
 		itemDropList = temp;
-	}
-	
-	/**
-	 * Attaches a quest event which is called when certain action happens.
-	 * @param type quest event type
-	 * @param quest quest to be added
-	 */
-	public void addQuestEvent(QuestEventType type, Quest quest) {
-		if (!questEvents.containsKey(type)) {
-			List<Quest> list = new ArrayList<>();
-			list.add(quest);
-			questEvents.put(type, list);
-		} else {
-			questEvents.get(type).add(quest);
-		}
 	}
 	
 	/**

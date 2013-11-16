@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.friendlyblob.mayhemandhell.server.data.DialogDataParser;
+import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.NpcTemplate;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.datatables.DialogTable;
@@ -54,6 +55,14 @@ public class Quest extends Script{
 				dialogs.put(dialog.getId(), dialog);
 			}
 		}
+	}
+	
+	public String onQuestStarted(Player player, QuestState state) {
+		return null;
+	}
+	
+	public String onKill(GameCharacter target, Player killer) {
+		return null;
 	}
 	
 	public int getQuestId() {
@@ -119,7 +128,7 @@ public class Quest extends Script{
 	 * @param npcId
 	 */
 	public void addKillNpc(int npcId) {
-		addEventToNpc(QuestEventType.QUEST_START, npcId);
+		addEventToNpc(QuestEventType.ON_KILL, npcId);
 	}
 	
 	/**
@@ -147,7 +156,11 @@ public class Quest extends Script{
 		if (state == null) {
 			state = new QuestState(this);
 			player.putQuestState(state);
-			player.sendPacket(new EventNotification("'" + name + "' started"));
+			
+			// Sending notification to player
+			String notification = onQuestStarted(player, state);
+			notification = notification != null ? notification :  "'" + name + "' started";
+			player.sendEventNotification(notification);
 		}
 	}
 

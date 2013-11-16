@@ -15,12 +15,15 @@ import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
 import com.friendlyblob.mayhemandhell.server.model.logic.Formulas;
+import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
+import com.friendlyblob.mayhemandhell.server.model.quests.Quest.QuestEventType;
 import com.friendlyblob.mayhemandhell.server.model.stats.CharacterStats;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.Attack;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterStatusUpdate;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DeathNotification;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.EventNotification;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyMovementStop;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.TargetInfoResponse;
@@ -353,24 +356,9 @@ public class GameCharacter extends GameObject{
 	}
 	
 	/**
-	 * Either adds or removes (negative) a certain amount of health.
-	 * Calls "onHealthChange() method"
-	 * @param health
-	 */
-	public void offsetHealth(int offset) {
-		this.health += offset;
-		this.health = Math.min(this.health, getMaxHealth());
-		
-		// Check if character is dead
-		if (this.health < 0) {
-			onDeath();
-		}
-	}
-	
-	/**
 	 * Get's called when character dies
 	 */
-	public void onDeath() {
+	public void onDeath(GameCharacter attacker) {
 		this.alive = false;
 		this.ai.setIntention(Intention.IDLE);
 		this.ai.stopAiTask();
@@ -392,6 +380,18 @@ public class GameCharacter extends GameObject{
 			ii.setPosition(getPosition());
 			
 			World.getInstance().getZone(0).addObject(ii);		
+		}
+		
+		// Notify quest engine about npc being killed
+		if (attacker instanceof Player) {
+			if (getTemplate().getQuestEvents(QuestEventType.ON_KILL) != null) {
+				for(Quest quest : getTemplate().getQuestEvents(QuestEventType.ON_KILL)) {
+					String notification = quest.onKill(this, (Player)attacker);
+					if (notification != null) {
+						((Player)attacker).sendPacket(new EventNotification(notification));
+					}
+				}
+			}
 		}
 	}
 	
@@ -537,7 +537,7 @@ public class GameCharacter extends GameObject{
 			
 			if (this.health < 0) {
 				this.health = 0;
-				onDeath();
+				onDeath(attacker);
 			}
 		}
 	}
@@ -589,7 +589,7 @@ public class GameCharacter extends GameObject{
 	 * @return
 	 */
 	public int getAttackDamage() {
-		return 15;
+		return getTemplate().getBaseStrength();
 	}
 
 	public boolean isPlayer() {

@@ -23,8 +23,8 @@ public class NpcInstance extends GameCharacter {
 	}
 	
 	@Override
-	public void onDeath() {
-		super.onDeath();
+	public void onDeath(GameCharacter attacker) {
+		super.onDeath(attacker);
 		this.spawn.removeNpc(this);
 	}
 	

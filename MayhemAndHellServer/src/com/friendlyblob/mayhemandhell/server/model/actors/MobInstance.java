@@ -61,8 +61,8 @@ public class MobInstance extends GameCharacter {
 	}
 	
 	@Override
-	public void onDeath() {
-		super.onDeath();
+	public void onDeath(GameCharacter attacker) {
+		super.onDeath(attacker);
 		spawnAtTick = GameTimeController.getInstance().getGameTicks() 
 				+ spawnInterval/GameTimeController.MILLIS_IN_TICK;
 	}
