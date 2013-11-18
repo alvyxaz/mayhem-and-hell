@@ -9,6 +9,7 @@ import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogLinkType
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogPage;
 import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
 import com.friendlyblob.mayhemandhell.server.model.quests.QuestManager;
+import com.friendlyblob.mayhemandhell.server.model.quests.QuestState;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DialogPageInfo;
 
@@ -23,13 +24,20 @@ public class RequestDialogAction extends ClientPacket {
 		// Checking if any of bottom buttons were clicked
 		if (index < 0) {
 			if (index == -1) {
-				// Goodbye
+				// Right button (Goodbye)
 				player.setDialog(null);
 			} else if (index == -2) {
-				// Accept
+				// Left button
 				if (player.getDialog() != null) {
-					if (player.getDialog().getQuest() != null) {
-						player.getDialog().getQuest().startQuest(player);
+					Quest quest = player.getDialog().getQuest();
+					if (quest != null) {
+						QuestState state = player.getQuestState(quest.getQuestId());
+						if (state == null) {
+							quest.startQuest(player);
+						} else if (state.isTurnIn()) {
+							state.setCompleted();
+							player.sendEventNotification("'"+ quest.getName() + "' completed");
+						}
 					}
 				}
 			}
@@ -49,13 +57,18 @@ public class RequestDialogAction extends ClientPacket {
 						page = dialog.getPage(link.getTarget());
 						break;
 					case QUEST_START:
-						Quest quest = QuestManager.getInstance().getQuest(link.getTarget());
-						if (quest != null) {
-							dialog = quest.getDialogStart();
+						Quest questStart = QuestManager.getInstance().getQuest(link.getTarget());
+						if (questStart != null) {
+							dialog = questStart.getDialogStart();
 							page = dialog.getPage(0);
 						}
 						break;
 					case QUEST_COMPLETE:
+						Quest questComplete = QuestManager.getInstance().getQuest(link.getTarget());
+						if (questComplete != null) {
+							dialog = questComplete.getDialogComplete();
+							page = dialog.getPage(0);
+						}
 						break;
 					case SHOP:
 						break;

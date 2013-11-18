@@ -29,9 +29,16 @@ gui/ingame/icon_quest
   orig: 10, 10
   offset: 0, 0
   index: -1
-gui/ingame/icon_store
+gui/ingame/icon_quest_turn_in
   rotate: false
   xy: 161, 20
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+gui/ingame/icon_store
+  rotate: false
+  xy: 173, 20
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
@@ -59,7 +66,7 @@ gui/ingame/target_background
   index: -1
 gui/ingame/window
   rotate: false
-  xy: 173, 23
+  xy: 185, 23
   size: 7, 7
   split: 3, 3, 3, 3
   orig: 7, 7

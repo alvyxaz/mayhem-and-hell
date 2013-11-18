@@ -124,6 +124,14 @@ public class Quest extends Script{
 	}
 	
 	/**
+	 * Adds and Npc that allows you to turn in this quest
+	 * @param npcId
+	 */
+	public void addCompleteNpc(int npcId) {
+		addEventToNpc(QuestEventType.QUEST_COMPLETE, npcId);
+	}
+	
+	/**
 	 * Adds an npc that needs to be killed. 
 	 * @param npcId
 	 */
@@ -145,6 +153,7 @@ public class Quest extends Script{
 	
 	public static enum QuestEventType {
 		QUEST_START,
+		QUEST_COMPLETE,
 		ON_TALK,
 		ON_ATTACK,
 		ON_KILL,

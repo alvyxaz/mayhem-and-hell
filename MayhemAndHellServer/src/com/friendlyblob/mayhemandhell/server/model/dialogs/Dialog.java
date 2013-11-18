@@ -8,6 +8,7 @@ import com.friendlyblob.mayhemandhell.server.model.actors.NpcTemplate;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcInstance;
 import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
+import com.friendlyblob.mayhemandhell.server.model.quests.QuestState;
 
 /**
  * Represents a whole dialog. Dialogs are made of pages, 
@@ -77,7 +78,9 @@ public class Dialog {
 		private String text;
 		private DialogLink[] links;
 		private Dialog dialog;
-		private boolean acceptEnabled;
+		
+		private boolean leftButtonEnabled;
+		private String leftButtonText;
 		
 		public int getId() {
 			return id;
@@ -124,10 +127,15 @@ public class Dialog {
 			// If it's the main page, add quest related links 
 			// TODO find a way to not do this when current dialog is quest dialog
 			if (id == 0) {
-				List<Quest> questList = npc.getQuestsToStart(player);
+				List<Quest> questList = npc.getQuests();
 				if (questList != null) {
 					for(Quest quest : questList) {
-						links.add(quest.getQuestStartLink());
+						QuestState state = player.getQuestState(quest.getQuestId());
+						if (state == null) {
+							links.add(quest.getQuestStartLink());
+						} else if (state.isTurnIn()){
+							links.add(quest.getQuestCompleteLink());
+						}
 					}
 				}
 			}
@@ -158,12 +166,17 @@ public class Dialog {
 			this.dialog = dialog;
 		}
 		
-		public boolean isAcceptEnabled() {
-			return acceptEnabled;
+		public boolean isLeftButtonEnabled() {
+			return leftButtonEnabled;
 		}
 		
-		public void setAcceptEnabled(boolean acceptEnabled) {
-			this.acceptEnabled = acceptEnabled;
+		public String getLeftButtonText() {
+			return leftButtonText;
+		}
+		
+		public void setLeftButton(boolean enabled, String text) {
+			this.leftButtonEnabled = enabled;
+			leftButtonText = text;
 		}
 		
 	}

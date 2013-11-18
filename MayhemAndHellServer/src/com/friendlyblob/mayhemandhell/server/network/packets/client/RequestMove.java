@@ -12,8 +12,13 @@ public class RequestMove extends ClientPacket{
 	
 	@Override
 	protected boolean read() {
-		x = readD();
-		y = readD();
+		try {
+			x = readD();
+			y = readD();
+		} catch (Exception e) {
+			return false;
+		}
+		
 		return true;
 	}
 

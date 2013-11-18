@@ -44,27 +44,36 @@ public class NpcTemplate extends CharacterTemplate {
 		respawnTime = set.getInteger("respawnTime", 1000);
 	}
 	
-	public boolean hasQuestsToStart(Player player) {
-		return getQuestsToStart(player).size() > 0;
+	public boolean hasQuests() {
+		return getQuests().size() > 0;
 	}
 	
-	public List<Quest> getQuestsToStart(Player player) {
+	/**
+	 * Returns a list of quests that player can get from this npc or turn in.
+	 * @param player
+	 * @return
+	 */
+	public List<Quest> getQuests() {
 		List<Quest> startsQuests = getQuestEvents(QuestEventType.QUEST_START);
-		List<Quest> quests = new ArrayList<Quest>(); 
+		List<Quest> completesQuests = getQuestEvents(QuestEventType.QUEST_COMPLETE);
 		
-		// If there are no quest starts attached
-		if (startsQuests == null) {
-			return quests;
-		}
+		List<Quest> playerQuests = new ArrayList<Quest>(); 
 		
-		for(Quest quest : startsQuests) {
-			QuestState state = player.getQuestState(quest.getQuestId());
-			if (state == null) {
-				quests.add(quest);
+		// Collect quests that can be started
+		if (startsQuests != null) {
+			for(Quest quest : startsQuests) {
+				playerQuests.add(quest);
 			}
 		}
 		
-		return quests;
+		// Collect quests that can be turned in
+		if (completesQuests != null) {
+			for(Quest quest : completesQuests) {
+				playerQuests.add(quest);
+			}
+		}
+		
+		return playerQuests;
 	}
 	
 	/**

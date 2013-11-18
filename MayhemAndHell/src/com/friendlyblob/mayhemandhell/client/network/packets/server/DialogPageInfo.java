@@ -11,7 +11,8 @@ public class DialogPageInfo extends ReceivablePacket{
 	private String[] linkTexts;
 	private int[] linkTypes;
 	private int pageId;
-	private boolean acceptEnabled;
+	private boolean leftButtonEnabled;
+	private String leftButtonText;
 	
 	@Override
 	public boolean read() {
@@ -19,7 +20,11 @@ public class DialogPageInfo extends ReceivablePacket{
 		name = readS();
 		text = readS();
 		pageId = readD();
-		acceptEnabled = readC() == 1 ? true: false;
+		leftButtonEnabled = readC() == 1 ? true: false;
+		
+		if (leftButtonEnabled) {
+			leftButtonText = readS(); 
+		}
 		
 		int linkCount = readD();
 
@@ -38,7 +43,9 @@ public class DialogPageInfo extends ReceivablePacket{
 	public void run() {
 		Dialog dialog = GameWorld.getInstance().game.screenGame.guiManager.dialog;
 		dialog.updateDialog(name, text, linkTexts, linkTypes, pageId);
-		dialog.setShowAccept(acceptEnabled);
+		if (leftButtonEnabled) {
+			dialog.setLeftButton(leftButtonText);
+		}
 	}
 
 }

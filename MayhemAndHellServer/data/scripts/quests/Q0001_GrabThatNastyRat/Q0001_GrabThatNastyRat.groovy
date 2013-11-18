@@ -5,7 +5,7 @@ import java.io.File;
 public class Q0001_GrabThatNastyRat extends Quest{
 	
 	final RATS_KILLED = "rats";
-	final RATS_REQUIRED = 5;
+	final RATS_REQUIRED = 1;
 	
 	// NPC id's
 	final SMITH = 100;
@@ -36,7 +36,6 @@ public class Q0001_GrabThatNastyRat extends Quest{
 			
 			if (ratsKilled >= RATS_REQUIRED) {
 				state.setTurnIn();
-				killer.sendEventNotification("'"+ getName() + "' completed");
 			}
 			state.setInt(RATS_KILLED, ratsKilled);
 		}

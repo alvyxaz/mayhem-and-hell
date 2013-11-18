@@ -22,13 +22,14 @@ public class Dialog extends GuiWindow {
 	private Rectangle goodbye;
 	private Rectangle accept;
 	
-	private Rectangle[] links;
+	private Rectangle[] links = new Rectangle[0]; // Synchronization purposes
 	private String[] linkTexts;
 	private TextureRegion[] linkIcons;
 	
 	private int pageId;
 	
-	private boolean showAccept = false;
+	private boolean showLeftButton = false;
+	private String leftButtonText;
 	
 	public Dialog() {
 		super();
@@ -53,7 +54,7 @@ public class Dialog extends GuiWindow {
 			}
 		}
 		
-		if (showAccept && accept.contains(x, y)) {
+		if (showLeftButton && accept.contains(x, y)) {
 			MyGame.connection.sendPacket(new RequestDialogAction(-2, pageId));
 			hide();
 			return;
@@ -90,76 +91,81 @@ public class Dialog extends GuiWindow {
 				box.y + box.height - contentPaddingTop - titleBox.height, 
 				WIDTH);
 		
-		for (int i = 0; i < links.length; i++) {
-			// Button bg
-			spriteBatch.setColor(0.6f, 0.4f, 0.2f, 1f);
-			spriteBatch.draw(Assets.px, 
-					box.x + links[i].x, 
-					box.y + links[i].y, 
-					links[i].width, 
-					links[i].height);
+		synchronized (links) {
+			for (int i = 0; i < links.length; i++) {
+				// Button bg
+				spriteBatch.setColor(0.6f, 0.4f, 0.2f, 1f);
+				spriteBatch.draw(Assets.px, 
+						box.x + links[i].x, 
+						box.y + links[i].y, 
+						links[i].width, 
+						links[i].height);
+				spriteBatch.setColor(Color.WHITE);
+				
+				Assets.defaultFont.draw(spriteBatch, linkTexts[i], box.x + links[i].x + 15, box.y + links[i].y + 15);
+				
+				spriteBatch.draw(linkIcons[i], box.x + links[i].x + 1, 
+						box.y + links[i].y + 3);
+			}
+			
+			// Left and right buttons
+			spriteBatch.setColor(0.6f, 0.2f, 0.2f, 1f);
+			spriteBatch.draw(Assets.px, box.x + goodbye.x,  box.y + goodbye.y, 
+					goodbye.width, goodbye.height);
+			Assets.defaultFont.drawWrapped(spriteBatch, "Goodbye", box.x + goodbye.x, 
+					box.y + goodbye.y + goodbye.height-5, goodbye.width, HAlignment.CENTER);
+			
+			if (showLeftButton) {
+				spriteBatch.setColor(0.4f, 0.6f, 0.15f, 1f);
+				spriteBatch.draw(Assets.px, box.x + accept.x,  box.y + accept.y, 
+						accept.width, accept.height);
+				Assets.defaultFont.drawWrapped(spriteBatch, leftButtonText, box.x + accept.x, 
+						box.y + accept.y + accept.height-5, accept.width, HAlignment.CENTER);
+			}
 			spriteBatch.setColor(Color.WHITE);
-			
-			Assets.defaultFont.draw(spriteBatch, linkTexts[i], box.x + links[i].x + 15, box.y + links[i].y + 15);
-			
-			spriteBatch.draw(linkIcons[i], box.x + links[i].x + 1, 
-					box.y + links[i].y + 3);
 		}
-		
-		// Goodbye & accept
-		spriteBatch.setColor(0.6f, 0.2f, 0.2f, 1f);
-		spriteBatch.draw(Assets.px, box.x + goodbye.x,  box.y + goodbye.y, 
-				goodbye.width, goodbye.height);
-		Assets.defaultFont.drawWrapped(spriteBatch, "Goodbye", box.x + goodbye.x, 
-				box.y + goodbye.y + goodbye.height-5, goodbye.width, HAlignment.CENTER);
-		
-		if (showAccept) {
-			spriteBatch.setColor(0.4f, 0.6f, 0.15f, 1f);
-			spriteBatch.draw(Assets.px, box.x + accept.x,  box.y + accept.y, 
-					accept.width, accept.height);
-			Assets.defaultFont.drawWrapped(spriteBatch, "Accept", box.x + accept.x, 
-					box.y + accept.y + accept.height-5, accept.width, HAlignment.CENTER);
-		}
-		spriteBatch.setColor(Color.WHITE);
-		
 	}
 	
 	public void updateDialog(String name, String text, String[] linkTexts, int[] linkTypes, int pageId) {
+		this.showLeftButton = false;
 		this.setTitle(name + " says:");
 		this.text = text;
 		this.linkTexts = linkTexts;
 		this.pageId = pageId;
 		
-		links = new Rectangle[linkTexts.length];
-		for (int i = 0; i < links.length; i++) {
-			links[i] = new Rectangle(contentPaddingLeft, 4 + GOODBYE_HEIGHT + LINK_HEIGHT*(links.length-1-i), 
-					WIDTH, 16);
-		}
-		
-		TextureRegion[] tempLinkIcons = new TextureRegion[linkTypes.length];
-		
-		for (int i = 0; i < linkTypes.length; i++) {
-			switch(linkTypes[i]) {
-			case 2: 
-				tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_quest");
-				break;
-			case 3: 
-				tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_quest");
-				break;
-			case 4:
-				tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_store");
-				break;
-			default:
-				tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_chat");
-				break;
+		synchronized (links) {
+			links = new Rectangle[linkTexts.length];
+			for (int i = 0; i < links.length; i++) {
+				links[i] = new Rectangle(contentPaddingLeft, 4 + GOODBYE_HEIGHT + LINK_HEIGHT*(links.length-1-i), 
+						WIDTH, 16);
 			}
+			
+			TextureRegion[] tempLinkIcons = new TextureRegion[linkTypes.length];
+			
+			for (int i = 0; i < linkTypes.length; i++) {
+				switch(linkTypes[i]) {
+				case 2: 
+					tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_quest");
+					break;
+				case 3: 
+					tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_quest_turn_in");
+					break;
+				case 4:
+					tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_store");
+					break;
+				default:
+					tempLinkIcons[i] = Assets.getTextureRegion("gui/ingame/icon_chat");
+					break;
+				}
+			}
+			linkIcons = tempLinkIcons;
 		}
-		linkIcons = tempLinkIcons;
 		show();
 	}
 	
-	public void setShowAccept(boolean accept) {
-		showAccept = accept;
+	public void setLeftButton(String text) {
+		showLeftButton = true;
+		leftButtonText = text;
 	}
 
 	@Override

@@ -16,7 +16,7 @@ public abstract class BaseScreen implements Screen {
 	
 	protected StringBuilder fpsText;
 	private BaseScreen screenToSwitchTo;
-	public boolean isSwitchInProgress = false;;
+	public boolean isSwitchInProgress = false;
 	
 	public OrthographicCamera guiCam;
 	

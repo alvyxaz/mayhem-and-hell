@@ -23,6 +23,8 @@ import com.friendlyblob.mayhemandhell.client.screens.ZoneLoadingScreen;
 public class MyGame extends Game implements ApplicationListener {
 	public static int SCREEN_WIDTH = 400;
 	public static int SCREEN_HEIGHT = 240;
+	public static int GUI_WIDTH = 800;
+	public static int GUI_HEIGHT = 480;
 	public static int SCREEN_HALF_WIDTH;
 	public static int SCREEN_HALF_HEIGHT;
 	public static Rectangle SCREEN_RECTANGLE;
@@ -44,6 +46,8 @@ public class MyGame extends Game implements ApplicationListener {
 	public GameScreen screenGame;
 	
 	public static Connection connection;
+	
+	private String host = "localhost";
 	
 	public MyGame(GoogleInterface google, ActionResolver actionResolver){
 		this.google = google;
@@ -67,6 +71,10 @@ public class MyGame extends Game implements ApplicationListener {
 
 		isAndroid = Gdx.app.getType() == ApplicationType.Android;
 		
+		if (isAndroid) {
+			host = "158.129.18.169";
+		}
+		
 		// Initializing screens;
 		screenLoading = new LoadingScreen(this);
 		
@@ -85,7 +93,7 @@ public class MyGame extends Game implements ApplicationListener {
 
     public void connectToServer() {
     	try {
-			MyGame.connection = new Connection(new PacketHandler(), "localhost", 7777);
+			MyGame.connection = new Connection(new PacketHandler(), host, 7777);
 			MyGame.connection.game = this;
 			MyGame.connection.start();
 			MyGame.connection.sendPacket(new ClientVersion(5));
@@ -110,10 +118,10 @@ public class MyGame extends Game implements ApplicationListener {
 		float mismatch = difference - (int) difference;
 		float scale = ((int) difference) >= 1 ? (int) difference : mismatch; 
 		
-		if(mismatch <= 0.3f){
+		if(mismatch <= 0.5f){
 			SCREEN_WIDTH = (int)(Gdx.graphics.getWidth()/scale);
 			SCREEN_HEIGHT= (int)(Gdx.graphics.getHeight()/scale);
-		} else if(mismatch > 0.7f){
+		} else if(mismatch > 0.5f){
 			scale += 1;
 			SCREEN_WIDTH = (int)(Gdx.graphics.getWidth() / scale);
 			SCREEN_HEIGHT= (int)(Gdx.graphics.getHeight()/scale);
@@ -127,6 +135,9 @@ public class MyGame extends Game implements ApplicationListener {
 		SCREEN_HALF_HEIGHT = SCREEN_HEIGHT / 2;
 
 		SCREEN_RECTANGLE = new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+		
+		GUI_WIDTH = SCREEN_WIDTH*2;
+		GUI_HEIGHT = SCREEN_HEIGHT*2;
 	}
     
     public void resize (int width, int height) {

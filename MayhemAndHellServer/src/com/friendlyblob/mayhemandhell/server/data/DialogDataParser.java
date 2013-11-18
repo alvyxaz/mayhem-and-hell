@@ -92,9 +92,9 @@ public class DialogDataParser extends DataParser {
 		DialogPage page = new DialogPage();
 		page.setId(Integer.parseInt(pageNode.getAttributes().getNamedItem("id").getNodeValue()));
 		
-		Node acceptEnabledNode= pageNode.getAttributes().getNamedItem("accept");
-		if (acceptEnabledNode != null) {
-			page.setAcceptEnabled(Boolean.parseBoolean(acceptEnabledNode.getNodeValue()));
+		Node leftButtonNode= pageNode.getAttributes().getNamedItem("leftButton");
+		if (leftButtonNode != null) {
+			page.setLeftButton(true, leftButtonNode.getNodeValue());
 		}
 		
 		for (pageNode = pageNode.getFirstChild(); pageNode != null; pageNode = pageNode.getNextSibling()) {

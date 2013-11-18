@@ -24,7 +24,14 @@ public class DialogPageInfo extends ServerPacket {
 		writeS(npcName);							// NPC talking
 		writeS(page.getText());						// Page text
 		writeD(page.getId());						// Current page id
-		writeC(page.isAcceptEnabled() ? 1 : 0);		// 1 if accept button is enabled
+		
+		// if left button is enabled
+		if (page.isLeftButtonEnabled()) {
+			writeC(1);
+			writeS(page.getLeftButtonText());
+		} else {
+			writeC(0);
+		}
 		
 		if (links == null) {
 			writeD(0);
