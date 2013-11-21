@@ -31,7 +31,6 @@ public class AnimationParser {
 				}
 				animationCollections.put(character.getIntAttribute("id"), animations);
 			}
-			
 		} catch (Exception e){
 			e.printStackTrace();
 		}

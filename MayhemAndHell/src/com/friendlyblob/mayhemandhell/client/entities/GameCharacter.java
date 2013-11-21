@@ -39,6 +39,7 @@ public class GameCharacter extends GameObject {
 	protected int currentFrame;
 	
 	protected CharacterAnimation animationHandler;
+	private boolean twoDirectionalAnimations;
 	
 	public GameCharacter(int id, int x, int y, int animationId){
 		super(id);
@@ -48,11 +49,12 @@ public class GameCharacter extends GameObject {
 		animationHandler = new CharacterAnimation();
 		
 		prepareAnimations(animationId);
+		twoDirectionalAnimations = animationHandler.isTwoDirectional();
 	}
 	
 	public void prepareAnimations(int animationId) {
 		for (AnimationData animation : AnimationParser.getCollection(animationId).values()) {
-			animationHandler.setAnimation(CharacterAnimationType.valueOf(animation.type), 
+			animationHandler.setAnimation(animation.type, 
 					new Animation(animation, animationHandler));
 		}
 	}
@@ -155,19 +157,36 @@ public class GameCharacter extends GameObject {
 		
 		float angle = (float)Math.atan2(targetY - position.y, targetX - position.x);
 
-		// Calculate direction
-		if (angle >= -Math.PI/4 && angle <= Math.PI/4) {
+		// Calculating direction of movement (for animating purposes)
+		if (angle >= -Math.PI/2 && angle <= Math.PI/2) {
+			// Moving right
 			direction = MovementDirection.RIGHT.value;
 			animationHandler.play(CharacterAnimationType.WALKING_RIGHT);
-		} else if (angle >= Math.PI/4 && angle <= Math.PI*3/4) {
-			direction = MovementDirection.UP.value;
-			animationHandler.play(CharacterAnimationType.WALKING_UP);
-		} else if (angle >= -Math.PI*3/4 && angle <= -Math.PI/4) {
-			direction = MovementDirection.DOWN.value;
-			animationHandler.play(CharacterAnimationType.WALKING_DOWN);
+			
+			if (!twoDirectionalAnimations && angle >= Math.PI/4) {
+				// Moving up
+				direction = MovementDirection.UP.value;
+				animationHandler.play(CharacterAnimationType.WALKING_UP);
+				
+			} else if (!twoDirectionalAnimations && angle <= -Math.PI/4) {
+				// Moving down
+				direction = MovementDirection.DOWN.value;
+				animationHandler.play(CharacterAnimationType.WALKING_DOWN);
+			}
 		} else {
+			// Moving left
 			direction = MovementDirection.LEFT.value;
 			animationHandler.play(CharacterAnimationType.WALKING_LEFT);
+			
+			if (!twoDirectionalAnimations && angle <= Math.PI*3/4 && angle > Math.PI/2) {
+				// Moving up
+				direction = MovementDirection.UP.value;
+				animationHandler.play(CharacterAnimationType.WALKING_UP);
+			} else if (!twoDirectionalAnimations && angle >= -Math.PI*3/4 && angle < - Math.PI/2) {
+				// Moving down
+				direction = MovementDirection.DOWN.value;
+				animationHandler.play(CharacterAnimationType.WALKING_DOWN);
+			}
 		}
 	}
 	

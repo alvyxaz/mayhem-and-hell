@@ -1,14 +1,18 @@
 package com.friendlyblob.mayhemandhell.client.animations;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.friendlyblob.mayhemandhell.client.animations.Animation.AnimationData;
 
-public class CharacterAnimation implements AnimationHandler {
+public class CharacterAnimation extends AnimationHandler {
 
-	private Animation[] animations;
+	private HashMap<String, Animation> animations;
 	
 	private Animation lastLooped;
 	private Animation current;
+	
+	private boolean twoDirectional = false;
 	
 	public enum CharacterAnimationType {
 		DEFAULT,
@@ -35,25 +39,31 @@ public class CharacterAnimation implements AnimationHandler {
 		DEATH
 	}
 	
-	public CharacterAnimation() {
-		animations = new Animation[CharacterAnimationType.values().length];
+	public boolean isTwoDirectional() {
+		return twoDirectional;
 	}
 	
-	public boolean test = false;
+	public CharacterAnimation() {
+		animations = new HashMap<String, Animation>();
+	}
 	
-	public void setAnimation(CharacterAnimationType type, Animation animation) {
-		animations[type.ordinal()] = animation;
-		if (type.DEFAULT == type) {
-			test = true;
+	public void setAnimation(String name, Animation animation) {
+		if (name == CharacterAnimationType.WALKING_UP.toString()) {
+			twoDirectional = true;
 		}
+		animations.put(name, animation);
 	}
 	
 	/**
 	 * Play a certain type of animation
 	 * @param type
 	 */
+	public void play(String name) {
+		play(animations.get(name));
+	}
+	
 	public void play(CharacterAnimationType type) {
-		play(animations[type.ordinal()]);
+		play(animations.get(type.toString()));
 	}
 	
 	/**
@@ -61,6 +71,10 @@ public class CharacterAnimation implements AnimationHandler {
 	 * @param animation
 	 */
 	public void play(Animation animation) {
+		if (animation == null) {
+			return;
+		}
+		
 		if (current == animation && !current.data.looped) {
 			animation.restart();
 			return;
@@ -74,7 +88,7 @@ public class CharacterAnimation implements AnimationHandler {
 	 */
 	public TextureRegion getFrame(float deltaTime) {
 		if (current == null) {
-			current = animations[CharacterAnimationType.DEFAULT.ordinal()];
+			current = animations.get(CharacterAnimationType.DEFAULT.toString());
 		}
 		return current.getFrame(deltaTime);
 	}

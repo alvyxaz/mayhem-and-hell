@@ -1,11 +1,11 @@
 package com.friendlyblob.mayhemandhell.client.animations;
 
-public interface AnimationHandler {
+public abstract class AnimationHandler {
 	
 	/**
 	 * Called when animation is finished. Looped animation will never
 	 * call this method.
 	 */
-	public void onAnimationFinished();
+	public abstract void onAnimationFinished();
 	
 }
