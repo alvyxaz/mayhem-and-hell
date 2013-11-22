@@ -38,9 +38,9 @@ public class Animation {
 				currentTime = 0;
 				currentFrame = 0;
 				handler.onAnimationFinished();
+			} else {
+				currentTime -= this.data.duration;
 			}
-			
-			currentTime -= this.data.duration;
 		}
 		return getFrame();
 	}
@@ -53,6 +53,9 @@ public class Animation {
 		currentFrame = 0;
 	}
 
+	public boolean isFinished() {
+		return currentTime == 0;
+	}
 	
 	/**
 	 * Returns current frame, does not affect animation flow.

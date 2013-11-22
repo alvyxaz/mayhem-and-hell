@@ -68,6 +68,41 @@
 			<frame startX="50" startY="99" startMark="0" />
 		</animation>
 		
+		<!-- ************************************************* -->
+        <!-- * ATTACKING -->
+       	<!-- ************************************************* --> 
+       	
+		<animation type="ATTACK_UP" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="false" duration="0.4">
+			<frame startX="25" startY="33" startMark="0" />
+			<frame startX="75" startY="33" startMark="0.25" />
+			<frame startX="100" startY="33" startMark="0.50" />
+			<frame startX="125" startY="33" startMark="0.75" />
+		</animation>
+		
+		<animation type="ATTACK_DOWN" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="false" duration="0.4">
+			<frame startX="25" startY="0" startMark="0" />
+			<frame startX="75" startY="0" startMark="0.25" />
+			<frame startX="100" startY="0" startMark="0.50" />
+			<frame startX="125" startY="0" startMark="0.75" />
+		</animation>
+		
+		<animation type="ATTACK_LEFT" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="false" duration="0.4">
+			<frame startX="0" startY="66" startMark="0" />
+			<frame startX="75" startY="66" startMark="0.25" />
+			<frame startX="100" startY="66" startMark="0.50" />
+			<frame startX="125" startY="66" startMark="0.75" />
+		</animation>
+		
+		<animation type="ATTACK_RIGHT" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="false" duration="0.4">
+			<frame startX="50" startY="99" startMark="0" />
+			<frame startX="75" startY="99" startMark="0.25" />
+			<frame startX="100" startY="99" startMark="0.50" />
+			<frame startX="125" startY="99" startMark="0.75" />
+		</animation>
 		
 	</character>
 	

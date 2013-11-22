@@ -17,6 +17,10 @@ public class ObjectPosition {
 		this.y = y;
 	}
 	
+	public float angleTo(ObjectPosition target) {
+		return (float)Math.atan2(target.y - y, target.x - x);
+	}
+	
 	public int distanceTo(ObjectPosition target) {
 		int dx = (int)(target.x - this.x);
 		int dy = (int)(target.y - this.y);

@@ -25,7 +25,7 @@ public class CharacterAnimation extends AnimationHandler {
 		
 		// Attack
 		ATTACK_UP,
-		ATTCK_DOWN,
+		ATTACK_DOWN,
 		ATTACK_LEFT,
 		ATTACK_RIGHT,
 		
@@ -75,10 +75,22 @@ public class CharacterAnimation extends AnimationHandler {
 			return;
 		}
 		
+		// Check if we're trying to repeat the same looped animation.
 		if (current == animation && !current.data.looped) {
 			animation.restart();
 			return;
 		}
+		
+		// If new animation is looped, and the old one is not finished
+		if (animation.data.looped && !current.data.looped && !current.isFinished()) {
+			return;
+		}
+		
+		// Save the last looped animation
+		if (animation.data.looped) {
+			lastLooped = animation;
+		}
+		
 		current = animation;
 	}
 	

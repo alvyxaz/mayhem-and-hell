@@ -460,7 +460,7 @@ public class GameCharacter extends GameObject{
 			return;
 		}
 		
-		if (attackTarget.isDead() || attackTarget == null) {
+		if (attackTarget == null || attackTarget.isDead()) {
 			getAi().setIntention(Intention.ACTIVE);
 			return;
 		}
@@ -473,7 +473,10 @@ public class GameCharacter extends GameObject{
 		
 		attackEndTime = GameTimeController.getInstance().getGameTicks() + (timeBetweenAttacks + attackTime)/GameTimeController.MILLIS_IN_TICK -1;
 		
-		Attack attack = new Attack(attackTarget.getObjectId());
+		Attack attack = new Attack(
+				attackTarget.getObjectId(),
+				getObjectId(),
+				getPosition().angleTo(attackTarget.getPosition()));
 		
 		attack.setDamage(getAttackDamage());
 		

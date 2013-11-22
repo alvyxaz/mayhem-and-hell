@@ -31,8 +31,6 @@ public class GameCharacter extends GameObject {
 	private final int IDLE = 0;
 	private final int MOVING = 1;
 	
-	protected int direction = 2;
-	
 	float animationCycle = 0;
 	float timePerFrame = 0.1f;
 	int frameCount = 4;
@@ -40,6 +38,8 @@ public class GameCharacter extends GameObject {
 	
 	protected CharacterAnimation animationHandler;
 	private boolean twoDirectionalAnimations;
+	
+	private MovementDirection currentDirection; 
 	
 	public GameCharacter(int id, int x, int y, int animationId){
 		super(id);
@@ -96,17 +96,17 @@ public class GameCharacter extends GameObject {
 	}
 	
 	public void onArrived() {
-		switch(direction) {
-			case 0: // UP
+		switch(currentDirection) {
+			case UP: // UP
 				animationHandler.play(CharacterAnimationType.IDLE_UP);
 				break;
-			case 1: // RIGHT
+			case RIGHT: // RIGHT
 				animationHandler.play(CharacterAnimationType.IDLE_RIGHT);
 				break;
-			case 2: // DOWN
+			case DOWN: // DOWN
 				animationHandler.play(CharacterAnimationType.IDLE_DOWN);
 				break;
-			case 3: // LEFT
+			case LEFT: // LEFT
 				animationHandler.play(CharacterAnimationType.IDLE_LEFT);
 				break;
 		}
@@ -157,37 +157,99 @@ public class GameCharacter extends GameObject {
 		
 		float angle = (float)Math.atan2(targetY - position.y, targetX - position.x);
 
+		currentDirection = angleToDirection(angle);
+		animationHandler.play(directionToWalking(currentDirection));
+	}
+	
+	/**
+	 * Given a direction, returns a movement animation
+	 * @param direction
+	 * @return
+	 */
+	public CharacterAnimationType directionToWalking(MovementDirection direction) {
+		switch(direction) {
+			case DOWN:
+				return CharacterAnimationType.WALKING_DOWN;
+			case LEFT:
+				return CharacterAnimationType.WALKING_LEFT;
+			case RIGHT:
+				return CharacterAnimationType.WALKING_RIGHT;
+			case UP:
+				return CharacterAnimationType.WALKING_UP;
+		}
+		
+		return CharacterAnimationType.WALKING_DOWN;
+	}
+	
+	/**
+	 * Given a direction, returns attack animation to that direction
+	 * @param direction
+	 * @return
+	 */
+	public CharacterAnimationType directionToAttackAnimation(MovementDirection direction) {
+		switch(direction) {
+			case DOWN:
+				return CharacterAnimationType.ATTACK_DOWN;
+			case LEFT:
+				return CharacterAnimationType.ATTACK_LEFT;
+			case RIGHT:
+				return CharacterAnimationType.ATTACK_RIGHT;
+			case UP:
+				return CharacterAnimationType.ATTACK_UP;
+		}
+		
+		return CharacterAnimationType.IDLE_DOWN;
+	}
+	
+	public CharacterAnimationType directionToIdle(MovementDirection direction) {
+		switch(direction) {
+			case DOWN:
+				return CharacterAnimationType.IDLE_DOWN;
+			case LEFT:
+				return CharacterAnimationType.IDLE_LEFT;
+			case RIGHT:
+				return CharacterAnimationType.IDLE_RIGHT;
+			case UP:
+				return CharacterAnimationType.IDLE_UP;
+		}
+	
+		return CharacterAnimationType.IDLE_DOWN;
+	}
+	
+	/**
+	 * Given an angle, returns a direction.
+	 * @param angle
+	 * @return
+	 */
+	public MovementDirection angleToDirection(float angle) {
+		MovementDirection direction = MovementDirection.DOWN;
+		
 		// Calculating direction of movement (for animating purposes)
 		if (angle >= -Math.PI/2 && angle <= Math.PI/2) {
 			// Moving right
-			direction = MovementDirection.RIGHT.value;
-			animationHandler.play(CharacterAnimationType.WALKING_RIGHT);
+			direction = MovementDirection.RIGHT;
 			
 			if (!twoDirectionalAnimations && angle >= Math.PI/4) {
 				// Moving up
-				direction = MovementDirection.UP.value;
-				animationHandler.play(CharacterAnimationType.WALKING_UP);
-				
+				direction = MovementDirection.UP;
 			} else if (!twoDirectionalAnimations && angle <= -Math.PI/4) {
 				// Moving down
-				direction = MovementDirection.DOWN.value;
-				animationHandler.play(CharacterAnimationType.WALKING_DOWN);
+				direction = MovementDirection.DOWN;
 			}
 		} else {
 			// Moving left
-			direction = MovementDirection.LEFT.value;
-			animationHandler.play(CharacterAnimationType.WALKING_LEFT);
+			direction = MovementDirection.LEFT;
 			
 			if (!twoDirectionalAnimations && angle <= Math.PI*3/4 && angle > Math.PI/2) {
 				// Moving up
-				direction = MovementDirection.UP.value;
-				animationHandler.play(CharacterAnimationType.WALKING_UP);
+				direction = MovementDirection.UP;
 			} else if (!twoDirectionalAnimations && angle >= -Math.PI*3/4 && angle < - Math.PI/2) {
 				// Moving down
-				direction = MovementDirection.DOWN.value;
-				animationHandler.play(CharacterAnimationType.WALKING_DOWN);
+				direction = MovementDirection.DOWN;
 			}
 		}
+		
+		return direction;
 	}
 	
 	public void moveTo (int x, int y, int speed) {
@@ -204,6 +266,14 @@ public class GameCharacter extends GameObject {
 		return state == MOVING;
 	}
 	
+	public void attack(float angle) {
+		MovementDirection direction = angleToDirection(angle);
+		currentDirection = direction;
+		animationHandler.play(directionToIdle(direction));
+		animationHandler.play(
+				directionToAttackAnimation(direction));
+	}
+	
 	public static enum MovementDirection {
 		UP(0),
 		RIGHT(1),
@@ -216,4 +286,5 @@ public class GameCharacter extends GameObject {
 			this.value = value;
 		}
 	};
+	
 }
