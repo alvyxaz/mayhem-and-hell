@@ -11,6 +11,7 @@ import com.friendlyblob.mayhemandhell.server.factories.ItemFactory;
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.Zone;
+import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcAttackableInstance;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
@@ -63,6 +64,15 @@ public class GameCharacter extends GameObject{
 		if (ai == null) {
 			ai = new GameCharacterAi(this);
 		}
+	}
+	
+	/**
+	 * TODO implement fully
+	 * @param object
+	 * @return true if character is hostile to this entity
+	 */
+	public boolean isHostile(GameObject object) {
+		return object instanceof NpcAttackableInstance;
 	}
 	
 	/**

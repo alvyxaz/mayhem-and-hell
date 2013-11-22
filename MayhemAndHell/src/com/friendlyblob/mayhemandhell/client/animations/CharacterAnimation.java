@@ -82,7 +82,7 @@ public class CharacterAnimation extends AnimationHandler {
 		}
 		
 		// If new animation is looped, and the old one is not finished
-		if (animation.data.looped && !current.data.looped && !current.isFinished()) {
+		if (animation.data.looped && current != null && !current.data.looped && !current.isFinished()) {
 			return;
 		}
 		

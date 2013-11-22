@@ -20,6 +20,8 @@ public class TargetInfoResponse extends ServerPacket {
 		writeD(object.getObjectId());
 		writeS(object.getName());
 
+		writeC(this.getClient().getPlayer().isHostile(object) ? 1 : 0);
+		
 		// Available actions
 		writeD(actions.length);
 		for (GameAction action : actions) {

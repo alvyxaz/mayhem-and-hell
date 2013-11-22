@@ -45,7 +45,7 @@ public class Item extends GameObject {
 
 	@Override
 	public void draw(SpriteBatch sb) {
-		sb.setColor(1f, 1f, 1f, 0.3f);
+		sb.setColor(1f, 1f, 1f, 0.1f);
 		sb.draw(Assets.px, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		sb.setColor(Color.WHITE);
 		// TODO draw by itemId

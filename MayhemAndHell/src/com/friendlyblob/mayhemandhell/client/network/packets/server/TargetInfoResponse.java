@@ -1,5 +1,6 @@
 package com.friendlyblob.mayhemandhell.client.network.packets.server;
 
+import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject.GameObjectType;
 import com.friendlyblob.mayhemandhell.client.entities.gui.TargetBar.TargetInfo;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
@@ -10,6 +11,8 @@ public class TargetInfoResponse extends ReceivablePacket {
 	
 	private static TargetInfo info = new TargetInfo();
 	
+	private boolean isHostile;
+	
 	@Override
 	public boolean read() {
 		info.cleanup();
@@ -17,6 +20,8 @@ public class TargetInfoResponse extends ReceivablePacket {
 		info.objectId = readD();
 		
 		info.name = readS();
+		
+		isHostile = readC() == 1 ? true : false;
 		
 		actions = new String[readD()];
 		for (int i = 0; i < actions.length; i++) {
@@ -39,6 +44,16 @@ public class TargetInfoResponse extends ReceivablePacket {
 	public void run() {
 		GameWorld.getInstance().getPlayer().targetId = info.objectId;
 		GameWorld.getInstance().game.screenGame.guiManager.targetBar.showTarget(info, actions);
+		
+		GameObject object = null;
+		
+		if (info.objectId == GameWorld.getInstance().player.objectId) {
+			object = player;
+		} else {
+			object = GameWorld.getInstance().gameObjects.get(info.objectId);
+		}
+		
+		GameWorld.getInstance().targetMark.setTarget(object).setHostile(isHostile);
 	}
 
 }

@@ -9,6 +9,7 @@ import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject.GameObjectType;
+import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 
@@ -90,6 +91,7 @@ public class TargetBar extends GuiElement {
 		this.visible = false;
 		manager.actionsBar.hide();
 		MyGame.connection.sendPacket(new RequestTarget(-1));
+		GameWorld.getInstance().targetMark.setTarget(null);
 	}
 
 	public void showTarget(TargetInfo info, String[] actions) {

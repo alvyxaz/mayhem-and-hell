@@ -13,6 +13,7 @@ import com.friendlyblob.mayhemandhell.client.entities.EnvironmentObject;
 import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
+import com.friendlyblob.mayhemandhell.client.entities.TargetMark;
 import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditor;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 
@@ -34,6 +35,8 @@ public class GameWorld {
 	
 	public static HashMap<String, String> environmentObjectTypes = new HashMap<String, String>();
 	
+	public TargetMark targetMark;
+	
 	/*-------------------------------------
 	 * Camera
 	 */
@@ -54,6 +57,7 @@ public class GameWorld {
 		 * Entities initialization
 		 */
 		player = new Player(0, 100, 100); // TODO do not initialize until login is successful
+		targetMark = new TargetMark();
 	}
 	
 	public void putCharacter(GameCharacter character) {
@@ -129,11 +133,12 @@ public class GameWorld {
 			go.draw(spriteBatch);
 		}
 		
+		targetMark.draw(spriteBatch);
+		
 		for (GameObject go : gameObjects.values()) {
 			go.draw(spriteBatch);
 		}
 		
-		// TODO optimize to avoid iterators (Make sure FastMap uses them first)
 		for (GameCharacter character : characters.values()) {
 			character.draw(spriteBatch);
 		}

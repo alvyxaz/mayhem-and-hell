@@ -127,7 +127,7 @@ public class GameCharacter extends GameObject {
 	}
 	
 	public void draw(SpriteBatch spriteBatch){
-		spriteBatch.setColor(1f, 1f, 1f, 0.3f);
+		spriteBatch.setColor(1f, 1f, 1f, 0.1f);
 		spriteBatch.draw(Assets.px, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		spriteBatch.setColor(Color.WHITE);
 		

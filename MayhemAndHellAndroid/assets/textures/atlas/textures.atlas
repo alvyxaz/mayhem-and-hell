@@ -183,3 +183,15 @@ objects/tree
   orig: 71, 100
   offset: 0, 0
   index: -1
+
+textures7.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+other/target_mark
+  rotate: false
+  xy: 2, 2
+  size: 32, 14
+  orig: 32, 14
+  offset: 0, 0
+  index: -1
