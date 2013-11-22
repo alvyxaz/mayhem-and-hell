@@ -15,6 +15,7 @@ import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.entities.TargetMark;
 import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditor;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestAction;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 
 public class GameWorld {
@@ -111,12 +112,11 @@ public class GameWorld {
 			GameObject gameObject = getObjectAt(toWorldX(Input.getX()), toWorldY(Input.getY()));
 			
 			if (gameObject != null) {
-				// Clicked on an object, let's show a target bar
-				// TODO check whether clicked on the object that is already targeted
-				// And act accordingly (like use the first available action on double click)
-				
-				MyGame.connection.sendPacket(new RequestTarget(gameObject.objectId));
-				
+				if (gameObject == targetMark.getTarget()) {
+					MyGame.connection.sendPacket(new RequestAction(0));
+				} else {
+					MyGame.connection.sendPacket(new RequestTarget(gameObject.objectId));
+				}
 			} else {
 				// Movement should be the last case
 				getPlayer().requestMovementDestination(toWorldX(Input.getX()), toWorldY(Input.getY()));

@@ -38,6 +38,10 @@ public class TargetMark {
 		return this;
 	}
 	
+	public GameObject getTarget() {
+		return target;
+	}
+	
 	public void setHostile(boolean hostile) {
 		this.hostile = hostile;
 	}

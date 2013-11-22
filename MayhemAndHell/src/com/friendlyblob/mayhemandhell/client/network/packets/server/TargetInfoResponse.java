@@ -36,7 +36,6 @@ public class TargetInfoResponse extends ReceivablePacket {
 			info.currentHealth = readD();
 			info.maxHealth = readD();
 		}
-		
 		return true;
 	}
 
