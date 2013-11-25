@@ -13,11 +13,15 @@ public class World {
 	private ConcurrentHashMap<Integer, GameCharacter> allPlayers;
 	private ConcurrentHashMap<Integer, GameObject> allObjects;
 
+	private ConcurrentHashMap<String, GameCharacter> allPlayersByNames;
+	
 	private TIntObjectHashMap<Zone> allZones;
 	
 	public World() {
 		allPlayers = new ConcurrentHashMap<Integer, GameCharacter>() ;
 		allObjects = new ConcurrentHashMap<Integer, GameObject>() ;
+		
+		allPlayersByNames = new ConcurrentHashMap<String, GameCharacter>();
 		
 		// TODO load all zones from somewhere
 		allZones = new TIntObjectHashMap<Zone>();
@@ -31,6 +35,8 @@ public class World {
 		allPlayers.put(player.getObjectId(), player);
 		allObjects.put(player.getObjectId(), player);
 		
+		allPlayersByNames.put(player.getName(), player);
+		
 		// TODO add player to it's zone, not a random zone
 		allZones.get(0).addObject(player);
 	}
@@ -38,6 +44,9 @@ public class World {
 	public void removePlayer(Player player) {
 		allPlayers.remove(player.getObjectId());
 		allObjects.remove(player.getObjectId());
+		
+		allPlayersByNames.remove(player.getName());
+		
 		player.getZone().removeObject(player);
 	}
 	
@@ -62,6 +71,10 @@ public class World {
 	
 	public ConcurrentHashMap<Integer, GameCharacter> getPlayers() {
 		return allPlayers;
+	}
+	
+	public ConcurrentHashMap<String, GameCharacter> getPlayersByNames() {
+		return allPlayersByNames;
 	}
 	
 	

@@ -3,18 +3,13 @@ package com.friendlyblob.mayhemandhell.server.network.packets.server;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 
 public class ChatMessageNotify extends ServerPacket{
+
+	private String playerName;
+	private String msg;
+	private int type;
 	
-	int playerId;
-	String msg;
-	int type;
-	
-	// message type specific vars
-	int recipientPlayerId;
-	int guildObjectId;
-	int partyObjectId;
-	
-	public ChatMessageNotify(int playerId, String message, int type) {
-		this.playerId = playerId;
+	public ChatMessageNotify(String playerName, String message, int type) {
+		this.playerName = playerName;
 		this.msg = message;
 		this.type = type;
 	}
@@ -22,21 +17,9 @@ public class ChatMessageNotify extends ServerPacket{
 	@Override
 	public void write() {
 		writeC(0xA0);
-		writeD(playerId);
+		writeS(playerName);
 		writeS(msg);
 		writeD(type);
-		
-		switch (type) {
-			case 1:
-				writeD(recipientPlayerId);
-				break;
-			case 2:
-				writeD(guildObjectId);
-				break;
-			case 3:
-				writeD(partyObjectId);
-				break;
-		}
 	}
 
 }
