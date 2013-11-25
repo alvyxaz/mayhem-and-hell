@@ -1,4 +1,4 @@
-package com.friendlyblob.mayhemandhell.client.entities.gui;
+package com.friendlyblob.mayhemandhell.client.entities.gui.inventory;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

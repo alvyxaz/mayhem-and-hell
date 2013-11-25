@@ -1,10 +1,11 @@
-package com.friendlyblob.mayhemandhell.client.entities.gui;
+package com.friendlyblob.mayhemandhell.client.entities.gui.inventory;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.math.Rectangle;
+import com.friendlyblob.mayhemandhell.client.entities.gui.GuiElement;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiElement.GuiPriority;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 
@@ -33,9 +34,7 @@ public class InventoryIcon extends GuiElement {
 			} else {
 				this.manager.inventory.show();
 			}
-
 		}
-
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.friendlyblob.mayhemandhell.client.entities.gui.SlotObject;
+import com.friendlyblob.mayhemandhell.client.entities.gui.inventory.SlotObject;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 
 public class Item extends GameObject {

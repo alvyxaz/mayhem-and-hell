@@ -1,4 +1,4 @@
-package com.friendlyblob.mayhemandhell.client.entities.gui;
+package com.friendlyblob.mayhemandhell.client.entities.gui.inventory;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.entities.Inventory;
 import com.friendlyblob.mayhemandhell.client.entities.Item;
+import com.friendlyblob.mayhemandhell.client.entities.gui.GuiWindow;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 
 public class InventoryView extends GuiWindow {

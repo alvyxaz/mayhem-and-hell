@@ -7,6 +7,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
+import com.friendlyblob.mayhemandhell.client.entities.gui.chat.Chat;
+import com.friendlyblob.mayhemandhell.client.entities.gui.inventory.InventoryIcon;
+import com.friendlyblob.mayhemandhell.client.entities.gui.inventory.InventoryView;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 
 /**
