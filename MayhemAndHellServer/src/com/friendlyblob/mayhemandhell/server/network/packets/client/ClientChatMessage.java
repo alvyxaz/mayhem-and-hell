@@ -61,7 +61,7 @@ public class ClientChatMessage extends ClientPacket {
 	        					GameCharacter gc = World.getInstance().getPlayersByNames().get(recipientPlayer);
 	            				
 	        					if (gc != null) {
-	            					packet = new ChatMessageNotify(gc.getName(), actualMessage, 1);
+	            					packet = new ChatMessageNotify(playerName, actualMessage, 1);
 	            					
 	            					// Send to recipient   						
 	        						((Player) gc).sendPacket(packet);
