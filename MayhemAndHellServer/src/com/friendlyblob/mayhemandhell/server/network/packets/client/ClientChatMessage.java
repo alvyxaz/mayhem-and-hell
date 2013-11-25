@@ -57,7 +57,6 @@ public class ClientChatMessage extends ClientPacket {
 	    	    			String recipientPlayer = params.substring(0, params.indexOf(" "));
         					actualMessage = params.substring(recipientPlayer.length()+1);
 
-	    	    			System.out.println("player: " + recipientPlayer + " msg: " + actualMessage);
 	    					if (recipientPlayer.trim().length() > 0 && actualMessage.trim().length() > 0) {
 	        					GameCharacter gc = World.getInstance().getPlayersByNames().get(recipientPlayer);
 	            				
