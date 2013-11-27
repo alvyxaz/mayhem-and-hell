@@ -18,6 +18,7 @@ import com.friendlyblob.mayhemandhell.server.model.datatables.CharacterTemplateT
 import com.friendlyblob.mayhemandhell.server.model.datatables.DialogTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.NpcTable;
+import com.friendlyblob.mayhemandhell.server.model.datatables.ResourceTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.SpawnTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ZoneTable;
 import com.friendlyblob.mayhemandhell.server.model.quests.QuestManager;
@@ -61,6 +62,7 @@ public class GameServer{
     	ItemTable.initialize();
     	DialogTable.initialize();
     	NpcTable.initialize(); 		// Depends on items, dialogs
+    	ResourceTable.initialize();	// Depends on items
     	SpawnTable.initialize(); 	// Depends on npc's
     	CharacterTemplateTable.initialize();
     	

@@ -31,6 +31,7 @@ public class GuiManager {
 	public ActionsBar actionsBar;
 	public PlayerStatus playerStatus;
 	public Resurrection resurrection;
+	public CastingBar castingBar;
 	
 	public Chat chat;
 	
@@ -64,6 +65,9 @@ public class GuiManager {
 		
 		dialog = new Dialog();
 		addGuiElement(dialog, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.MIDDLE);
+		
+		castingBar = new CastingBar();
+		addGuiElement(castingBar, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.BOTTOM);
 	}
 	
 	/**
@@ -133,6 +137,12 @@ public class GuiManager {
 	 * @return true if any of the GUI elements were clicked 
 	 */
 	public boolean update(float deltaTime) {
+		for (int i = 0; i < guiElements.length; i++) {
+			if (guiElements[i].visible) {
+				guiElements[i].update(deltaTime);
+			}
+		}
+		
 		if (!Gdx.input.isTouched() && !Input.isReleasing()) {
 			// We can pretend that gui was clicked so that
 			// we don't have to analyse click input in gameplay logic.

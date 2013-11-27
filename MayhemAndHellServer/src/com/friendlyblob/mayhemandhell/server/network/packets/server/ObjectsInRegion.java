@@ -5,6 +5,7 @@ import java.util.List;
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
+import com.friendlyblob.mayhemandhell.server.model.resources.Resource;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 
 public class ObjectsInRegion extends ServerPacket{
@@ -25,7 +26,7 @@ public class ObjectsInRegion extends ServerPacket{
 		for(GameObject object : closeObjects) {
 			writeD(object.getObjectId());				// Object id
 			writeD((int)object.getPosition().getX());	// X position
-			writeD((int)object.getPosition().getY());	// X position
+			writeD((int)object.getPosition().getY());	// Y position
 			writeH(object.getType().value);
 			
 			switch (object.getType()) {
@@ -38,6 +39,9 @@ public class ObjectsInRegion extends ServerPacket{
 				case ITEM:
 					writeD(((ItemInstance) object).getItemId());
 					break;
+				case RESOURCE:
+					writeS(((Resource) object).getTemplate().getName());
+					writeS(((Resource) object).getTemplate().getIcon());
 			}
 		}
 	}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "type" should be a classname of the item !-->
+<list>
+	<resource id="1" name="Cooper vein">
+		<icon>cooper_vein</icon>
+		<limited>true</limited>
+		<regenerationTime>2000</regenerationTime>
+		<gatherTime>3000</gatherTime>
+		<item>2</item>
+	</resource>
+</list>

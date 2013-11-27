@@ -59,7 +59,7 @@ public class Chat extends GuiElement implements InputProcessor {
 		textBox = new Rectangle(0, 0, padding + lineWidth, padding + lineHeight);
 		
 		Gdx.input.setInputProcessor(this);
-		visible = true;
+		visible = false;
 	}
 	
 	/**

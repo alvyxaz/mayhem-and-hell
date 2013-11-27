@@ -5,6 +5,7 @@ import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject.GameObjectType;
 import com.friendlyblob.mayhemandhell.client.entities.Item;
+import com.friendlyblob.mayhemandhell.client.entities.Resource;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
@@ -26,45 +27,46 @@ public class ObjectsInRegion extends ReceivablePacket {
 				int objectId = readD();
 				int x = readD();
 				int y = readD();
-				GameObjectType type = GameObjectType.fromValue(readH());
+				int typeValue = readH();
+				GameObjectType type = GameObjectType.fromValue(typeValue);
 				
-				int sprite = 0, itemId = 0;
 				switch (type) {
 					case PLAYER:
 					case FRIENDLY_NPC:
 					case HOSTILE_NPC:
 						int speed = readD();
-						sprite = readD();
+						int sprite = readD();
+						
+						// Ignoring player himself. 
+						// Data has to be read anyway (before this if).
+						if(playerId == objectId) {
+							continue;
+						}
+						
+						if (world.characterExists(objectId)) {
+							// TODO some sort of interpolation
+							// world.getCharacter(objectId).moveTo(x, y, speed);
+						} else {
+							world.putCharacter(new GameCharacter(objectId, x, y, sprite));
+						}
 						break;
 					case ITEM:
-						itemId = readD();
+						int itemId = readD();
+						world.putObject(new Item(objectId, itemId, x, y));
 						break;
-				}
-				
-				
-				// TODO player id doesn't work
-				if(playerId == objectId) {
-					continue;
-				}
-				
-				if (world.characterExists(objectId)) {
-					// TODO some sort of interpolation
-					// world.getCharacter(objectId).moveTo(x, y, speed);
-				} else {
-					switch (type) {
-						case PLAYER:
-						case FRIENDLY_NPC:
-						case HOSTILE_NPC:
-							world.putCharacter(new GameCharacter(objectId, x, y, sprite));
-							break;
-						case ITEM:
-							world.putObject(new Item(objectId, itemId, x, y));
-							break;
-					}
+					case RESOURCE:
+						// Resource data
+						String name = readS();
+						String icon = readS();
+						
+						Resource resource = new Resource(objectId, name, icon);
+						resource.setPosition(x, y);
+						world.putObject(resource);
+						break;
 				}
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		
 		

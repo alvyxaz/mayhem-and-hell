@@ -9,4 +9,9 @@
 			<modifier stat="pDefence" type="multiply_base" value="2" />
 		</modifiers>
 	</item>
+	<item id="2" type="Material" name="Cooper ore">
+		<set name="icon" val="cooper_ore" />
+		<set name="description" val="Ore. But cooper." />
+		<set name="type" val="metal" />
+	</item>
 </list>

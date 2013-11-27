@@ -21,7 +21,8 @@ public class GameActions {
 	};
 	
 	public static GameAction[] resource = new GameAction[] {
-		GameAction.PICK_UP,
+		GameAction.GATHER,
+		GameAction.INSPECT
 	};
 	
 	public static enum GameAction {
@@ -30,7 +31,10 @@ public class GameActions {
 		WHISPER("Whisper"),
 		FOLLOW("Follow"),
 		TALK("Talk"),
-		PICK_UP("Pick up");
+		PICK_UP("Pick up"),
+		GATHER("Gather"),
+		MINE("Mine"),
+		INSPECT("Inspect");
 		
 		private String name;
 		

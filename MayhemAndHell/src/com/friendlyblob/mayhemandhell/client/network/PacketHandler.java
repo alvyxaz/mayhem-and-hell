@@ -58,6 +58,10 @@ public class PacketHandler {
 			case 0x0F:
 				response = new EventNotification();
 				break;
+			case 0x10:
+				response = new StartCasting();
+				break;
+				
 			case 0xA0:
 				response = new ChatMessageNotify();
 				break;
