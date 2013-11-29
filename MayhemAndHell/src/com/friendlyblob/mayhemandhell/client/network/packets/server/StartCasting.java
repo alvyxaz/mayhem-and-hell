@@ -9,7 +9,11 @@ public class StartCasting extends ReceivablePacket {
 	public boolean read() {
 		int time = readD();
 		String text = readS();
-		GameWorld.getInstance().game.screenGame.guiManager.castingBar.startCasting(text, time);
+		if (time > 0) {
+			GameWorld.getInstance().game.screenGame.guiManager.castingBar.startCasting(text, time);
+		} else {
+			GameWorld.getInstance().game.screenGame.guiManager.castingBar.hide();
+		}
 		return false;
 	}
 

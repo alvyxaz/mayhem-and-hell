@@ -4,7 +4,7 @@ import java.util.concurrent.Future;
 
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
-import com.friendlyblob.mayhemandhell.server.model.skills.Skill;
+import com.friendlyblob.mayhemandhell.server.model.skills.Castable;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.AutoAttack;
 import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
@@ -30,7 +30,7 @@ public abstract class Ai implements Control {
 	protected GameCharacter followTarget;
 	
 	// Skill being cast at the moment
-	protected Skill skill;
+	protected Castable skill;
 	
 	private static final int FOLLOW_INTERVAL = 1000;
 	private static final int ATTACK_FOLLOW_INTERVAL = 500;
@@ -99,7 +99,7 @@ public abstract class Ai implements Control {
 				onIntentionAttack((GameCharacter) arg0);
 				break;
 			case CAST:
-				onIntentionCast((Skill) arg0, (GameCharacter) arg1);
+				onIntentionCast((Castable) arg0, (GameCharacter) arg1);
 				break;
 			case MOVE_TO:
 				onIntentionMoveTo((ObjectPosition) arg0);
@@ -204,7 +204,7 @@ public abstract class Ai implements Control {
 	
 	protected abstract void onIntentionAttack(GameCharacter target);
 	
-	protected abstract void onIntentionCast(Skill skill, GameCharacter target);
+	protected abstract void onIntentionCast(Castable skill, GameCharacter target);
 	
 	protected abstract void onIntentionMoveTo(ObjectPosition destination );
 	

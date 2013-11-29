@@ -1,7 +1,9 @@
 package com.friendlyblob.mayhemandhell.server.model.resources;
 
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
+import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
+import com.friendlyblob.mayhemandhell.server.model.skills.Castable;
 
 public class Resource extends GameObject {
 	private ResourceTemplate template;
@@ -24,6 +26,38 @@ public class Resource extends GameObject {
 	}
 	public void setTemplate(ResourceTemplate template) {
 		this.template = template;
+	}
+	
+	/**
+	 * Represents a resource gathering skill that has to be casted before obtaining that resource
+	 * @author Alvys
+	 *
+	 */
+	public static class ResourceSkill implements Castable {
+
+		private String name;
+		private int castingTime;
+		
+		public ResourceSkill(String name, int castingTime) {
+			this.name = name;
+			this.castingTime = castingTime;
+		}
+		
+		@Override
+		public int getCastingTime() {
+			return castingTime;
+		}
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public void execute(GameCharacter caster, GameObject target) {
+			System.out.println("HEll yeah! Resource has been gathered");
+		}
+		
 	}
 	
 }

@@ -3,7 +3,7 @@ package com.friendlyblob.mayhemandhell.server.ai;
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
-import com.friendlyblob.mayhemandhell.server.model.skills.Skill;
+import com.friendlyblob.mayhemandhell.server.model.skills.Castable;
 import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
 public class GameCharacterAi extends Ai {
@@ -13,6 +13,25 @@ public class GameCharacterAi extends Ai {
 		// TODO Auto-generated constructor stub
 	}
 
+	public static class CastingTask implements Runnable{
+		private GameCharacter caster;
+		private GameObject target;
+		private Castable skill;
+		
+		public CastingTask(GameCharacter caster, GameObject target, Castable skill) {
+			this.caster = caster;
+			this.target = target;
+			this.skill = skill;
+		}
+
+		@Override
+		public void run() {
+			if (caster.isAttacking()) {
+				caster.abortAttack();
+			}
+		}
+	}
+	
 	@Override
 	public void setIntention(Intention intention) {
 		setIntention(intention, null, null);
@@ -156,7 +175,7 @@ public class GameCharacterAi extends Ai {
 	}
 
 	@Override
-	protected void onIntentionCast(Skill skill, GameCharacter target) {
+	protected void onIntentionCast(Castable skill, GameCharacter target) {
 		// TODO Auto-generated method stub
 	}
 
@@ -170,7 +189,6 @@ public class GameCharacterAi extends Ai {
 	@Override
 	protected void onIntentionFollow(GameCharacter target) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

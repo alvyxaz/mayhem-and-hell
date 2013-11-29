@@ -1,6 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.model.actors;
 
 import java.nio.ByteBuffer;
+import java.util.concurrent.Future;
 
 import com.friendlyblob.mayhemandhell.server.GameTimeController;
 import com.friendlyblob.mayhemandhell.server.ai.AiData;
@@ -18,6 +19,8 @@ import com.friendlyblob.mayhemandhell.server.model.items.Item;
 import com.friendlyblob.mayhemandhell.server.model.logic.Formulas;
 import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
 import com.friendlyblob.mayhemandhell.server.model.quests.Quest.QuestEventType;
+import com.friendlyblob.mayhemandhell.server.model.resources.Resource.ResourceSkill;
+import com.friendlyblob.mayhemandhell.server.model.skills.Castable;
 import com.friendlyblob.mayhemandhell.server.model.stats.CharacterStats;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
@@ -27,6 +30,7 @@ import com.friendlyblob.mayhemandhell.server.network.packets.server.DeathNotific
 import com.friendlyblob.mayhemandhell.server.network.packets.server.EventNotification;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyMovementStop;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.StartCasting;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.TargetInfoResponse;
 import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
@@ -51,6 +55,11 @@ public class GameCharacter extends GameObject{
 	protected GameCharacterAi ai;
 	
 	private int attackEndTime;
+	
+	private boolean attackAborted;
+	
+	private boolean casting; 
+	private Future<?> castingTask;
 	
 	public GameCharacter(int objectId, CharacterTemplate template) {
 		this.objectId = objectId;
@@ -369,6 +378,7 @@ public class GameCharacter extends GameObject{
 	 * Get's called when character dies
 	 */
 	public void onDeath(GameCharacter attacker) {
+		this.abortAttack();
 		this.alive = false;
 		this.ai.setIntention(Intention.IDLE);
 		this.ai.stopAiTask();
@@ -493,9 +503,63 @@ public class GameCharacter extends GameObject{
 		// Send a packet with damage to nearby characters
 		attackTarget.getRegion().broadcastToCloseRegions(attack);
 		
-		ThreadPoolManager.getInstance().scheduleAi(new HitTask(attackTarget, damage), attackTime);
+		setAttackAborted(false);
 		
+		ThreadPoolManager.getInstance().scheduleAi(new HitTask(attackTarget, damage), attackTime);
 		ThreadPoolManager.getInstance().scheduleAi(new NotifyAiTask(Event.READY_TO_ACT), attackTime + timeBetweenAttacks);
+	}
+	
+	public void cast(Castable skill) {
+		// TODO Check whether skill is supposed to be casted on self,
+		// handle picking out a target and etc.
+		startCasting(skill, getTarget());
+	}
+	
+	public void startCasting(Castable skill, GameObject target) {
+		if (isCasting()) {
+			return;
+		}
+		
+		setCasting(true);
+		
+		// Notify client that casting is started
+		this.sendPacket(new StartCasting(skill));
+		
+		// Create a casting task
+		castingTask = ThreadPoolManager.getInstance().scheduleEffect(
+				new CastTask(this, target, skill), 
+				skill.getCastingTime());
+	}
+	
+	public final void abortCast() {
+		if (isCasting()) {
+			Future<?> future = castingTask;
+			
+			if (future != null) {
+				future.cancel(true);
+			}
+			
+			setCasting(false);
+			this.getRegion().broadcastToCloseRegions(new StartCasting(Castable.STOP_CASTING));
+		}
+	}
+	
+	public class CastTask implements Runnable {
+		private GameCharacter caster;
+		private GameObject target;
+		private Castable skill;
+		
+		public CastTask(GameCharacter caster, GameObject target, Castable skill) {
+			this.caster = caster;
+			this.target = target;
+			this.skill = skill;
+		}
+		
+		@Override
+		public void run() {
+			skill.execute(caster, target);
+			caster.setCasting(false);
+		}
 	}
 	
 	/**
@@ -528,7 +592,9 @@ public class GameCharacter extends GameObject{
 		
 		@Override
 		public void run() {
-			executeHit(target, damage);
+			if (!isAttackAborted()) {
+				executeHit(target, damage);
+			}
 		}
 		
 	}
@@ -626,6 +692,27 @@ public class GameCharacter extends GameObject{
 		return isAttacking();
 	}
 	
+	public void abortAttack() {
+		attackAborted = true;
+	}
+	
+	public void setAttackAborted(boolean attackAborted) {
+		this.attackAborted = attackAborted;
+	}
+	
+	public boolean isAttackAborted() {
+		return attackAborted;
+	}
+	
+	
+	public boolean isCasting() {
+		return casting;
+	}
+
+	public void setCasting(boolean casting) {
+		this.casting = casting;
+	}
+
 	/**
 	 * Represents a scheduled notification
 	 * @author Alvys

@@ -11,6 +11,7 @@ import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogPage;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.resources.Resource;
+import com.friendlyblob.mayhemandhell.server.model.resources.Resource.ResourceSkill;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.ActionFailedMessage;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DialogPageInfo;
@@ -64,10 +65,7 @@ public class RequestAction extends ClientPacket {
 			} else if (actions[actionIndex] == GameAction.GATHER) {
 				if (player.getTarget() instanceof Resource) {
 					Resource resource = (Resource) player.getTarget(); 
-					player.sendPacket(
-							new StartCasting(
-								resource.getName(), 
-								resource.getTemplate().getGatherTime()));
+					player.cast(new ResourceSkill("Testing", 1500));
 				}
 			}
 		} else {

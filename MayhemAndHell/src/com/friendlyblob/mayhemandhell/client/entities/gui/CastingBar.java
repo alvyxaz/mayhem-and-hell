@@ -70,7 +70,7 @@ public class CastingBar extends GuiElement{
 	}
 	
 	public void startCasting(String text, int time) {
-		this.maxTime = (float)(time/1000);
+		this.maxTime = (float)time/1000;
 		this.timeLeft = maxTime;
 		this.percentage = 1;
 		
