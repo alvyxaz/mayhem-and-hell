@@ -172,7 +172,7 @@ textures5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-icons/cooper_ore
+icons/copper_ore
   rotate: false
   xy: 2, 2
   size: 24, 24
@@ -191,7 +191,7 @@ textures6.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-objects/cooper_vein
+objects/copper_vein
   rotate: false
   xy: 2, 2
   size: 16, 18
