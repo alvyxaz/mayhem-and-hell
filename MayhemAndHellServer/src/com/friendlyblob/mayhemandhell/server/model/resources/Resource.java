@@ -55,7 +55,11 @@ public class Resource extends GameObject {
 
 		@Override
 		public void execute(GameCharacter caster, GameObject target) {
-			System.out.println("HEll yeah! Resource has been gathered");
+		}
+
+		@Override
+		public int getRange() {
+			return 10;
 		}
 		
 	}

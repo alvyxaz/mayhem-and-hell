@@ -10,6 +10,8 @@ public interface Castable {
 	public String getName();
 	public void execute(GameCharacter caster, GameObject target);
 	
+	public int getRange();
+	
 	/**
 	 * "Spell" that represents a casting being cancelled
 	 * @author Alvys
@@ -29,6 +31,11 @@ public interface Castable {
 
 		@Override
 		public void execute(GameCharacter caster, GameObject target) {
+		}
+
+		@Override
+		public int getRange() {
+			return 10;
 		}
 		
 	}

@@ -182,6 +182,7 @@ public class GameCharacterAi extends Ai {
 	@Override
 	protected void onIntentionMoveTo(ObjectPosition destination) {
 		stopAutoAttack();
+		actor.abortCast();
 		actor.moveCharacterTo((int) destination.getX(), (int) destination.getY());
 		overrideIntention(Intention.MOVE_TO);
 	}

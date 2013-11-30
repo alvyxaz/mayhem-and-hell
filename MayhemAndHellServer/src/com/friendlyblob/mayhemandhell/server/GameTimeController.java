@@ -61,8 +61,8 @@ public class GameTimeController extends Thread{
 			character.getZone().updateRegion(character);
 			
 			if (character.updatePosition(getGameTicks())) {
-				// Destination reached
 				stopMoving(character);
+				character.onDestinationReached();
 			}
 		}
 	}

@@ -13,7 +13,9 @@ import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.Zone;
 import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcAttackableInstance;
+import com.friendlyblob.mayhemandhell.server.model.datatables.DialogTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
+import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.items.Item;
 import com.friendlyblob.mayhemandhell.server.model.logic.Formulas;
@@ -27,7 +29,9 @@ import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.Attack;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterStatusUpdate;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DeathNotification;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.DialogPageInfo;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.EventNotification;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ItemPickedUp;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyMovementStop;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.StartCasting;
@@ -40,26 +44,24 @@ import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 public class GameCharacter extends GameObject{
 
 	private int health;
-	
 	private int energy;
 	private int mana;
 	
 	protected boolean alive;
 	
+	protected GameCharacterAi ai;
 	private CharacterStats stats;
-	
-	private MovementData movement;
-	
 	private CharacterTemplate template;
 	
-	protected GameCharacterAi ai;
+	private MovementData movement;
+	private DestinationReachedTask destinationTask;
 	
 	private int attackEndTime;
-	
 	private boolean attackAborted;
 	
-	private boolean casting; 
-	private Future<?> castingTask;
+	// Casting related
+	private boolean casting; 		// Whether character is casting something right now
+	private Future<?> castingTask;	// Task of executing a result of casting
 	
 	public GameCharacter(int objectId, CharacterTemplate template) {
 		this.objectId = objectId;
@@ -172,6 +174,8 @@ public class GameCharacter extends GameObject{
 	public boolean moveCharacterTo(int x, int y) {
 		// TODO check boundaries and collisions. If out of bounds - return false
 		
+		this.destinationTask = null;
+		
 		MovementData movementData = new MovementData();
 		movementData.destinationX = x;
 		movementData.destinationY = y;
@@ -195,6 +199,16 @@ public class GameCharacter extends GameObject{
 		zone.updateRegion(this, true);
 		this.movement = new MovementData().fillWithCurrent(this);
 		getRegion().broadcastToCloseRegions(new NotifyCharacterMovement(this, true));
+	}
+	
+	/**
+	 * Move character to a target, and execute task after it arrives.
+	 * @param object target to move to
+	 * @param task task to be executed
+	 */
+	public void moveCharacterTo(GameObject object, DestinationReachedTask task) {
+		moveCharacterTo(object);
+		this.destinationTask = task;
 	}
 	
 	public void moveCharacterTo(GameObject object) {
@@ -265,26 +279,6 @@ public class GameCharacter extends GameObject{
 
 	public CharacterStats getStats() {
 		return stats;
-	}
-	
-	public static class MovementData {
-		public float destinationX;
-		public float destinationY;
-		public int movementSpeed;
-		public int timeStamp;
-		
-		/**
-		 * Fills moevement data with characters current position.
-		 * @param character
-		 * @return
-		 */
-		public MovementData fillWithCurrent(GameCharacter character) {
-			destinationX = (int) character.getPosition().getX();
-			destinationY = (int) character.getPosition().getY();
-			movementSpeed = 0;
-			timeStamp = 0;
-			return this;
-		}
 	}
 	
 	/**
@@ -429,6 +423,18 @@ public class GameCharacter extends GameObject{
 	}
 
 	/**
+	 * Called when character reaches it's destination, but not
+	 * every time it stops (Does not get called if you are stopped by other forces,
+	 * only when you arrive at the target)
+	 */
+	public void onDestinationReached() {
+		if (destinationTask != null) {
+			destinationTask.execute();
+			destinationTask = null;
+		}
+	}
+	
+	/**
 	 * @return the energy
 	 */
 	public int getEnergy() {
@@ -510,8 +516,7 @@ public class GameCharacter extends GameObject{
 	}
 	
 	public void cast(Castable skill) {
-		// TODO Check whether skill is supposed to be casted on self,
-		// handle picking out a target and etc.
+		// TODO handle picking out a target and etc.
 		startCasting(skill, getTarget());
 	}
 	
@@ -713,6 +718,78 @@ public class GameCharacter extends GameObject{
 		this.casting = casting;
 	}
 
+	/**
+	 * Represents a task that is executed right after destination is reached.
+	 * @author Alvys
+	 *
+	 */
+	public static class DestinationReachedTask {
+		private GameCharacter actor;
+		private Intention intention;
+		private GameObject target;
+		private Object argument;
+		
+		public DestinationReachedTask(GameCharacter actor, Intention intention, GameObject target, Object argument) {
+			this.actor = actor;
+			this.intention = intention;
+			this.target = target;
+			this.argument = argument;
+		}
+		
+		public void execute() {
+			switch(intention) {
+				case CAST:
+					if (argument != null) {
+						Castable spell = (Castable) argument;
+						actor.startCasting(spell, target);
+					}
+					break;
+				case IDLE:
+					break;
+				case INTERACT:
+					if (argument instanceof Dialog) {
+						Dialog dialog = (Dialog) argument;
+						Player player = (Player) actor;
+						
+						player.setDialog(dialog);
+						player.sendPacket(new DialogPageInfo(target.getName(), 
+								player.getDialog().getPage(0), player.getDialog().getPage(0).getLinks(player)));
+					}
+					break;
+				case PICK_UP:
+					Player player = (Player) actor;
+					ItemInstance item = (ItemInstance) argument;
+					
+					if (player.getInventory().addItem(item)) {
+						World.getInstance().removeObject(item);
+					}
+
+					player.sendPacket(new ItemPickedUp(item));
+					break;
+			}
+		}
+	}
+	
+	public static class MovementData {
+		public float destinationX;
+		public float destinationY;
+		public int movementSpeed;
+		public int timeStamp;
+		
+		/**
+		 * Fills moevement data with characters current position.
+		 * @param character
+		 * @return
+		 */
+		public MovementData fillWithCurrent(GameCharacter character) {
+			destinationX = (int) character.getPosition().getX();
+			destinationY = (int) character.getPosition().getY();
+			movementSpeed = 0;
+			timeStamp = 0;
+			return this;
+		}
+	}
+	
 	/**
 	 * Represents a scheduled notification
 	 * @author Alvys

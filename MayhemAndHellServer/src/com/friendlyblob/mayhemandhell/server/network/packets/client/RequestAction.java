@@ -4,6 +4,7 @@ import com.friendlyblob.mayhemandhell.server.actions.GameActions.GameAction;
 import com.friendlyblob.mayhemandhell.server.ai.Intention;
 import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
+import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter.DestinationReachedTask;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcInstance;
 import com.friendlyblob.mayhemandhell.server.model.datatables.DialogTable;
@@ -46,26 +47,23 @@ public class RequestAction extends ClientPacket {
 				if (player.getTarget() instanceof NpcInstance) {
 					int dialog = ((NpcInstance) player.getTarget()).getTemplate().set.getInteger("dialog", -1);
 					if (dialog != -1) {
-						player.setDialog(DialogTable.getInstance().getDialog(dialog));
-						player.sendPacket(new DialogPageInfo(player.getTarget().getName(), 
-								player.getDialog().getPage(0), player.getDialog().getPage(0).getLinks(player)));
+						player.moveCharacterTo(player.getTarget(), 
+								new DestinationReachedTask(player, Intention.INTERACT, player.getTarget(), 
+										DialogTable.getInstance().getDialog(dialog)));	
 					}
 				}
 			} else if (actions[actionIndex] == GameAction.PICK_UP) {
-				// TODO range checking
 				if (player.getTarget() instanceof ItemInstance) {
 					ItemInstance item = (ItemInstance) player.getTarget();
+					player.moveCharacterTo(player.getTarget(), 
+							new DestinationReachedTask(player, Intention.PICK_UP, player.getTarget(), item));	
 					
-					if (player.getInventory().addItem(item)) {
-						World.getInstance().removeObject(item);
-					}
-
-					getClient().sendPacket(new ItemPickedUp(item));
 				}
 			} else if (actions[actionIndex] == GameAction.GATHER) {
 				if (player.getTarget() instanceof Resource) {
-					Resource resource = (Resource) player.getTarget(); 
-					player.cast(new ResourceSkill("Testing", 1500));
+					player.moveCharacterTo(player.getTarget(), 
+							new DestinationReachedTask(player, Intention.CAST, player.getTarget(), 
+									new ResourceSkill("Testing", 1500)));
 				}
 			}
 		} else {
