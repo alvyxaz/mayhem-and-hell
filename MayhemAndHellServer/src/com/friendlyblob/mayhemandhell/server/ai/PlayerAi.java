@@ -31,6 +31,11 @@ public class PlayerAi extends GameCharacterAi {
 		thinking = false;
 	}
 	
+	@Override
+	protected void onEventAttacked(GameCharacter attacker) {
+		
+	}
+	
 	/**
 	 * Player Ai analyzes whether it should attack, walk to the target or else.
 	 * Following does not change intention.

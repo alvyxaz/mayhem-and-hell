@@ -138,7 +138,9 @@ public class GameObject {
 	
 	public void clearTargetedBy() {
 		for (GameObject object : targetedBy) {
-			object.removeTarget();
+			if (object.getTarget() == this) {
+				object.removeTarget();
+			}
 		}
 		targetedBy.clear();
 	}

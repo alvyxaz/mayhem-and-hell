@@ -175,6 +175,7 @@ public class GameCharacter extends GameObject{
 		// TODO check boundaries and collisions. If out of bounds - return false
 		
 		this.destinationTask = null;
+		stopActions();
 		
 		MovementData movementData = new MovementData();
 		movementData.destinationX = x;
@@ -187,7 +188,17 @@ public class GameCharacter extends GameObject{
 		return true;
 	}
 	
+	/**
+	 * Stop all current actions of the character (casting, auto attacking and etc)
+	 */
+	public void stopActions() {
+		getAi().stopAutoAttack();
+		abortCast();
+	}
+	
 	public void teleportTo(Zone zone, int x, int y) {
+		stopActions();
+		
 		if (this.getZone() != zone) {
 			this.getZone().removeObject(this);
 			this.setPosition(x, y);
@@ -734,6 +745,9 @@ public class GameCharacter extends GameObject{
 			this.intention = intention;
 			this.target = target;
 			this.argument = argument;
+			
+			// In case this actor had any other intentions, let's override them.
+			actor.getAi().setIntention(Intention.ACTIVE);
 		}
 		
 		public void execute() {
