@@ -2,6 +2,9 @@ package com.friendlyblob.mayhemandhell.server.model.quests;
 
 import java.util.Map;
 
+import com.friendlyblob.mayhemandhell.server.model.actors.Player;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.UpdateCharacterHint;
+
 import javolution.util.FastMap;
 
 public class QuestState {
@@ -11,17 +14,26 @@ public class QuestState {
 	
 	private QuestProgressState state;
 	
-	public QuestState(Quest quest) {
+	private Player player;
+	
+	public QuestState(Quest quest, Player player) {
+		this.player = player;
 		values = new FastMap<>();
 		questId = quest.getQuestId();
+		setState(QuestProgressState.STARTED);
 	}
 	
 	public void setTurnIn() {
-		state = QuestProgressState.TURN_IN;
+		setState(QuestProgressState.TURN_IN);
 	}
 	
 	public void setCompleted() {
-		state = QuestProgressState.COMPLETED;
+		setState(QuestProgressState.COMPLETED);
+	}
+	
+	public void setState(QuestProgressState state) {
+		this.state = state;
+		player.sendPacket(new UpdateCharacterHint(player.getRegion().getVisibleCharacters(), player));
 	}
 	
 	public boolean isTurnIn() {

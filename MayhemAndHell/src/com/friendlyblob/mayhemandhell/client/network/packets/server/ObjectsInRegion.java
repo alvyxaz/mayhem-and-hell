@@ -8,6 +8,7 @@ import com.friendlyblob.mayhemandhell.client.entities.Item;
 import com.friendlyblob.mayhemandhell.client.entities.Resource;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
+import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 
 public class ObjectsInRegion extends ReceivablePacket {
@@ -36,7 +37,7 @@ public class ObjectsInRegion extends ReceivablePacket {
 					case HOSTILE_NPC:
 						int speed = readD();
 						int sprite = readD();
-						
+						int hint = readC();
 						// Ignoring player himself. 
 						// Data has to be read anyway (before this if).
 						if(playerId == objectId) {
@@ -47,7 +48,13 @@ public class ObjectsInRegion extends ReceivablePacket {
 							// TODO some sort of interpolation
 							// world.getCharacter(objectId).moveTo(x, y, speed);
 						} else {
-							world.putCharacter(new GameCharacter(objectId, x, y, sprite));
+							GameCharacter character = new GameCharacter(objectId, x, y, sprite);
+							
+							if (hint > 0) {
+								character.setHint(hint);
+							}
+							
+							world.putCharacter(character);
 						}
 						break;
 					case ITEM:

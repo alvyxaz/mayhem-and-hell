@@ -3,6 +3,7 @@ package com.friendlyblob.mayhemandhell.server.model.dialogs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import com.friendlyblob.mayhemandhell.server.model.actors.NpcTemplate;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
@@ -127,9 +128,9 @@ public class Dialog {
 			// If it's the main page, add quest related links 
 			// TODO find a way to not do this when current dialog is quest dialog
 			if (id == 0) {
-				List<Quest> questList = npc.getQuests();
-				if (questList != null) {
-					for(Quest quest : questList) {
+				Set<Quest> questSet = npc.getQuests();
+				if (questSet != null) {
+					for(Quest quest : questSet) {
 						QuestState state = player.getQuestState(quest.getQuestId());
 						if (state == null) {
 							links.add(quest.getQuestStartLink());

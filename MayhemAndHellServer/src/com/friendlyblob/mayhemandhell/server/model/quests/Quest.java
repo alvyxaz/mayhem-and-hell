@@ -3,8 +3,12 @@ package com.friendlyblob.mayhemandhell.server.model.quests;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javolution.util.FastMap;
 
 import com.friendlyblob.mayhemandhell.server.data.DialogDataParser;
+import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.NpcTemplate;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
@@ -14,6 +18,7 @@ import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogLink;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogLinkType;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.EventNotification;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.UpdateCharacterHint;
 import com.friendlyblob.mayhemandhell.server.scripting.Script;
 import com.friendlyblob.mayhemandhell.server.scripting.ScriptManager;
 
@@ -163,7 +168,7 @@ public class Quest extends Script{
 	public void startQuest(Player player) {
 		QuestState state = player.getQuestState(getQuestId());
 		if (state == null) {
-			state = new QuestState(this);
+			state = new QuestState(this, player);
 			player.putQuestState(state);
 			
 			// Sending notification to player

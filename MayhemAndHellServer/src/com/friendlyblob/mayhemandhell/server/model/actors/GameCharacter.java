@@ -1,6 +1,7 @@
 package com.friendlyblob.mayhemandhell.server.model.actors;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.concurrent.Future;
 
 import com.friendlyblob.mayhemandhell.server.GameTimeController;
@@ -13,6 +14,7 @@ import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.Zone;
 import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcAttackableInstance;
+import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcInstance;
 import com.friendlyblob.mayhemandhell.server.model.datatables.DialogTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog;
@@ -21,6 +23,7 @@ import com.friendlyblob.mayhemandhell.server.model.items.Item;
 import com.friendlyblob.mayhemandhell.server.model.logic.Formulas;
 import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
 import com.friendlyblob.mayhemandhell.server.model.quests.Quest.QuestEventType;
+import com.friendlyblob.mayhemandhell.server.model.quests.QuestState;
 import com.friendlyblob.mayhemandhell.server.model.resources.Resource.ResourceSkill;
 import com.friendlyblob.mayhemandhell.server.model.skills.Castable;
 import com.friendlyblob.mayhemandhell.server.model.stats.CharacterStats;
@@ -669,6 +672,48 @@ public class GameCharacter extends GameObject{
 	
 	public boolean isFollowing() {
 		return getAi().isFollowing();
+	}
+	
+	public CharacterHint getHint(Player player) {
+		List<Quest> startingQuests = this.getTemplate().getQuestEvents(QuestEventType.QUEST_START);
+		List<Quest> completingQuests = this.getTemplate().getQuestEvents(QuestEventType.QUEST_COMPLETE);
+		
+		CharacterHint tempHint = CharacterHint.NONE;
+		
+		if (completingQuests != null) {
+			for(Quest quest : completingQuests) {
+				QuestState state = player.getQuestState(quest.getQuestId());
+				if(state != null && state.isTurnIn()) {
+					return CharacterHint.QUEST_RETURN;
+				}
+			}
+		}
+		if (startingQuests != null) {
+			for(Quest quest : startingQuests) {
+				QuestState state = player.getQuestState(quest.getQuestId());
+				if( state == null) {
+					return CharacterHint.QUEST_GIVE;
+				} else if(!state.isCompleted() && !state.isTurnIn()) {
+					tempHint = CharacterHint.QUEST_IN_PROGRESS;
+				}
+			}
+		}
+		
+		return tempHint;
+	}
+	
+	public enum CharacterHint {
+		NONE(0),
+		QUEST_GIVE(1),
+		QUEST_RETURN(2),
+		QUEST_IN_PROGRESS(3),
+		QUEST_ATTACK(4);
+		
+		public final int value;
+		
+		CharacterHint(int value) {
+			this.value = value;
+		}
 	}
 	
 	/**

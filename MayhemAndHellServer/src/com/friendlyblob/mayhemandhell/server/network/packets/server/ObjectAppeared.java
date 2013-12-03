@@ -26,6 +26,7 @@ public class ObjectAppeared extends ServerPacket {
 			case FRIENDLY_NPC:
 			case HOSTILE_NPC:
 				writeD(((GameCharacter) object).getSprite());
+				writeC(((GameCharacter) object).getHint(getClient().getPlayer()).value);
 				break;
 			case ITEM:
 				writeD(((ItemInstance) object).getItemId());

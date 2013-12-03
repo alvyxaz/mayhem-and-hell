@@ -19,6 +19,8 @@ public class Q0001_GrabThatNastyRat extends Quest{
 		
 		addStartNpc(SMITH);
 		addKillNpc(RAT);
+		
+		addCompleteNpc(SMITH);
 	}
 	
 	def String onQuestStarted(Player player, QuestState state) {

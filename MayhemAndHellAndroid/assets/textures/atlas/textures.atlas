@@ -24,9 +24,37 @@ gui/ingame/casting_bg
   index: -1
 gui/ingame/casting_progress_bg
   rotate: false
-  xy: 304, 16
+  xy: 330, 16
   size: 1, 14
   orig: 1, 14
+  offset: 0, 0
+  index: -1
+gui/ingame/icon_char_attack
+  rotate: false
+  xy: 50, 2
+  size: 5, 10
+  orig: 5, 10
+  offset: 0, 0
+  index: -1
+gui/ingame/icon_char_quest
+  rotate: false
+  xy: 324, 15
+  size: 4, 15
+  orig: 4, 15
+  offset: 0, 0
+  index: -1
+gui/ingame/icon_char_quest_in
+  rotate: false
+  xy: 304, 15
+  size: 8, 15
+  orig: 8, 15
+  offset: 0, 0
+  index: -1
+gui/ingame/icon_char_quest_in_gray
+  rotate: false
+  xy: 314, 15
+  size: 8, 15
+  orig: 8, 15
   offset: 0, 0
   index: -1
 gui/ingame/icon_chat
@@ -89,7 +117,7 @@ gui/ingame/window
   index: -1
 gui/ingame/window_title
   rotate: false
-  xy: 307, 16
+  xy: 333, 16
   size: 1, 14
   orig: 1, 14
   offset: 0, 0
@@ -172,7 +200,7 @@ textures5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-icons/copper_ore
+icons/cooper_ore
   rotate: false
   xy: 2, 2
   size: 24, 24

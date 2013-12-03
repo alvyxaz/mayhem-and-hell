@@ -7,6 +7,7 @@ import com.friendlyblob.mayhemandhell.client.entities.GameObject.GameObjectType;
 import com.friendlyblob.mayhemandhell.client.entities.Item;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
+import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 
 public class ObjectAppeared extends ReceivablePacket {
@@ -17,6 +18,7 @@ public class ObjectAppeared extends ReceivablePacket {
 	GameObjectType type;
 	int sprite;
 	int itemId;
+	int hint;
 	
 	@Override
 	public boolean read() {
@@ -30,6 +32,7 @@ public class ObjectAppeared extends ReceivablePacket {
 			case FRIENDLY_NPC:
 			case HOSTILE_NPC:
 				sprite = readD();
+				hint = readC();
 				break;
 			case ITEM:
 				itemId = readD();
@@ -53,7 +56,13 @@ public class ObjectAppeared extends ReceivablePacket {
 				case PLAYER:
 				case FRIENDLY_NPC:
 				case HOSTILE_NPC:
-						world.putCharacter(new GameCharacter(objectId, x, y, sprite));
+					GameCharacter character = new GameCharacter(objectId, x, y, sprite);
+					
+					if (hint > 0) {
+						character.setHint(hint);
+					}
+					
+					world.putCharacter(character);
 					break;
 				case ITEM:
 						world.putObject(new Item(objectId, itemId, x, y));

@@ -35,6 +35,7 @@ public class ObjectsInRegion extends ServerPacket{
 				case HOSTILE_NPC:
 					writeD(((GameCharacter) object).getMovementSpeed());			// Movement speed
 					writeD(((GameCharacter) object).getSprite());					// Sprite (animation)
+					writeC(((GameCharacter) object).getHint(getClient().getPlayer()).value);
 					break;
 				case ITEM:
 					writeD(((ItemInstance) object).getItemId());

@@ -2,9 +2,11 @@ package com.friendlyblob.mayhemandhell.server.model.actors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javolution.util.FastMap;
 
@@ -33,6 +35,8 @@ public class NpcTemplate extends CharacterTemplate {
 	
 	private int respawnTime; // Respawn time in milliseconds;
 	
+	private Set<Quest> questSet = new HashSet<Quest>();
+	
 	public NpcTemplate(StatsSet set) {
 		super(set);
 		itemDropList = new ItemDrop[0];
@@ -48,32 +52,21 @@ public class NpcTemplate extends CharacterTemplate {
 		return getQuests().size() > 0;
 	}
 	
+	@Override
+	public void addQuestEvent(QuestEventType type, Quest quest) {
+		super.addQuestEvent(type, quest);
+		if (type == QuestEventType.QUEST_START || type == QuestEventType.QUEST_COMPLETE) {
+			questSet.add(quest);
+		}
+	}
+	
 	/**
-	 * Returns a list of quests that player can get from this npc or turn in.
+	 * Returns a set of quests that player can get from this npc or turn in.
 	 * @param player
 	 * @return
 	 */
-	public List<Quest> getQuests() {
-		List<Quest> startsQuests = getQuestEvents(QuestEventType.QUEST_START);
-		List<Quest> completesQuests = getQuestEvents(QuestEventType.QUEST_COMPLETE);
-		
-		List<Quest> playerQuests = new ArrayList<Quest>(); 
-		
-		// Collect quests that can be started
-		if (startsQuests != null) {
-			for(Quest quest : startsQuests) {
-				playerQuests.add(quest);
-			}
-		}
-		
-		// Collect quests that can be turned in
-		if (completesQuests != null) {
-			for(Quest quest : completesQuests) {
-				playerQuests.add(quest);
-			}
-		}
-		
-		return playerQuests;
+	public Set<Quest> getQuests() {
+		return questSet;
 	}
 	
 	/**

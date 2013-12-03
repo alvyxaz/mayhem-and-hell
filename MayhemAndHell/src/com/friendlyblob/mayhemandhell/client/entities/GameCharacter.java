@@ -3,6 +3,7 @@ package com.friendlyblob.mayhemandhell.client.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.friendlyblob.mayhemandhell.client.MyGame;
@@ -41,6 +42,10 @@ public class GameCharacter extends GameObject {
 	
 	private MovementDirection currentDirection; 
 	
+	private TextureRegion hint;
+	private int hintXOffset;
+	private int hintYOffset;
+	
 	public GameCharacter(int id, int x, int y, int animationId){
 		super(id);
 		position.set(x, y);
@@ -56,6 +61,36 @@ public class GameCharacter extends GameObject {
 		for (AnimationData animation : AnimationParser.getCollection(animationId).values()) {
 			animationHandler.setAnimation(animation.type, 
 					new Animation(animation, animationHandler));
+		}
+	}
+	
+	public void setHint(TextureRegion hint) {
+		this.hint = hint;
+		if (hint != null) {
+			hintXOffset = (int)hitBox.width/2 - (int)hint.getRegionWidth()/2;
+			hintYOffset = (int)hitBox.height + 1;
+		}
+	}
+	
+	public void setHint(int hint) {
+		switch(hint) {
+			case 0: // NONE
+				setHint(null);
+				break;
+			case 1: // QUEST_GIVE
+				setHint(Assets.getTextureRegion("gui/ingame/icon_char_quest"));
+				break;
+			case 2: // QUEST_RETURN
+				setHint(Assets.getTextureRegion("gui/ingame/icon_char_quest_in"));
+				break;
+			case 3: // QUEST_IN_PROGRESS
+				setHint(Assets.getTextureRegion("gui/ingame/icon_char_quest_in_gray"));
+				break;
+			case 4: // QUEST_ATTACK
+				setHint(Assets.getTextureRegion("gui/ingame/icon_char_attack"));
+				break;
+			default: 
+				setHint(null);
 		}
 	}
 	
@@ -132,6 +167,10 @@ public class GameCharacter extends GameObject {
 		spriteBatch.setColor(Color.WHITE);
 		
 		spriteBatch.draw(animationHandler.getFrame(Gdx.graphics.getDeltaTime()), position.x - animationHandler.getFrameWidth()/2, position.y);
+	
+		if (hint != null) {
+			spriteBatch.draw(hint, hitBox.x + hintXOffset, hitBox.y + hintYOffset);
+		}
 	}
 	
 	/**
