@@ -14,7 +14,7 @@ import com.friendlyblob.mayhemandhell.client.helpers.Assets;
  */
 public class EventNotifications {
 	
-	private static final Color REGULAR_COLOR = new Color(0f, 0f, 0f, 1);// Color(1f, 0.8f, 0, 1f);
+	private static final Color REGULAR_COLOR = new Color(1f, 0.86f, 0f, 1);// Color(1f, 0.7f, 0, 1f);
 	
 	private static final int BUFFER_SIZE = 5;
 	private static final float MAX_TIMER = 2; 
@@ -30,7 +30,7 @@ public class EventNotifications {
 	private BitmapFont font;
 	
 	public EventNotifications() {
-		font = Assets.defaultFont;
+		font = Assets.defaultFontStroked;
 		notifications = new String[BUFFER_SIZE];
 		colors = new Color[BUFFER_SIZE];
 		timers = new float[BUFFER_SIZE];
@@ -61,13 +61,13 @@ public class EventNotifications {
 				}
 				//-------------------------------------
 				// DRAW
-				Assets.defaultFont.setColor(colors[i]);
-				Assets.defaultFont.drawWrapped(spriteBatch, notifications[i], 0, y[i], 
+				font.setColor(colors[i]);
+				font.drawWrapped(spriteBatch, notifications[i], 0, y[i], 
 						MyGame.SCREEN_WIDTH, HAlignment.CENTER);
 			}
 		}
 		// Restore regular color
-		Assets.defaultFont.setColor(Color.WHITE);
+		font.setColor(Color.WHITE);
 	}
 	
 	public synchronized void addNotification (String notification, Color color) {
@@ -77,7 +77,7 @@ public class EventNotifications {
 				oldest = i;
 			}
 			if (timers[i] > 0) {
-				y[i] += Assets.defaultFont.getLineHeight();
+				y[i] += font.getLineHeight();
 			}
 		}
 		

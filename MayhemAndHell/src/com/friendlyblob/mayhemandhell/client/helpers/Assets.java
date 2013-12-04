@@ -14,21 +14,25 @@ public class Assets {
 	public static AssetManager manager;
 	
 	public static BitmapFont defaultFont;
-	
+	public static BitmapFont defaultFontStroked;
 	public static Texture px;
 	
 	public static void initialize(){
 		assets = new Assets();
 		manager = new AssetManager();
 		
+		System.out.println();
+		
 		// Loading critical resources
 		manager.load("textures/atlas/debugging/px.png", Texture.class);
-		manager.load("fonts/minecraftia.fnt", BitmapFont.class);
+		manager.load("fonts/arial_normal.fnt", BitmapFont.class);
+		manager.load("fonts/arial_border.fnt", BitmapFont.class);
 		
 		// Making sure critical resources are loaded before going further
 		manager.finishLoading();
 		
-		defaultFont = manager.get("fonts/minecraftia.fnt", BitmapFont.class);
+		defaultFont = manager.get("fonts/arial_normal.fnt", BitmapFont.class);
+		defaultFontStroked = manager.get("fonts/arial_border.fnt", BitmapFont.class);
 		px = manager.get("textures/atlas/debugging/px.png", Texture.class);
 	}
 	

@@ -69,7 +69,7 @@ public class TargetBar extends GuiElement {
 	public void draw(SpriteBatch spriteBatch) {
 		spriteBatch.draw(background, box.x, box.y);
 		spriteBatch.draw(xTexture, xRectangle.x, xRectangle.y);
-		Assets.defaultFont.draw(spriteBatch, targetInfo.name, box.x + 5, box.y + box.height - 2);
+		Assets.defaultFont.draw(spriteBatch, targetInfo.name, box.x + 5, MyGame.SCREEN_HEIGHT);
 		
 		spriteBatch.setColor(Color.GRAY);
 		spriteBatch.draw(Assets.px, box.x+4, box.y+2, (box.width-8), 2);
