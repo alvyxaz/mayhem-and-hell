@@ -633,7 +633,7 @@ public class GameCharacter extends GameObject{
 				this.sendPacket(packet);
 			}
 			
-			if (this.health < 0) {
+			if (this.health <= 0) {
 				this.health = 0;
 				onDeath(attacker);
 			}

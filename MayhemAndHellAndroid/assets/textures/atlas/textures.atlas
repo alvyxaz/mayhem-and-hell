@@ -24,7 +24,7 @@ gui/ingame/casting_bg
   index: -1
 gui/ingame/casting_progress_bg
   rotate: false
-  xy: 330, 16
+  xy: 337, 16
   size: 1, 14
   orig: 1, 14
   offset: 0, 0
@@ -99,6 +99,13 @@ gui/ingame/skill_slot
   orig: 16, 16
   offset: 0, 0
   index: -1
+gui/ingame/status_bar
+  rotate: false
+  xy: 330, 19
+  size: 5, 11
+  orig: 5, 11
+  offset: 0, 0
+  index: -1
 gui/ingame/target_background
   rotate: false
   xy: 132, 10
@@ -117,7 +124,7 @@ gui/ingame/window
   index: -1
 gui/ingame/window_title
   rotate: false
-  xy: 333, 16
+  xy: 340, 16
   size: 1, 14
   orig: 1, 14
   offset: 0, 0
