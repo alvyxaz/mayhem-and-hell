@@ -164,7 +164,7 @@ public class GameCharacter extends GameObject {
 	public void draw(SpriteBatch spriteBatch){
 		spriteBatch.setColor(1f, 1f, 1f, 0.1f);
 		spriteBatch.draw(Assets.px, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
-		Assets.defaultFont.draw(spriteBatch, objectId + "", hitBox.x + 10, hitBox.y - 10);
+//		Assets.defaultFont.draw(spriteBatch, objectId + "", hitBox.x + 10, hitBox.y - 10);
 		spriteBatch.setColor(Color.WHITE);
 		
 		spriteBatch.draw(animationHandler.getFrame(Gdx.graphics.getDeltaTime()), position.x - animationHandler.getFrameWidth()/2, position.y);
