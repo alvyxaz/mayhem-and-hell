@@ -72,4 +72,9 @@ public abstract class GameObject {
 		setType(GameObjectType.fromValue(type));
 	}
 	
+	public void setPosition (int x, int y) {
+		position.set(x, y);
+		this.hitBox.x = x;
+		this.hitBox.y = y;
+	}
 }

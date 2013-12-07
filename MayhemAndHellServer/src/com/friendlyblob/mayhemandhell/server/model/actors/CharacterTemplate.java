@@ -90,39 +90,39 @@ public class CharacterTemplate {
 	}
 	
 	public void parseSetData() {
-		baseMaxHealth = set.getInteger("baseMaxHealth", 100);
-		baseMaxMana = set.getInteger("baseMaxMana", 100);
-		baseMaxEnergy = set.getInteger("baseMaxEnergy", 100);
-		baseMaxWeight = set.getInteger("baseMaxWeight", 100);
+		baseMaxHealth = set.getInt("baseMaxHealth", 100);
+		baseMaxMana = set.getInt("baseMaxMana", 100);
+		baseMaxEnergy = set.getInt("baseMaxEnergy", 100);
+		baseMaxWeight = set.getInt("baseMaxWeight", 100);
 		
-		baseWalkingSpeed = set.getInteger("baseWalkingSpeed", 50);
-		baseRunningSpeed = set.getInteger("baseRunningSpeed", 50);
+		baseWalkingSpeed = set.getInt("baseWalkingSpeed", 50);
+		baseRunningSpeed = set.getInt("baseRunningSpeed", 50);
 		
-		baseStrength = set.getInteger("baseStrength", 10);
-		baseDexterity = set.getInteger("baseDexterity", 10);
-		baseIntelligence = set.getInteger("baseIntelligence", 10);
-		baseVitality = set.getInteger("baseVitality", 10);
-		baseToughness = set.getInteger("baseToughness", 10);
+		baseStrength = set.getInt("baseStrength", 10);
+		baseDexterity = set.getInt("baseDexterity", 10);
+		baseIntelligence = set.getInt("baseIntelligence", 10);
+		baseVitality = set.getInt("baseVitality", 10);
+		baseToughness = set.getInt("baseToughness", 10);
 		
-		basePhysicalDamage = set.getInteger("basePhysicalDamage", 10);
-		baseMagicDamage = set.getInteger("baseMagicDamage", 10);
-		baseRangeDamage = set.getInteger("baseRangeDamage", 10);
+		basePhysicalDamage = set.getInt("basePhysicalDamage", 10);
+		baseMagicDamage = set.getInt("baseMagicDamage", 10);
+		baseRangeDamage = set.getInt("baseRangeDamage", 10);
 		
-		basePhysicalDefence = set.getInteger("basePhysicalDefence", 0);
-		baseMagicalDefence = set.getInteger("baseMagicalDefence", 0);
-		baseRangeDefence = set.getInteger("baseRangeDefence", 0);
+		basePhysicalDefence = set.getInt("basePhysicalDefence", 0);
+		baseMagicalDefence = set.getInt("baseMagicalDefence", 0);
+		baseRangeDefence = set.getInt("baseRangeDefence", 0);
 		
-		baseFireResistance = set.getInteger("baseFireResistance", 0);
-		baseFrostResistance = set.getInteger("baseFrostResistance", 0);
-		baseElectricityResistance = set.getInteger("baseElectricityResistance", 0);
-		basePoisonResistance = set.getInteger("basePoisonResistance", 0);
-		baseHolyResistance = set.getInteger("baseHolyResistance", 0);
+		baseFireResistance = set.getInt("baseFireResistance", 0);
+		baseFrostResistance = set.getInt("baseFrostResistance", 0);
+		baseElectricityResistance = set.getInt("baseElectricityResistance", 0);
+		basePoisonResistance = set.getInt("basePoisonResistance", 0);
+		baseHolyResistance = set.getInt("baseHolyResistance", 0);
 		
-		baseFireDamage = set.getInteger("baseFireDamage", 0);
-		baseFrostDamage = set.getInteger("baseFrostDamage", 0);
-		baseElectricDamage = set.getInteger("baseElectricDamage", 0);
-		basePoisonDamage = set.getInteger("basePoisonDamage", 0);
-		baseHolyDamage = set.getInteger("baseHolyDamage", 0);
+		baseFireDamage = set.getInt("baseFireDamage", 0);
+		baseFrostDamage = set.getInt("baseFrostDamage", 0);
+		baseElectricDamage = set.getInt("baseElectricDamage", 0);
+		basePoisonDamage = set.getInt("basePoisonDamage", 0);
+		baseHolyDamage = set.getInt("baseHolyDamage", 0);
 	}
 	
 	public void setSprite(int sprite) {

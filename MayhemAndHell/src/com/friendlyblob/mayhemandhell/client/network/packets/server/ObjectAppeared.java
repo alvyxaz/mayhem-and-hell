@@ -1,13 +1,9 @@
 package com.friendlyblob.mayhemandhell.client.network.packets.server;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
-import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject.GameObjectType;
 import com.friendlyblob.mayhemandhell.client.entities.Item;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
-import com.friendlyblob.mayhemandhell.client.gameworld.Map;
-import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 
 public class ObjectAppeared extends ReceivablePacket {
@@ -37,6 +33,10 @@ public class ObjectAppeared extends ReceivablePacket {
 			case ITEM:
 				itemId = readD();
 				break;
+		case OTHER:
+			break;
+		case RESOURCE:
+			break;
 		}
 
 		
@@ -65,8 +65,15 @@ public class ObjectAppeared extends ReceivablePacket {
 					world.putCharacter(character);
 					break;
 				case ITEM:
-						world.putObject(new Item(objectId, itemId, x, y));
+						Item item = new Item(itemId, objectId);
+						item.setPosition(x, y);
+						
+						world.putObject(item);
 					break;
+			case OTHER:
+				break;
+			case RESOURCE:
+				break;
 			}
 			
 		}

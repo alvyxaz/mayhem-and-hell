@@ -12,7 +12,7 @@ public class DesktopGame {
 	public static void main (String[] args) {
 		// TODO: Remove tools dependency
 		Settings settings = new Settings();
-//		TexturePacker2.process(settings, "textures/atlas", "../MayhemAndHellAndroid/assets/textures/atlas", "textures");
+		TexturePacker2.process(settings, "textures/atlas", "../MayhemAndHellAndroid/assets/textures/atlas", "textures");
 		
 		ActionResolver actionResolver = new ActionResolverDesktop();
 		MyGame game = new MyGame(new GoogleDesktop(), actionResolver);

@@ -19,6 +19,7 @@ import com.friendlyblob.mayhemandhell.server.model.datatables.DialogTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ItemTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.NpcTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ResourceTable;
+import com.friendlyblob.mayhemandhell.server.model.datatables.ShopTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.SpawnTable;
 import com.friendlyblob.mayhemandhell.server.model.datatables.ZoneTable;
 import com.friendlyblob.mayhemandhell.server.model.quests.QuestManager;
@@ -64,6 +65,7 @@ public class GameServer{
     	NpcTable.initialize(); 		// Depends on items, dialogs
     	ResourceTable.initialize();	// Depends on items
     	SpawnTable.initialize(); 	// Depends on npc's
+    	ShopTable.initialize();		// Depends on items, dialogs, npcs
     	CharacterTemplateTable.initialize();
     	
     	// Script managers
@@ -132,7 +134,7 @@ public class GameServer{
 		Config.load();
 		
 		final String LOG_FOLDER = "log"; // Name of folder for log file
-		final String LOG_NAME = "log/log.cfg"; // Name of log file
+		final String LOG_NAME = "./log/log.cfg"; // Name of log file
 		
 		FileHandler fh = new FileHandler(LOG_FOLDER+"/serverLog.log"); 
 		

@@ -10,6 +10,7 @@ import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.entities.gui.chat.Chat;
 import com.friendlyblob.mayhemandhell.client.entities.gui.inventory.InventoryIcon;
 import com.friendlyblob.mayhemandhell.client.entities.gui.inventory.InventoryView;
+import com.friendlyblob.mayhemandhell.client.entities.gui.shop.Shop;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 
 /**
@@ -26,6 +27,7 @@ public class GuiManager {
 	
 	public TargetBar targetBar;
 	public InventoryView inventory;
+	public Shop shop;
 	public Dialog dialog;
 	public InventoryIcon inventoryIcon;
 	public ActionsBar actionsBar;
@@ -45,8 +47,11 @@ public class GuiManager {
 		addGuiElement(targetBar, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.TOP);
 		
 		inventory = new InventoryView();
-		inventory.setDataSource(GameWorld.getInstance().getPlayer().getInventory());
+		inventory.setInventory(GameWorld.getInstance().getPlayer().getInventory());
 		addGuiElement(inventory, GuiPositionHorizontal.MIDDLE, GuiPositionVertical.MIDDLE);
+		
+		shop = new Shop();
+		addGuiElement(shop, GuiPositionHorizontal.LEFT, GuiPositionVertical.MIDDLE);
 		
 		actionsBar = new ActionsBar();
 		addGuiElement(actionsBar, GuiPositionHorizontal.RIGHT, GuiPositionVertical.BOTTOM);

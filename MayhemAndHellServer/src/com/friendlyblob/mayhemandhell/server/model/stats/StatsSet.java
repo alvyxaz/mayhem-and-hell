@@ -72,7 +72,7 @@ public class StatsSet {
 	 * @param name : String designating the key in the set
 	 * @return int : value associated to the key
 	 */
-	public int getInteger(String name) {
+	public int getInt(String name) {
 		final Object val = set.get(name);
 		if (val == null) {
 			throw new IllegalArgumentException("Integer value required, but not specified: " + name + "!");
@@ -95,7 +95,7 @@ public class StatsSet {
 	 * @param deflt : int designating the default value if value associated with the key is null
 	 * @return int : value associated to the key
 	 */
-	public int getInteger(String name, int deflt)
+	public int getInt(String name, int deflt)
 	{
 		Object val = set.get(name);
 		
@@ -112,6 +112,37 @@ public class StatsSet {
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Integer value required, but found: " + val);
 		}
+	}
+	
+	/**
+	 * Returns the String associated to the key put in parameter ("name").
+	 * @param name : String designating the key in the set
+	 * @return String : value associated to the key
+	 */
+	public String getString(String name) {
+		final Object val = set.get(name);
+		if (val == null) {
+			throw new IllegalArgumentException("String value required, but not specified: " + name + "!");
+		}
+		
+		return (String) val;
+	}
+	
+	/**
+	 * Returns the String associated to the key put in parameter ("name"). If the value associated to the key is null, this method returns the value of the parameter deflt.
+	 * @param name : String designating the key in the set
+	 * @param deflt : String designating the default value if value associated with the key is null
+	 * @return String : value associated to the key
+	 */
+	public String getString(String name, String deflt)
+	{
+		Object val = set.get(name);
+		
+		if (val == null) {
+			return deflt;
+		}
+		
+		return (String) val;
 	}
 	
 	/**

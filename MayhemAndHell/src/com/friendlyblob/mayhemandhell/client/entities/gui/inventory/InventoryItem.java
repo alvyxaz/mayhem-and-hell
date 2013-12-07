@@ -1,26 +1,24 @@
 package com.friendlyblob.mayhemandhell.client.entities.gui.inventory;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.friendlyblob.mayhemandhell.client.entities.GameObject;
-import com.friendlyblob.mayhemandhell.client.helpers.Assets;
-
 public class InventoryItem extends SlotObject  {
+	private static final int SIZE = 24;
+	
+	public int itemId;
 	public String name;
 	public String description;
 	
-	public InventoryItem(int size) {
-		super(size);
+	public InventoryItem(int itemId) {
+		super(SIZE, SIZE);
+		
+		this.itemId = itemId;
 		// TODO Auto-generated constructor stub
 	}
 	
-	public InventoryItem setName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return this;
 	}
 	
-	public InventoryItem setDescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
-		return this;
 	}
 }

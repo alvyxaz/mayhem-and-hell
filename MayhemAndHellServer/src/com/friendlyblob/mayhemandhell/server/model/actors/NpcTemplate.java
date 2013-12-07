@@ -45,7 +45,7 @@ public class NpcTemplate extends CharacterTemplate {
 	@Override
 	public void parseSetData() {
 		super.parseSetData();
-		respawnTime = set.getInteger("respawnTime", 1000);
+		respawnTime = set.getInt("respawnTime", 1000);
 	}
 	
 	public boolean hasQuests() {

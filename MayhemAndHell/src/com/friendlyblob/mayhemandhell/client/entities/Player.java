@@ -3,6 +3,7 @@ package com.friendlyblob.mayhemandhell.client.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.friendlyblob.mayhemandhell.client.MyGame;
+import com.friendlyblob.mayhemandhell.client.entities.gui.inventory.Inventory;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
 
@@ -12,7 +13,7 @@ public class Player extends GameCharacter {
 	
 	public int targetId;
 	
-	public Inventory inventory = new Inventory();
+	public Inventory inventory = new Inventory(3, 4);
 	
 	public Player (int id, int x, int y){
 		super(id, x, y, 0);

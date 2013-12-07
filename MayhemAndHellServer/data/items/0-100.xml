@@ -4,14 +4,16 @@
 	<item id="1" type="EquipableItem" name="Frozen Sword">
 		<set name="icon" val="sword" />
 		<set name="description" val="Regular sword. But frozen." />
+        <set name="price" val="25" />
 		<modifiers>
 			<modifier stat="pDamage" type="increment_base" value="10" />
 			<modifier stat="pDefence" type="multiply_base" value="2" />
 		</modifiers>
 	</item>
 	<item id="2" type="Material" name="Copper ore">
-		<set name="icon" val="copper_ore" />
+		<set name="icon" val="copper_vein" />
 		<set name="description" val="Ore. But copper." />
 		<set name="type" val="metal" />
+        <set name="price" val="2" />
 	</item>
 </list>

@@ -59,7 +59,11 @@ public class ObjectsInRegion extends ReceivablePacket {
 						break;
 					case ITEM:
 						int itemId = readD();
-						world.putObject(new Item(objectId, itemId, x, y));
+						
+						Item item = new Item(itemId, objectId);
+						item.setPosition(x, y);
+						
+						world.putObject(item);
 						break;
 					case RESOURCE:
 						// Resource data
@@ -70,6 +74,8 @@ public class ObjectsInRegion extends ReceivablePacket {
 						resource.setPosition(x, y);
 						world.putObject(resource);
 						break;
+				case OTHER:
+					break;
 				}
 			}
 		} catch (Exception e) {

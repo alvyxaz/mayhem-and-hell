@@ -6,12 +6,10 @@ import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 
 public class SlotObject extends Rectangle {
 	
-	public SlotObject(int size) {
-		super(0, 0, size, size);
+	public SlotObject(int width, int height) {
+		super(0, 0, width, height);
 		// TODO Auto-generated constructor stub
 	}
-
-	public int iconId;
 	
 	private TextureRegion texture = Assets.getTextureRegion("icons/sword");
 	

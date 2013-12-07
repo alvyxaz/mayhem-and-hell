@@ -32,23 +32,23 @@ public class BaseStats {
 	 * @param set
 	 */
 	public BaseStats(StatsSet set) {
-		baseMaxHealth = set.getInteger("baseMaxHealth", 50);
-		baseMaxMana = set.getInteger("baseMaxEnergy", 100);
-		baseMaxEnergy = set.getInteger("baseMaxEnergy", 100);
-		baseMaxWeight = set.getInteger("baseMaxWeight", 100);
+		baseMaxHealth = set.getInt("baseMaxHealth", 50);
+		baseMaxMana = set.getInt("baseMaxEnergy", 100);
+		baseMaxEnergy = set.getInt("baseMaxEnergy", 100);
+		baseMaxWeight = set.getInt("baseMaxWeight", 100);
 		
-		baseMovementSpeed = set.getInteger("baseWalkingSpeed", 100);
+		baseMovementSpeed = set.getInt("baseWalkingSpeed", 100);
 		
-		basePhysicalDamage = set.getInteger("basePhysicalDamage", 10);
-		basePhysicalDefence = set.getInteger("basePhysicalDefence", 10);
-		baseMagicDamage = set.getInteger("baseMagicDamage", 10);
-		baseMagicDefence = set.getInteger("baseMagicDefence", 10);
+		basePhysicalDamage = set.getInt("basePhysicalDamage", 10);
+		basePhysicalDefence = set.getInt("basePhysicalDefence", 10);
+		baseMagicDamage = set.getInt("baseMagicDamage", 10);
+		baseMagicDefence = set.getInt("baseMagicDefence", 10);
 		
 		// ATTRIBUTES
-		strength = set.getInteger("strength", 10);
-		dexterity = set.getInteger("dexterity", 10);
-		intelligence = set.getInteger("intelligence", 10);
-		vitality = set.getInteger("vitality", 10);
+		strength = set.getInt("strength", 10);
+		dexterity = set.getInt("dexterity", 10);
+		intelligence = set.getInt("intelligence", 10);
+		vitality = set.getInt("vitality", 10);
 		
 	}
 	

@@ -5,8 +5,8 @@ import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 public class Inventory {
 	private ItemInstance[] items;
 	
-	public Inventory() {
-		items = new ItemInstance[3*4];
+	public Inventory(int width, int height) {
+		items = new ItemInstance[width*height];
 	}
 	
 	/**
@@ -34,14 +34,14 @@ public class Inventory {
 	 * @return true on success
 	 * false when no slots available
 	 */
-	public boolean addItem(ItemInstance item) {
+	public int addItem(ItemInstance item) {
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] == null) {
 				items[i] = item;
-				return true;
+				return i;
 			}
 		}
 		
-		return false;
+		return -1;
 	}
 }

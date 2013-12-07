@@ -25,4 +25,10 @@ public class ItemFactory {
 		
 		return newItem;
 	}
+	
+	public ItemInstance createItemInstance (Item template) {
+		ItemInstance newItem = new ItemInstance(IdFactory.getInstance().getNextId(), template);
+		
+		return newItem;
+	}
 }

@@ -26,14 +26,14 @@ public class ZoneTemplate {
 	 */
 	public void setStatsSet(StatsSet set) {
 		this.set = set;
-		tileWidth = set.getInteger("tileWidth", 16);
-		tileHeight = set.getInteger("tileHeight", 16);
+		tileWidth = set.getInt("tileWidth", 16);
+		tileHeight = set.getInt("tileHeight", 16);
 		
-		regionsCountX = set.getInteger("regionsCountX", 4);
-		regionsCountY = set.getInteger("regionsCountY", 4);
+		regionsCountX = set.getInt("regionsCountX", 4);
+		regionsCountY = set.getInt("regionsCountY", 4);
 		
-		regionWidth = set.getInteger("regionWidth", 20);
-		regionWidth = set.getInteger("regionHeight", 20);
+		regionWidth = set.getInt("regionWidth", 20);
+		regionWidth = set.getInt("regionHeight", 20);
 	}
 
 	public StatsSet getStatsSet() {

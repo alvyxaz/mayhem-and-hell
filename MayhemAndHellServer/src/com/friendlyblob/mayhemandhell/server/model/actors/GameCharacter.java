@@ -331,11 +331,11 @@ public class GameCharacter extends GameObject{
 		return stats.getMaxMana();
 	}
 	
-	private int getMaxEnergy() {
+	public int getMaxEnergy() {
 		return stats.getMaxEnergy();
 	}
 	
-	private int getWalkingSpeed() {
+	public int getWalkingSpeed() {
 		return stats.getWalkingSpeed();
 	}
 	
@@ -819,7 +819,7 @@ public class GameCharacter extends GameObject{
 					Player player = (Player) actor;
 					ItemInstance item = (ItemInstance) argument;
 					
-					if (player.getInventory().addItem(item)) {
+					if (player.getInventory().addItem(item) != -1) {
 						World.getInstance().removeObject(item);
 					}
 

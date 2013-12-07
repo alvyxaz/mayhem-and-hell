@@ -61,8 +61,14 @@ public class PacketHandler {
 			case 0x10:
 				response = new StartCasting();
 				break;
+			case 0x11:
+				response = new ShowShop();
+				break;
 			case 0x12:
 				response = new UpdateCharacterHint();
+				break;
+			case 0x13:
+				response = new UpdateInventorySlot();
 				break;
 				
 			case 0xA0:

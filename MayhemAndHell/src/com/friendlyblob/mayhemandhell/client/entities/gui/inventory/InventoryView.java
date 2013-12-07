@@ -1,12 +1,9 @@
 package com.friendlyblob.mayhemandhell.client.entities.gui.inventory;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
-import com.friendlyblob.mayhemandhell.client.entities.Inventory;
 import com.friendlyblob.mayhemandhell.client.entities.Item;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiWindow;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
@@ -27,7 +24,7 @@ public class InventoryView extends GuiWindow {
 	// Variable to indicate when object is being dragged
 	private boolean dragging;
 	// Dragging threshold measured in pixels
-	private int draggingTreshold = 2;
+	private int draggingThreshold = 2;
 	// Dragging distance deltas
 	private int draggingDx, draggingDy;
 	// Current dragging position
@@ -61,7 +58,7 @@ public class InventoryView extends GuiWindow {
 		visible = false;
 	}
 	
-	public void setDataSource(Inventory inventory) {
+	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
 	}
 	
@@ -73,17 +70,17 @@ public class InventoryView extends GuiWindow {
 			spriteBatch.draw(slotTexture, box.x + slots[i].x, box.y  + slots[i].y);
 		}
 		
-		Item item;
+		SlotObject item;
 		for (int i = 0; i < slots.length; i++) {
-			if (inventory.getItemAt(i)!= null) {
-				item = inventory.getItemAt(i);
+			if (inventory.getItemAt(i) != null) {
+				item = (SlotObject) inventory.getItemAt(i);
 
 				// Check if dragging, then draw at object's current position
 				// else draw at slot's position
 				if (dragging && draggingFrom == i) {
-					spriteBatch.draw(item.getInventoryItem().getTexture(), box.x + item.getInventoryItem().getX(), box.y + item.getInventoryItem().getY());
+					spriteBatch.draw(item.getTexture(), box.x + item.getX(), box.y + item.getY());
 				} else {
-					spriteBatch.draw(item.getInventoryItem().getTexture(), box.x + slots[i].x, box.y + slots[i].y);
+					spriteBatch.draw(item.getTexture(), box.x + slots[i].x, box.y + slots[i].y);
 				}
 			}
 		}
@@ -110,7 +107,7 @@ public class InventoryView extends GuiWindow {
 	@Override
 	public void onContentTouching(float x, float y) {
 		if (dragging) {
-			inventory.getItemAt(this.draggingFrom).getInventoryItem().setPosition(x, y);
+			inventory.getItemAt(this.draggingFrom).setPosition(x, y);
 		} else {
 			for (int i = 0; i < slots.length; i++) {
 				// If the slot which was touched contains an object
@@ -118,7 +115,7 @@ public class InventoryView extends GuiWindow {
 					draggingDx += Input.touch[0].dx;
 					draggingDy += Input.touch[0].dy;
 					
-					if (Math.abs(draggingDx) > draggingTreshold || Math.abs(draggingDy) > draggingTreshold ) {
+					if (Math.abs(draggingDx) > draggingThreshold || Math.abs(draggingDy) > draggingThreshold ) {
 						startDragging(x, y, i);
 					}
 				}
@@ -134,12 +131,12 @@ public class InventoryView extends GuiWindow {
 		draggingAtY = (int)y;
 		this.draggingFrom = draggingFrom;
 		
-		inventory.getItemAt(this.draggingFrom).getInventoryItem().setPosition(x, y);
+		inventory.getItemAt(this.draggingFrom).setPosition(x, y);
 	}
 	
 	public void stopDragging(float x, float y) {
 		dragging = false;
-		inventory.getItemAt(this.draggingFrom).getInventoryItem().setPosition(0, 0);
+		inventory.getItemAt(this.draggingFrom).setPosition(0, 0);
 		
 		for (int i = 0; i < slots.length; i++) {
 			if (inventory.getItemAt(i) == null) {

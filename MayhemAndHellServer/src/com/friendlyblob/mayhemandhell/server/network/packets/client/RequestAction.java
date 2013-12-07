@@ -45,7 +45,7 @@ public class RequestAction extends ClientPacket {
 				player.getAi().startAutoAttack();
 			} else if (actions[actionIndex] == GameAction.TALK) {
 				if (player.getTarget() instanceof NpcInstance) {
-					int dialog = ((NpcInstance) player.getTarget()).getTemplate().set.getInteger("dialog", -1);
+					int dialog = ((NpcInstance) player.getTarget()).getTemplate().set.getInt("dialog", -1);
 					if (dialog != -1) {
 						player.moveCharacterTo(player.getTarget(), 
 								new DestinationReachedTask(player, Intention.INTERACT, player.getTarget(), 

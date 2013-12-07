@@ -36,8 +36,8 @@ public abstract class GuiWindow extends GuiElement {
 	private int titleDy;
 	
 	// Ammount of pixels movement required to initiate dragging
-	private int draggingTreshold = 2; 
-	private boolean calculatingTreshold;
+	private int draggingThreshold = 2; 
+	private boolean calculatingThreshold;
 	
 	public int paddingLeft;
 	public int paddingTop;
@@ -67,7 +67,7 @@ public abstract class GuiWindow extends GuiElement {
 	public final void onRelease(float x, float y) {
 		titleDx = 0;
 		titleDy = 0;
-		calculatingTreshold = false;
+		calculatingThreshold = false;
 		if (xRectangle.contains(box.x + x, box.y + y)) {
 			visible = false;
 		}
@@ -84,16 +84,16 @@ public abstract class GuiWindow extends GuiElement {
 			setY(Input.getY()-draggingAtY);
 		}
 		
-		if (calculatingTreshold) {
+		if (calculatingThreshold) {
 			titleDx += Input.touch[0].dx;
 			titleDx += Input.touch[0].dy;
-			if (Math.abs(titleDx) > draggingTreshold || Math.abs(titleDy) > draggingTreshold ) {
+			if (Math.abs(titleDx) > draggingThreshold || Math.abs(titleDy) > draggingThreshold ) {
 				startDragging((int) x, (int) y);
 			}
 		}
 		
 		if (!dragging && titleBox.contains(box.x + x, box.y+y)) {
-			calculatingTreshold = true;
+			calculatingThreshold = true;
 		}
 		
 		onContentTouching(x, y);
@@ -102,7 +102,7 @@ public abstract class GuiWindow extends GuiElement {
 	public void startDragging(int x, int y) {
 		titleDx = 0;
 		titleDy = 0;
-		calculatingTreshold = false;
+		calculatingThreshold = false;
 		dragging = true;
 		draggingAtX = (int)x;
 		draggingAtY = (int)y;

@@ -207,7 +207,7 @@ textures5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-icons/cooper_ore
+icons/copper_ore
   rotate: false
   xy: 2, 2
   size: 24, 24

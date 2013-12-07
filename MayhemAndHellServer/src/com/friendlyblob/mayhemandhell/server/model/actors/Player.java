@@ -30,8 +30,11 @@ public class Player extends GameCharacter {
 	private boolean online = true;
 	
 	private Inventory inventory;
+	private int money;
 	
 	private Dialog dialog; // The last (current) dialog a player was interacting with
+	
+	private int lastShopId; // last shop the player interacted with
 	
 	private Map<Integer, QuestState> quests = new HashMap<Integer, QuestState>();
 	
@@ -48,6 +51,7 @@ public class Player extends GameCharacter {
 		this.setObjectId((int)(5000 + Math.random()*2000)); // TODO remove
 		this.setName("PC" + this.getObjectId());
 		this.setType(GameObjectType.PLAYER);
+		this.setMoney(100);
 		
 		this.setHealth(template.getBaseMaxHealth());
 		
@@ -55,7 +59,7 @@ public class Player extends GameCharacter {
 		this.alive = true;
 		attachAi();
 		
-		inventory = new Inventory();
+		inventory = new Inventory(3, 4);
 	}
 
 	/**
@@ -189,12 +193,28 @@ public class Player extends GameCharacter {
 		return dialog;
 	}
 	
+	public void setLastShopId(int shopId) {
+		this.lastShopId = shopId;
+	}
+	
+	public int getLastShopId() {
+		return lastShopId;
+	}
+	
 	public boolean isOnline() {
 		return online;
 	}
 	
 	public void setOnline(boolean online) {
 		this.online = online;
+	}
+	
+	public int getMoney() {
+		return money;
+	}
+	
+	public void setMoney(int money) {
+		this.money = money;
 	}
 	
 	@Override

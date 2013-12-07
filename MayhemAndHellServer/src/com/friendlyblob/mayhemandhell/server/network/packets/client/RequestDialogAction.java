@@ -1,17 +1,22 @@
 package com.friendlyblob.mayhemandhell.server.network.packets.client;
 
+import java.util.List;
+
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.actors.instances.NpcInstance;
 import com.friendlyblob.mayhemandhell.server.model.datatables.DialogTable;
+import com.friendlyblob.mayhemandhell.server.model.datatables.ShopTable;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogLink;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogLinkType;
 import com.friendlyblob.mayhemandhell.server.model.dialogs.Dialog.DialogPage;
+import com.friendlyblob.mayhemandhell.server.model.items.Item;
 import com.friendlyblob.mayhemandhell.server.model.quests.Quest;
 import com.friendlyblob.mayhemandhell.server.model.quests.QuestManager;
 import com.friendlyblob.mayhemandhell.server.model.quests.QuestState;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DialogPageInfo;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ShowShop;
 
 public class RequestDialogAction extends ClientPacket {
 
@@ -71,6 +76,15 @@ public class RequestDialogAction extends ClientPacket {
 						}
 						break;
 					case SHOP:
+						int shopId = link.getTarget();
+						List<Item> shopItemList = ShopTable.getInstance().getShop(shopId);
+
+						if (shopItemList != null) {
+							player.setLastShopId(shopId);
+							
+							getClient().sendPacket(new ShowShop(shopItemList));
+						}
+						
 						break;
 					case UNKNOWN:
 						break;

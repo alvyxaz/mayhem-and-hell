@@ -8,19 +8,13 @@ import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 public class Resource extends GameObject {
 
 	private TextureRegion texture;
-	private String name;
 	
 	public Resource(int objectId, String name, String icon) {
 		super(objectId);
 		this.name = name;
-		texture = Assets.getTextureRegion("objects/"+icon);
-		this.hitBox = new Rectangle(0, 0, texture.getRegionWidth(), texture.getRegionHeight());
-	}
 
-	public void setPosition (int x, int y) {
-		position.set(x, y);
-		this.hitBox.x = x;
-		this.hitBox.y = y;
+		this.texture = Assets.getTextureRegion("objects/"+icon);
+		this.hitBox = new Rectangle(0, 0, texture.getRegionWidth(), texture.getRegionHeight());
 	}
 	
 	@Override
