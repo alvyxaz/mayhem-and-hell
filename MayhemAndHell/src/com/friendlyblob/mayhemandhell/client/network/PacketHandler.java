@@ -52,9 +52,6 @@ public class PacketHandler {
 			case 0x0D:
 				response = new DialogPageInfo();
 				break;
-			case 0x0E:
-				response = new ItemPickedUp();
-				break;
 			case 0x0F:
 				response = new EventNotification();
 				break;

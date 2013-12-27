@@ -20,8 +20,8 @@ import com.friendlyblob.mayhemandhell.server.model.resources.Resource;
 import com.friendlyblob.mayhemandhell.server.model.resources.Resource.ResourceSkill;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.ActionFailedMessage;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterStatusUpdate;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DialogPageInfo;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.ItemPickedUp;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.StartCasting;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.UpdateInventorySlot;
 
@@ -48,6 +48,7 @@ public class RequestBuyItem extends ClientPacket {
 				item = shopItemList.get(i);
 				
 				if (item.getItemId() == itemId && item.getStatsSet().getInt("price") < player.getMoney()) {
+					// TODO: deduct the sum from the player's money
 					ItemInstance itemInstance = ItemFactory.getInstance().createItemInstance(item);
 					int slot = player.getInventory().addItem(itemInstance);
 					

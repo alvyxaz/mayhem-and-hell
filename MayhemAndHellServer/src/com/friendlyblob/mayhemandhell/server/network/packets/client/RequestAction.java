@@ -16,7 +16,6 @@ import com.friendlyblob.mayhemandhell.server.model.resources.Resource.ResourceSk
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.ActionFailedMessage;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DialogPageInfo;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.ItemPickedUp;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.StartCasting;
 
 public class RequestAction extends ClientPacket {

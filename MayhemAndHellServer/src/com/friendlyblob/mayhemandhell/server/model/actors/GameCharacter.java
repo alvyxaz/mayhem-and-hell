@@ -34,11 +34,11 @@ import com.friendlyblob.mayhemandhell.server.network.packets.server.CharacterSta
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DeathNotification;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DialogPageInfo;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.EventNotification;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.ItemPickedUp;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyCharacterMovement;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.NotifyMovementStop;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.StartCasting;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.TargetInfoResponse;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.UpdateInventorySlot;
 import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
 /*
@@ -822,8 +822,13 @@ public class GameCharacter extends GameObject{
 					if (player.getInventory().addItem(item) != -1) {
 						World.getInstance().removeObject(item);
 					}
-
-					player.sendPacket(new ItemPickedUp(item));
+					
+					int slot = player.getInventory().addItem(item);
+					
+					if (slot != -1) {
+						player.sendPacket(new UpdateInventorySlot(slot, item.getItemId()));
+					}
+					
 					break;
 			}
 		}
