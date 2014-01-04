@@ -7,6 +7,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Rectangle;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
@@ -15,12 +16,12 @@ import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.Connection;
 import com.friendlyblob.mayhemandhell.client.network.PacketHandler;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientVersion;
+import com.friendlyblob.mayhemandhell.client.screens.BaseScreen;
 import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 import com.friendlyblob.mayhemandhell.client.screens.LoadingScreen;
 import com.friendlyblob.mayhemandhell.client.screens.RegisterScreen;
 import com.friendlyblob.mayhemandhell.client.screens.LoginScreen;
 import com.friendlyblob.mayhemandhell.client.screens.TestScreen;
-import com.friendlyblob.mayhemandhell.client.screens.UITestScreen;
 import com.friendlyblob.mayhemandhell.client.screens.ZoneLoadingScreen;
 
 public class MyGame extends Game implements ApplicationListener {
@@ -143,6 +144,14 @@ public class MyGame extends Game implements ApplicationListener {
 		GUI_WIDTH = SCREEN_WIDTH*2;
 		GUI_HEIGHT = SCREEN_HEIGHT*2;
 	}
+    
+    @Override
+    public void setScreen(Screen screen) {
+    	super.setScreen(screen);
+    	if (screen instanceof BaseScreen) {
+    		((BaseScreen)screen).prepare();
+    	}
+    }
     
     public void resize (int width, int height) {
     	
