@@ -19,17 +19,17 @@ public class GameScreen extends BaseScreen{
 	public GameScreen(MyGame game) {
 		super(game);
 		
-		notifications = new LiveNotifications();
-		eventNotifications = new EventNotifications();
+//		notifications = new LiveNotifications();
+//		eventNotifications = new EventNotifications();
 		
-		GameWorld.initialize();
-		world = GameWorld.getInstance();
-		world.setGame(game);
+//		GameWorld.initialize();
+//		world = GameWorld.getInstance();
+//		world.setGame(game);
 		
 		game.connectToServer();
 		
 		// Temporary GUI implementation 
-		guiManager = new GuiManager();
+//		guiManager = new GuiManager();
 		
 	}
 
@@ -39,37 +39,37 @@ public class GameScreen extends BaseScreen{
 		/*---------------------------------------
 		 * World
 		 */
-		world.draw(spriteBatch);
+//		world.draw(spriteBatch);
+//		
+//		notifications.draw(spriteBatch, deltaTime);
+//		
+//		spriteBatch.end();
+//		/*---------------------------------------
+//		 * GUI Elements
+//		 */
+//		spriteBatch.begin();
+//		spriteBatch.setProjectionMatrix(guiCam.combined);
+//
+//		guiManager.draw(spriteBatch);
 		
-		notifications.draw(spriteBatch, deltaTime);
+		Assets.defaultFont.draw(spriteBatch, "GAME ON", 20, 20);
 		
-		spriteBatch.end();
-		/*---------------------------------------
-		 * GUI Elements
-		 */
-		spriteBatch.begin();
-		spriteBatch.setProjectionMatrix(guiCam.combined);
-
-		guiManager.draw(spriteBatch);
-		
-		Assets.defaultFont.draw(spriteBatch, fpsText, 20, 20);
-		
-		eventNotifications.draw(spriteBatch, deltaTime);
+//		eventNotifications.draw(spriteBatch, deltaTime);
 		
 		spriteBatch.end();
 	}
 	
 	@Override
 	public void update(float deltaTime) {
-		world.update(deltaTime);
-		
-		// If GUI didn't catch touch input
-		if(!guiManager.update(deltaTime)) {
-			// Pass touch event to other entities
-			if (!MapEditor.enabled) {
-				world.updateWorldInput();
-			}
-		}
+//		world.update(deltaTime);
+//		
+//		// If GUI didn't catch touch input
+//		if(!guiManager.update(deltaTime)) {
+//			// Pass touch event to other entities
+//			if (!MapEditor.enabled) {
+//				world.updateWorldInput();
+//			}
+//		}
 	}
 
 	@Override

@@ -67,6 +67,9 @@ public class PacketHandler {
 			case 0x13:
 				response = new UpdateInventorySlot();
 				break;
+			case 0x14:
+				response = new RegistrationSuccessful();
+				break;
 				
 			case 0xA0:
 				response = new ChatMessageNotify();

@@ -5,25 +5,19 @@ import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.NotifyReadyToPlay;
-import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 
-public class LoginSuccessful extends ReceivablePacket{
-
-	int playerId;
-	int x;
-	int y;
+public class RegistrationSuccessful extends ReceivablePacket{
 	
 	@Override
 	public boolean read() {
-		playerId = readD();
-		x = readD();
-		y = readD();
+
 		return true;
 	}
 
 	@Override
 	public void run() {
-		MyGame.getInstance().setScreen(new GameScreen(MyGame.getInstance()));
+		System.out.println("REG SUCCESS! show login screen");
+		MyGame.getInstance().setScreen(MyGame.getInstance().screenLogin);
 	}
 
 }

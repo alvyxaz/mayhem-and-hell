@@ -31,7 +31,7 @@ public class KeyPacket extends ReceivablePacket{
 		connection.getCrypt().setKey(key);
 		connection.getCrypt().enable();
 		
-		connection.sendPacket(new LoginPacket());
+//		connection.sendPacket(new LoginPacket());
 	}
 
 }

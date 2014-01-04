@@ -26,6 +26,8 @@ import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.LoginPacket;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.RegisterPacket;
 
 public class LoginScreen extends BaseScreen{
 	private GameWorld world;
@@ -44,7 +46,7 @@ public class LoginScreen extends BaseScreen{
 //		world = GameWorld.getInstance();
 //		world.setGame(game);
 		
-//		game.connectToServer();
+		game.connectToServer();
 		
 		// Temporary GUI implementation 
 //		guiManager = new GuiManager();
@@ -65,47 +67,36 @@ public class LoginScreen extends BaseScreen{
         stage.addActor(root);
         
         root.debug();
-
-        Table left = new Table();
-        left.debug();
-        root.add(left);
-        
-        Table right = new Table();
-        root.add(right);
         
         // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
-        final Label loginLabel = new Label("Username:", skin);
-        final TextField loginField = new TextField("", skin);
-        final Label passwordLabel = new Label("Password:", skin);
-        final TextField passwordField = new TextField("", skin);
+        final TextField usernameField = new TextField("Username", skin);
+        final TextField passwordField = new TextField("Password", skin);
         // TODO: fix password
         passwordField.setPasswordMode(true);
         final TextButton loginButton = new TextButton("Login", skin);
-        left.add(loginLabel);
-        left.add(loginField);
-        left.row();
-        left.add(passwordLabel);
-        left.add(passwordField);
-        left.row();
-        left.add(loginButton).colspan(2);
+        final TextButton registerLabel = new TextButton("Register", skin);
+        root.add(usernameField).colspan(2);
+        root.row();
+        root.add(passwordField).colspan(2);
+        root.row();
+        root.add(loginButton);
+        root.add(registerLabel);
         
         loginButton.addListener(new ChangeListener() {
         		@Override
                 public void changed (ChangeEvent event, Actor actor) {
                         // Send login request
         			System.out.println("clicked");
+        			MyGame.connection.sendPacket(new LoginPacket(usernameField.getText(), passwordField.getText()));
+
                 }
 
         });
         
-        final Label registerLabel = new Label("Register", skin);
-        right.add(registerLabel);
         
-        registerLabel.addListener(new ClickListener() {
+        registerLabel.addListener(new ChangeListener() {
         	@Override
-        	public void touchUp(InputEvent event, float x, float y, int pointer, int button)
-        	{
-        		super.touchUp(event, x, y, pointer, button);
+            public void changed (ChangeEvent event, Actor actor) {
         		System.out.println("clicked");
         		// show register
         		game.setScreen(game.screenRegister);
@@ -138,10 +129,6 @@ public class LoginScreen extends BaseScreen{
 	public void prepare() {
 		Gdx.input.setInputProcessor(stage);
 		System.out.println("PREPARE LOGIN");
-	}
-	
-	public GameWorld getWorld() {
-		return world;
 	}
 
 }

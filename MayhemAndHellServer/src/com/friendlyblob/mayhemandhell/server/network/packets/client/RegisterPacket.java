@@ -13,52 +13,49 @@ import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.datatables.CharacterTemplateTable;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
+import com.friendlyblob.mayhemandhell.server.network.GameClient.GameClientState;
 import com.friendlyblob.mayhemandhell.server.network.GameClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DeathNotification;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.LoginSuccessful;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.RegistrationSuccessful;
 
-public class LoginPacket extends ClientPacket{
+public class RegisterPacket extends ClientPacket{
 
-	private String login;
+	private String username;
 	private String password;
-	
+	private String passwordRepeated;
+	private int charId;
+
 	@Override
 	protected boolean read() {
-		login = readS();
+		username = readS();
 		password = readS();
+		passwordRepeated = readS();
+		charId = readH();
+		
 		return true;
 	}
 
 	@Override
 	public void run() {
-
+		
 		try {
 			Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ? AND password = SHA1(?)");
+			PreparedStatement ps = con.prepareStatement("INSERT INTO users(username, password) VALUES(?, SHA1(?))");
 
-			ps.setString(1, login);
+			ps.setString(1, username);
 			ps.setString(2, password);
-			ResultSet rset = ps.executeQuery();
+			ps.executeUpdate();
 			
-			while (rset.next()) {
-				if (rset.getInt(1) > 0) {
-					getClient().setState(GameClient.GameClientState.AUTHORIZED);
-					// TODO fetch player data from database and attach Player object to connection.
-					// TODO Remove random generated ID at player
-					Player player = new Player(666, CharacterTemplateTable.getInstance().getTemplate("player"));
-					getClient().setPlayer(player);
-					player.setClient(getClient());
-					
-					getClient().sendPacket(
-							new LoginSuccessful(
-									player.getObjectId(),
-									(int) player.getPosition().getX(),
-									(int) player.getPosition().getY()));
-					
-					break;
-				}
-			}
+			// TODO fetch player data from database and attach Player object to connection.
+			// TODO Remove random generated ID at player
+//			Player player = new Player(666, CharacterTemplateTable.getInstance().getTemplate("player"));
+//			getClient().setPlayer(player);
+//			player.setClient(getClient());
+			
+			getClient().sendPacket(new RegistrationSuccessful());
+				
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

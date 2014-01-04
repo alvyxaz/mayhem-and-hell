@@ -19,7 +19,7 @@ import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientVersio
 import com.friendlyblob.mayhemandhell.client.screens.BaseScreen;
 import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 import com.friendlyblob.mayhemandhell.client.screens.LoadingScreen;
-import com.friendlyblob.mayhemandhell.client.screens.RegisterScreen;
+import com.friendlyblob.mayhemandhell.client.screens.RegistrationScreen;
 import com.friendlyblob.mayhemandhell.client.screens.LoginScreen;
 import com.friendlyblob.mayhemandhell.client.screens.TestScreen;
 import com.friendlyblob.mayhemandhell.client.screens.ZoneLoadingScreen;
@@ -44,9 +44,12 @@ public class MyGame extends Game implements ApplicationListener {
 	
 	public ActionResolver actionResolver;
 	
+	// MyGame instance
+	private static MyGame _instance;
+	
 	// Screens
 	public LoadingScreen screenLoading;
-	public RegisterScreen screenRegister;
+	public RegistrationScreen screenRegister;
 	public LoginScreen screenLogin;
 	public GameScreen screenGame;
 	
@@ -58,6 +61,8 @@ public class MyGame extends Game implements ApplicationListener {
 		this.google = google;
 		this.actionResolver = actionResolver; 
 		random = new Random();
+		
+		this._instance = this;
 	}
 	
     public void create () {
@@ -92,16 +97,18 @@ public class MyGame extends Game implements ApplicationListener {
      * with loading main resources
      */
     public void prepareScreens() {
-    	screenRegister = new RegisterScreen(this);
+    	screenRegister = new RegistrationScreen(this);
     	screenLogin = new LoginScreen(this);
     }
 
     public void connectToServer() {
     	try {
-			MyGame.connection = new Connection(new PacketHandler(), host, 7777);
-			MyGame.connection.game = this;
-			MyGame.connection.start();
-			MyGame.connection.sendPacket(new ClientVersion(5));
+    		if (MyGame.connection == null) {
+    			MyGame.connection = new Connection(new PacketHandler(), host, 7777);
+    			MyGame.connection.game = this;
+    			MyGame.connection.start();
+    			MyGame.connection.sendPacket(new ClientVersion(5));
+    		}
 		} catch (Exception e){
 			System.out.println();
 		}
@@ -166,5 +173,9 @@ public class MyGame extends Game implements ApplicationListener {
 
     public void dispose () {
     	Assets.manager.clear();
+    }
+    
+    public static MyGame getInstance() {
+    	return _instance;
     }
 }
