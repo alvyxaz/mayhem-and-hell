@@ -17,7 +17,10 @@ import com.friendlyblob.mayhemandhell.client.network.PacketHandler;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientVersion;
 import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 import com.friendlyblob.mayhemandhell.client.screens.LoadingScreen;
+import com.friendlyblob.mayhemandhell.client.screens.RegisterScreen;
+import com.friendlyblob.mayhemandhell.client.screens.LoginScreen;
 import com.friendlyblob.mayhemandhell.client.screens.TestScreen;
+import com.friendlyblob.mayhemandhell.client.screens.UITestScreen;
 import com.friendlyblob.mayhemandhell.client.screens.ZoneLoadingScreen;
 
 public class MyGame extends Game implements ApplicationListener {
@@ -42,7 +45,8 @@ public class MyGame extends Game implements ApplicationListener {
 	
 	// Screens
 	public LoadingScreen screenLoading;
-	public ZoneLoadingScreen screenZoneLoading;
+	public RegisterScreen screenRegister;
+	public LoginScreen screenLogin;
 	public GameScreen screenGame;
 	
 	public static Connection connection;
@@ -87,8 +91,8 @@ public class MyGame extends Game implements ApplicationListener {
      * with loading main resources
      */
     public void prepareScreens() {
-    	screenZoneLoading = new ZoneLoadingScreen(this, "mainIsland");
-    	screenGame = new GameScreen(this);
+    	screenRegister = new RegisterScreen(this);
+    	screenLogin = new LoginScreen(this);
     }
 
     public void connectToServer() {

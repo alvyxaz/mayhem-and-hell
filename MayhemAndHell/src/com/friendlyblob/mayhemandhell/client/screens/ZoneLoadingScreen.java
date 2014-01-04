@@ -40,18 +40,18 @@ public class ZoneLoadingScreen extends BaseScreen{
 
 	@Override
 	public void draw(float deltaTime) {
-		if(Assets.manager.update()){
-			// Create a new game screen if necessary
-			if(game.screenGame == null)
-				game.screenGame = new GameScreen(game);
-			
-			loadedMapData.initializeTextureRegions();
-			
-			game.setScreen(game.screenGame);
-		}
-		
-		// Between 0 and 1
-		float progress = Assets.manager.getProgress();
+//		if(Assets.manager.update()){
+//			// Create a new game screen if necessary
+//			if(game.screenGame == null)
+//				game.screenGame = new GameScreen(game);
+//			
+//			loadedMapData.initializeTextureRegions();
+//			
+//			game.setScreen(game.screenGame);
+//		}
+//		
+//		// Between 0 and 1
+//		float progress = Assets.manager.getProgress();
 	}
 
 	/**
