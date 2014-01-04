@@ -56,7 +56,7 @@ public class RegistrationScreen extends BaseScreen{
 	private void initGuiElements() {
 
         batch = new SpriteBatch();
-        stage = new Stage();
+        stage = new Stage(MyGame.SCREEN_WIDTH, MyGame.SCREEN_HEIGHT);
 
         // A skin can be loaded via JSON or defined programmatically, either is fine. Using a skin is optional but strongly
         // recommended solely for the convenience of getting a texture, region, etc as a drawable, tinted drawable, etc.
@@ -170,7 +170,6 @@ public class RegistrationScreen extends BaseScreen{
 	@Override
 	public void prepare() {
 		Gdx.input.setInputProcessor(stage);
-		System.out.println("PREPARE");
 	}
 	
 	public GameWorld getWorld() {
