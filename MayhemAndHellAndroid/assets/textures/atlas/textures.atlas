@@ -15,6 +15,46 @@ textures2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+gui/arrow_left
+  rotate: false
+  xy: 2, 2
+  size: 15, 16
+  orig: 15, 16
+  offset: 0, 0
+  index: -1
+gui/arrow_right
+  rotate: false
+  xy: 79, 41
+  size: 15, 16
+  orig: 15, 16
+  offset: 0, 0
+  index: -1
+gui/bg
+  rotate: false
+  xy: 2, 59
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+gui/bg_pattern
+  rotate: false
+  xy: 260, 285
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+gui/logo
+  rotate: false
+  xy: 2, 20
+  size: 75, 37
+  orig: 75, 37
+  offset: 0, 0
+  index: -1
+
+textures3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 gui/ingame/casting_bg
   rotate: false
   xy: 2, 14
@@ -137,7 +177,7 @@ gui/ingame/x
   offset: 0, 0
   index: -1
 
-textures3.png
+textures4.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -170,7 +210,7 @@ gui/MapEditor/save
   offset: 0, 0
   index: -1
 
-textures4.png
+textures5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -203,7 +243,7 @@ gui/ObjectEditor/save
   offset: 0, 0
   index: -1
 
-textures5.png
+textures6.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -222,7 +262,7 @@ icons/sword
   offset: 0, 0
   index: -1
 
-textures6.png
+textures7.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -234,7 +274,7 @@ objects/copper_vein
   offset: 0, 0
   index: -1
 
-textures7.png
+textures8.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none

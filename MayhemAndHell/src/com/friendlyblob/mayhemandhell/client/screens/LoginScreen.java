@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -24,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager;
+import com.friendlyblob.mayhemandhell.client.entities.gui.MenuBackground;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.LoginPacket;
@@ -37,6 +40,8 @@ public class LoginScreen extends BaseScreen{
     private Stage stage;
     private SpriteBatch batch;
 	
+    private MenuBackground background;
+    
 	public LoginScreen(MyGame game) {
 		super(game);
 		
@@ -54,12 +59,14 @@ public class LoginScreen extends BaseScreen{
 
 	private void initGuiElements() {
 
+		background = new MenuBackground();
+		
         batch = new SpriteBatch();
         stage = new Stage(MyGame.SCREEN_WIDTH, MyGame.SCREEN_HEIGHT);
-
+        
         // A skin can be loaded via JSON or defined programmatically, either is fine. Using a skin is optional but strongly
         // recommended solely for the convenience of getting a texture, region, etc as a drawable, tinted drawable, etc.
-        skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("data/ui2/uiskin.json"));
 
         // Create a table that fills the screen. Everything else will go inside this table.
         Table root = new Table();
@@ -69,18 +76,31 @@ public class LoginScreen extends BaseScreen{
         root.debug();
         
         // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
-        final TextField usernameField = new TextField("Username", skin);
-        final TextField passwordField = new TextField("Password", skin);
-        // TODO: fix password
+        final TextField usernameField = new TextField("", skin);
+        usernameField.setMessageText("Username");
+        
+        final TextField passwordField = new TextField("", skin);
+        passwordField.setMessageText("Password");
+        passwordField.setPasswordCharacter('*');
         passwordField.setPasswordMode(true);
-        final TextButton loginButton = new TextButton("Login", skin);
-        final TextButton registerLabel = new TextButton("Register", skin);
-        root.add(usernameField).colspan(2);
+        
+        TextButtonStyle greenStyle = skin.get("green", TextButtonStyle.class);
+        TextButtonStyle redStyle = skin.get("red", TextButtonStyle.class);
+        
+        final TextButton loginButton = new TextButton("Hop in!", greenStyle);
+        final TextButton registerLabel = new TextButton("Register", redStyle);
+        
+        Image image = new Image(Assets.getTextureRegion("gui/logo"));
+        root.add(image).padBottom(10).colspan(2);
         root.row();
-        root.add(passwordField).colspan(2);
+        root.add(usernameField).colspan(2).padBottom(10).height(25);
         root.row();
-        root.add(loginButton);
-        root.add(registerLabel);
+        root.add(passwordField).colspan(2).padBottom(18).height(25);
+        root.row();
+        root.add(loginButton).colspan(1).width(60).height(25);
+        root.add(registerLabel).colspan(1).width(60).height(25);
+        
+        usernameField.setHeight(30);
         
         loginButton.addListener(new ChangeListener() {
         		@Override
@@ -88,7 +108,6 @@ public class LoginScreen extends BaseScreen{
                         // Send login request
         			System.out.println("clicked");
         			MyGame.connection.sendPacket(new LoginPacket(usernameField.getText(), passwordField.getText()));
-
                 }
 
         });
@@ -108,11 +127,16 @@ public class LoginScreen extends BaseScreen{
 
 	@Override
 	public void draw(float deltaTime) {
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        // Drawing a background
+        spriteBatch.begin();
+        background.draw(spriteBatch, deltaTime);
+        spriteBatch.end();
+        
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        Table.drawDebug(stage);
+//        Table.drawDebug(stage);
 	}
 	
 	@Override

@@ -1,0 +1,26 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: { default-font: { file: arial_normal.fnt } },
+com.badlogic.gdx.graphics.Color: {
+	inputColor: { a: 1, r: 1, g: 0.83, b: 0.41 },
+	inputMessageColor: { a: 1, r: 0.5, g: 0.41, b: 0.16 },
+	green: { a: 1, b: 0, g: 1, r: 0 },
+	white: { a: 1, b: 1, g: 1, r: 1 },
+	red: { a: 1, b: 0, g: 0, r: 1 },
+	black: { a: 1, b: 0, g: 0, r: 0 }
+},
+
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: { down: button_green, up: button_green, font: default-font, fontColor: white },
+	green: { down: button_green, up: button_green, font: default-font, fontColor: white },
+	red: { down: button_red, up: button_red, font: default-font, fontColor: white },
+},
+
+com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+	default: { selection: selection, background: input, font: default-font, fontColor: inputColor, messageFontColor: inputMessageColor, cursor: cursor }
+},
+
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: { font: default-font, fontColor: white }
+},
+
+}
