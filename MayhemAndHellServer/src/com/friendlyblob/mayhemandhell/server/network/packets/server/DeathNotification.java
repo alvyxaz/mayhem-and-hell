@@ -12,7 +12,7 @@ public class DeathNotification extends ServerPacket {
 	
 	/**
 	 * Whether or not resurrection window should be hidden from client 
-	 * (happens when player ir resurrected)
+	 * (happens when player is resurrected)
 	 * @param hideWindow
 	 */
 	public DeathNotification(boolean hideWindow) {

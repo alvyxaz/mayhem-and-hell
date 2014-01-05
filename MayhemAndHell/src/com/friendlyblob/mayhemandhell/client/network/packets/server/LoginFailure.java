@@ -5,25 +5,21 @@ import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.NotifyReadyToPlay;
-import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 
-public class LoginSuccessful extends ReceivablePacket{
-
-	int playerId;
-	int x;
-	int y;
+public class LoginFailure extends ReceivablePacket{
+	
+	private String message;
 	
 	@Override
 	public boolean read() {
-		playerId = readD();
-		x = readD();
-		y = readD();
+		this.message = readS();
+		
 		return true;
 	}
 
 	@Override
 	public void run() {
-		MyGame.getInstance().setScreen(MyGame.getInstance().screenGame);
+		MyGame.getInstance().screenLogin.showErrorMessage(message);
 	}
 
 }

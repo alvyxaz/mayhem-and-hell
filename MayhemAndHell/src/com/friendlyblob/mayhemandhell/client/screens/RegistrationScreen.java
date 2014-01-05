@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.esotericsoftware.tablelayout.Cell;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.entities.gui.MenuBackground;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
@@ -39,7 +40,8 @@ public class RegistrationScreen extends BaseScreen{
     private SpriteBatch batch;
     
     // UI elements
-    Image character;
+    private Image character;
+    private Cell notificationLabelCell;
     
     private int charId;
 	TextureRegion [] textures;
@@ -55,7 +57,7 @@ public class RegistrationScreen extends BaseScreen{
 //		world = GameWorld.getInstance();
 //		world.setGame(game);
 		
-		game.connectToServer();
+//		game.connectToServer();
 		
 		// Temporary GUI implementation 
 //		guiManager = new GuiManager();
@@ -140,17 +142,18 @@ public class RegistrationScreen extends BaseScreen{
         charSelectionTable.add(nextButton).size(30);
 
         // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
-        // TODO: modify fields to support placeholders
         final TextField usernameField = new TextField("", skin);
         usernameField.setMessageText("Username");
         
         final TextField passwordField = new TextField("", skin);
         passwordField.setMessageText("Password");
+        passwordField.setPasswordCharacter('*');
+        passwordField.setPasswordMode(true);
         
         final TextField passwordRepeatedField = new TextField("", skin);
         passwordRepeatedField.setMessageText("Repeat password");
-        
-        passwordField.setPasswordMode(true);
+        passwordRepeatedField.setPasswordCharacter('*');
+        passwordRepeatedField.setPasswordMode(true);
         
         TextButtonStyle redStyle = skin.get("red", TextButtonStyle.class);
         final TextButton registerButton = new TextButton("Complete registration", skin);
@@ -167,6 +170,8 @@ public class RegistrationScreen extends BaseScreen{
         fieldTable.add(passwordField).padBottom(10).height(25);
         fieldTable.row();
         fieldTable.add(passwordRepeatedField).padBottom(10).height(25);
+        root.row();
+        notificationLabelCell = root.add().colspan(2).padBottom(5);
         
         root.row();
         root.add(new Label("By registering, you agree that you understand that this \n" +
@@ -179,19 +184,28 @@ public class RegistrationScreen extends BaseScreen{
         registerButton.addListener(new ChangeListener() {
         		@Override
                 public void changed (ChangeEvent event, Actor actor) {
-                        // validate inputs
-        				// send
+        			hideNoticeMessage();
+        			System.out.println("click");
         			MyGame.connection.sendPacket(new RegisterPacket(usernameField.getText(), passwordField.getText(), passwordRepeatedField.getText(), charId));
-
                 }
 
         });
 
 	}
 
+	public void showNoticeMessage(String message) {
+		// TODO: reuse label?
+		notificationLabelCell.setWidget(new Label(message, skin));
+	}
+	
+	public void hideNoticeMessage() {
+		if (notificationLabelCell.getWidget() != null) {
+			notificationLabelCell.setWidget(null);
+		}
+	}
+	
 	@Override
 	public void draw(float deltaTime) {
-
 		// Drawing a background
         spriteBatch.begin();
         background.draw(spriteBatch, deltaTime);
@@ -210,10 +224,6 @@ public class RegistrationScreen extends BaseScreen{
 	@Override
 	public void prepare() {
 		Gdx.input.setInputProcessor(stage);
-	}
-	
-	public GameWorld getWorld() {
-		return world;
 	}
 
 }

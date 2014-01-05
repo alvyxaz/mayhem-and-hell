@@ -54,7 +54,7 @@ public class GamePacketHandler implements IPacketHandler<GameClient>,
 						response = new LoginPacket();
 						break;
 					case 0x03:
-						response = new RegisterPacket();
+						response = new RegistrationPacket();
 						break;
 				}
 				break;

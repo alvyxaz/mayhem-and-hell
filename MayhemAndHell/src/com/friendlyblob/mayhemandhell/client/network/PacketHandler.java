@@ -70,6 +70,12 @@ public class PacketHandler {
 			case 0x14:
 				response = new RegistrationSuccessful();
 				break;
+			case 0x15:
+				response = new RegistrationFailure();
+				break;
+			case 0x16:
+				response = new LoginFailure();
+				break;
 				
 			case 0xA0:
 				response = new ChatMessageNotify();

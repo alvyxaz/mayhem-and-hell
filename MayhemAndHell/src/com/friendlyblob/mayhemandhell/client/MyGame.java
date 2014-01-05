@@ -45,7 +45,7 @@ public class MyGame extends Game implements ApplicationListener {
 	public ActionResolver actionResolver;
 	
 	// MyGame instance
-	private static MyGame _instance;
+	private static MyGame instance;
 	
 	// Screens
 	public LoadingScreen screenLoading;
@@ -62,7 +62,7 @@ public class MyGame extends Game implements ApplicationListener {
 		this.actionResolver = actionResolver; 
 		random = new Random();
 		
-		this._instance = this;
+		this.instance = this;
 	}
 	
     public void create () {
@@ -85,6 +85,8 @@ public class MyGame extends Game implements ApplicationListener {
 			host = "158.129.18.169";
 		}
 		
+		connectToServer();
+		
 		// Initializing screens;
 		screenLoading = new LoadingScreen(this);
 		
@@ -99,16 +101,15 @@ public class MyGame extends Game implements ApplicationListener {
     public void prepareScreens() {
     	screenRegister = new RegistrationScreen(this);
     	screenLogin = new LoginScreen(this);
+    	screenGame = new GameScreen(this);
     }
 
     public void connectToServer() {
     	try {
-    		if (MyGame.connection == null) {
-    			MyGame.connection = new Connection(new PacketHandler(), host, 7777);
-    			MyGame.connection.game = this;
-    			MyGame.connection.start();
-    			MyGame.connection.sendPacket(new ClientVersion(5));
-    		}
+			MyGame.connection = new Connection(new PacketHandler(), host, 7777);
+			MyGame.connection.game = this;
+			MyGame.connection.start();
+			MyGame.connection.sendPacket(new ClientVersion(5));
 		} catch (Exception e){
 			System.out.println();
 		}
@@ -176,6 +177,6 @@ public class MyGame extends Game implements ApplicationListener {
     }
     
     public static MyGame getInstance() {
-    	return _instance;
+    	return instance;
     }
 }

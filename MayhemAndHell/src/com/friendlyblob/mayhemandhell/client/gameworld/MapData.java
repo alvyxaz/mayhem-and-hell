@@ -259,7 +259,12 @@ public class MapData {
 				String [] strTiles = lines[i].split(",");
 				
 				for (int x = 0; x < strTiles.length; x++) {
-					this.tiles[this.tiles.length-1-i][x] = Integer.parseInt(strTiles[x])-1;
+					try {
+						this.tiles[this.tiles.length-1-i][x] = Integer.parseInt(strTiles[x])-1;
+
+					} catch (Exception e) {
+						
+					}
 				}
 			}
 		}

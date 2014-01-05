@@ -21,14 +21,14 @@ public class GameScreen extends BaseScreen{
 		
 //		notifications = new LiveNotifications();
 //		eventNotifications = new EventNotifications();
-		
+//		
 //		GameWorld.initialize();
 //		world = GameWorld.getInstance();
 //		world.setGame(game);
-		
-		game.connectToServer();
-		
-		// Temporary GUI implementation 
+//		
+//		game.connectToServer();
+//		
+//		// Temporary GUI implementation 
 //		guiManager = new GuiManager();
 		
 	}
@@ -37,8 +37,8 @@ public class GameScreen extends BaseScreen{
 	public void draw(float deltaTime) {
 		spriteBatch.begin();
 		/*---------------------------------------
-		 * World
-		 */
+//		 * World
+//		 */
 //		world.draw(spriteBatch);
 //		
 //		notifications.draw(spriteBatch, deltaTime);

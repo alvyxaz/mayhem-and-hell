@@ -22,7 +22,7 @@ public class LoadingScreen extends BaseScreen{
 		if(Assets.manager.update()){
 			game.prepareScreens();
 
-			game.setScreen(game.screenRegister);
+			game.setScreen(game.screenLogin);
 		}
 		
 		// Between 0 and 1

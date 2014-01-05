@@ -20,44 +20,46 @@ import com.friendlyblob.mayhemandhell.server.network.packets.server.LoginSuccess
 
 public class LoginPacket extends ClientPacket{
 
-	private String login;
+	private String username;
 	private String password;
 	
 	@Override
 	protected boolean read() {
-		login = readS();
+		username = readS();
 		password = readS();
+		
 		return true;
 	}
 
 	@Override
 	public void run() {
 
+		// TODO: wont run on 3rd packet, wtf?
 		try {
 			Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ? AND password = SHA1(?)");
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = SHA1(?)");
 
-			ps.setString(1, login);
+			ps.setString(1, username);
 			ps.setString(2, password);
 			ResultSet rset = ps.executeQuery();
-			
-			while (rset.next()) {
-				if (rset.getInt(1) > 0) {
-					getClient().setState(GameClient.GameClientState.AUTHORIZED);
-					// TODO fetch player data from database and attach Player object to connection.
-					// TODO Remove random generated ID at player
-					Player player = new Player(666, CharacterTemplateTable.getInstance().getTemplate("player"));
-					getClient().setPlayer(player);
-					player.setClient(getClient());
-					
-					getClient().sendPacket(
-							new LoginSuccessful(
-									player.getObjectId(),
-									(int) player.getPosition().getX(),
-									(int) player.getPosition().getY()));
-					
-					break;
-				}
+
+			if (rset.next()) {
+				getClient().setState(GameClient.GameClientState.AUTHORIZED);
+//				 TODO fetch player data from database and attach Player object to connection.
+//				 TODO Remove random generated ID at player
+				Player player = new Player(666, CharacterTemplateTable.getInstance().getTemplate("player"));
+				getClient().setPlayer(player);
+				player.setClient(getClient());
+				
+				getClient().sendPacket(
+						new LoginSuccessful(
+								player.getObjectId(),
+								(int) player.getPosition().getX(),
+								(int) player.getPosition().getY()));
+				
+			} else {
+				// not valid credentials/user doesn't exist
+				getClient().sendPacket(new LoginFailure("Please check your username and/or password"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

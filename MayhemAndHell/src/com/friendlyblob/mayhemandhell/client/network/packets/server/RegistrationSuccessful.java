@@ -16,7 +16,6 @@ public class RegistrationSuccessful extends ReceivablePacket{
 
 	@Override
 	public void run() {
-		System.out.println("REG SUCCESS! show login screen");
 		MyGame.getInstance().setScreen(MyGame.getInstance().screenLogin);
 	}
 

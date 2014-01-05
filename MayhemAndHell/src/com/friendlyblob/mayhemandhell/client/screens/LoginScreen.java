@@ -24,11 +24,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.esotericsoftware.tablelayout.Cell;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager;
 import com.friendlyblob.mayhemandhell.client.entities.gui.MenuBackground;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientVersion;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.LoginPacket;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RegisterPacket;
 
@@ -42,6 +44,12 @@ public class LoginScreen extends BaseScreen{
 	
     private MenuBackground background;
     
+    // gui elements
+    private Label errorLabel;
+    
+    private Table root;
+    private Cell errorLabelCell;
+    
 	public LoginScreen(MyGame game) {
 		super(game);
 		
@@ -51,7 +59,7 @@ public class LoginScreen extends BaseScreen{
 //		world = GameWorld.getInstance();
 //		world.setGame(game);
 		
-		game.connectToServer();
+//		game.connectToServer();
 		
 		// Temporary GUI implementation 
 //		guiManager = new GuiManager();
@@ -69,16 +77,18 @@ public class LoginScreen extends BaseScreen{
         skin = new Skin(Gdx.files.internal("data/ui2/uiskin.json"));
 
         // Create a table that fills the screen. Everything else will go inside this table.
-        Table root = new Table();
+        root = new Table();
         root.setFillParent(true);
         stage.addActor(root);
         
         root.debug();
         
+        // add logo
+        
         // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
         final TextField usernameField = new TextField("", skin);
         usernameField.setMessageText("Username");
-        
+
         final TextField passwordField = new TextField("", skin);
         passwordField.setMessageText("Password");
         passwordField.setPasswordCharacter('*');
@@ -88,41 +98,55 @@ public class LoginScreen extends BaseScreen{
         TextButtonStyle redStyle = skin.get("red", TextButtonStyle.class);
         
         final TextButton loginButton = new TextButton("Hop in!", greenStyle);
-        final TextButton registerLabel = new TextButton("Register", redStyle);
+        final TextButton registerButton = new TextButton("Register", redStyle);
+        
+        errorLabel = new Label("Wrong username and/or password", skin);
         
         Image image = new Image(Assets.getTextureRegion("gui/logo"));
         root.add(image).padBottom(10).colspan(2);
         root.row();
         root.add(usernameField).colspan(2).padBottom(10).height(25);
         root.row();
-        root.add(passwordField).colspan(2).padBottom(18).height(25);
+        root.add(passwordField).colspan(2).padBottom(10).height(25);
         root.row();
-        root.add(loginButton).colspan(1).width(60).height(25);
-        root.add(registerLabel).colspan(1).width(60).height(25);
+        errorLabelCell = root.add().colspan(2).padBottom(5);
+        root.row();
+        root.add(loginButton).width(60).height(25);
+        root.add(registerButton).width(60).height(25);
         
         usernameField.setHeight(30);
         
         loginButton.addListener(new ChangeListener() {
         		@Override
                 public void changed (ChangeEvent event, Actor actor) {
-                        // Send login request
-        			System.out.println("clicked");
+        			hideErrorMessage();
+
         			MyGame.connection.sendPacket(new LoginPacket(usernameField.getText(), passwordField.getText()));
-                }
+//        			MyGame.connection.sendPacket(new ClientVersion(5));
+        		}
 
         });
         
         
-        registerLabel.addListener(new ChangeListener() {
+        registerButton.addListener(new ChangeListener() {
         	@Override
             public void changed (ChangeEvent event, Actor actor) {
-        		System.out.println("clicked");
-        		// show register
         		game.setScreen(game.screenRegister);
         	}
 
         });
 
+	}
+	
+	public void showErrorMessage(String message) {
+		// TODO: reuse label?
+		errorLabelCell.setWidget(new Label(message, skin));
+	}
+	
+	public void hideErrorMessage() {
+		if (errorLabelCell.getWidget() != null) {
+			errorLabelCell.setWidget(null);
+		}
 	}
 
 	@Override
@@ -136,7 +160,6 @@ public class LoginScreen extends BaseScreen{
         
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-//        Table.drawDebug(stage);
 	}
 	
 	@Override
