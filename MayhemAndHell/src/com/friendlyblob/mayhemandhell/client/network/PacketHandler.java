@@ -78,7 +78,7 @@ public class PacketHandler {
 				break;
 				
 			case 0xA0:
-				response = new ChatMessageNotify();
+				response = new ChatMessageNotification();
 				break;
 			case 0xFF:
 				response = new ActionFailedMessage();

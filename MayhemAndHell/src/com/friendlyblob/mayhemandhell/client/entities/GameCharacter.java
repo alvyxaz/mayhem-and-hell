@@ -12,6 +12,7 @@ import com.friendlyblob.mayhemandhell.client.animations.Animation.AnimationData;
 import com.friendlyblob.mayhemandhell.client.animations.AnimationParser;
 import com.friendlyblob.mayhemandhell.client.animations.CharacterAnimation;
 import com.friendlyblob.mayhemandhell.client.animations.CharacterAnimation.CharacterAnimationType;
+import com.friendlyblob.mayhemandhell.client.entities.gui.ChatBubbleNotifications;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
@@ -45,6 +46,8 @@ public class GameCharacter extends GameObject {
 	private TextureRegion hint;
 	private int hintXOffset;
 	private int hintYOffset;
+
+	public ChatBubbleNotifications chatBubbleNotifications;
 	
 	public GameCharacter(int id, int x, int y, int animationId){
 		super(id);
@@ -55,6 +58,8 @@ public class GameCharacter extends GameObject {
 		
 		prepareAnimations(animationId);
 		twoDirectionalAnimations = animationHandler.isTwoDirectional();
+		
+		chatBubbleNotifications = new ChatBubbleNotifications(this);
 	}
 	
 	public void prepareAnimations(int animationId) {
@@ -128,6 +133,8 @@ public class GameCharacter extends GameObject {
 			animationCycle = 0;
 		}
 		currentFrame = (int)(( animationCycle /timePerFrame)) % frameCount;
+		
+		chatBubbleNotifications.update(deltaTime);
 	}
 	
 	public void onArrived() {
@@ -172,6 +179,8 @@ public class GameCharacter extends GameObject {
 		if (hint != null) {
 			spriteBatch.draw(hint, hitBox.x + hintXOffset, hitBox.y + hintYOffset);
 		}
+		
+		chatBubbleNotifications.draw(spriteBatch);
 	}
 	
 	/**

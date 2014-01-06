@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
-import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientChatMessage;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.ChatMessagePacket;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestBuyItem;
 
 public class ShopListItem extends Rectangle {

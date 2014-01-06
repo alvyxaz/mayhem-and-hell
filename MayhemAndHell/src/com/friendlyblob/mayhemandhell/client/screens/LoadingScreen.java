@@ -21,8 +21,12 @@ public class LoadingScreen extends BaseScreen{
 	public void draw(float deltaTime) {
 		if(Assets.manager.update()){
 			game.prepareScreens();
-
-			game.setScreen(game.screenLogin);
+            // TODO get a response from server, find out which zone a player is in,
+            // and load a map of that zone.
+            int zoneId = 1;
+            game.screenZoneLoading.loadZone(zoneId);        // Initialize zone loading
+//			game.setScreen(game.screenLogin);
+			game.setScreen(game.screenZoneLoading);
 		}
 		
 		// Between 0 and 1

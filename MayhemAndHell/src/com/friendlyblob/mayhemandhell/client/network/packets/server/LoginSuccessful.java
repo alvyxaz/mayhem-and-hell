@@ -23,6 +23,11 @@ public class LoginSuccessful extends ReceivablePacket{
 
 	@Override
 	public void run() {
+		Player player = new Player(playerId, x, y);
+		
+		GameWorld.getInstance().player = player;
+		GameWorld.getInstance().putCharacter(player);
+		
 		MyGame.getInstance().setScreen(MyGame.getInstance().screenGame);
 	}
 

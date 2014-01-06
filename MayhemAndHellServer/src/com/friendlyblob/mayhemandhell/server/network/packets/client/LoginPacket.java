@@ -14,8 +14,10 @@ import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.datatables.CharacterTemplateTable;
 import com.friendlyblob.mayhemandhell.server.network.GameClient;
 import com.friendlyblob.mayhemandhell.server.network.GameClientPacket;
+import com.friendlyblob.mayhemandhell.server.network.GameClient.GameClientState;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.DeathNotification;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.LoginFailure;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.LoginSuccessful;
 
 public class LoginPacket extends ClientPacket{
@@ -34,7 +36,6 @@ public class LoginPacket extends ClientPacket{
 	@Override
 	public void run() {
 
-		// TODO: wont run on 3rd packet, wtf?
 		try {
 			Connection con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = SHA1(?)");
@@ -51,11 +52,18 @@ public class LoginPacket extends ClientPacket{
 				getClient().setPlayer(player);
 				player.setClient(getClient());
 				
+
+				
 				getClient().sendPacket(
 						new LoginSuccessful(
 								player.getObjectId(),
 								(int) player.getPosition().getX(),
 								(int) player.getPosition().getY()));
+				
+
+				
+				getClient().setState(GameClientState.IN_GAME);
+				World.getInstance().addPlayer(getClient().getPlayer());
 				
 			} else {
 				// not valid credentials/user doesn't exist

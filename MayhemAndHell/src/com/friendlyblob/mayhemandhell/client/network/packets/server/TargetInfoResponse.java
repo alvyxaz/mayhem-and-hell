@@ -42,7 +42,7 @@ public class TargetInfoResponse extends ReceivablePacket {
 	@Override
 	public void run() {
 		GameWorld.getInstance().getPlayer().targetId = info.objectId;
-		GameWorld.getInstance().game.screenGame.guiManager.targetBar.showTarget(info, actions);
+//		GameWorld.getInstance().game.screenGame.guiManager.targetBar.showTarget(info, actions);
 		
 		GameObject object = null;
 		

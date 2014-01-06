@@ -26,14 +26,14 @@ public class CharacterStatusUpdate extends ReceivablePacket {
 			return;
 		}
 		
-		TargetInfo info = GameWorld.getInstance().game.screenGame.guiManager.targetBar.getTargetInfo();
-	
-		if (info != null) {
-			info.currentHealth = currentHealth;
-			info.maxHealth = maxHealth;
-			GameWorld.getInstance().game.screenGame.
-					guiManager.targetBar.updateHealthPercentage();
-		}
+//		TargetInfo info = GameWorld.getInstance().game.screenGame.guiManager.targetBar.getTargetInfo();
+//	
+//		if (info != null) {
+//			info.currentHealth = currentHealth;
+//			info.maxHealth = maxHealth;
+//			GameWorld.getInstance().game.screenGame.
+//					guiManager.targetBar.updateHealthPercentage();
+//		}
 		
 	}
 

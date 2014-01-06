@@ -52,6 +52,7 @@ public class MyGame extends Game implements ApplicationListener {
 	public RegistrationScreen screenRegister;
 	public LoginScreen screenLogin;
 	public GameScreen screenGame;
+	public ZoneLoadingScreen screenZoneLoading;
 	
 	public static Connection connection;
 	
@@ -102,6 +103,7 @@ public class MyGame extends Game implements ApplicationListener {
     	screenRegister = new RegistrationScreen(this);
     	screenLogin = new LoginScreen(this);
     	screenGame = new GameScreen(this);
+    	screenZoneLoading = new ZoneLoadingScreen(this, "mainIsland");
     }
 
     public void connectToServer() {

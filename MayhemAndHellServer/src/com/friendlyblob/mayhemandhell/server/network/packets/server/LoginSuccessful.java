@@ -5,7 +5,6 @@ import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 public class LoginSuccessful extends ServerPacket {
 
 	private int playerId;
-	
 	private int x;
 	private int y;
 	

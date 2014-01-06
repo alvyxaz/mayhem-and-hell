@@ -31,7 +31,7 @@ public class GameWorld {
 	
 	public ConcurrentHashMap<Integer,GameCharacter> characters = new ConcurrentHashMap<Integer,GameCharacter>();
 	public ConcurrentHashMap<Integer,GameObject> gameObjects = new ConcurrentHashMap<Integer,GameObject>();
-	
+		
 	private static ArrayList<EnvironmentObject> environmentObjects = new ArrayList<EnvironmentObject>();
 	
 	public static HashMap<String, String> environmentObjectTypes = new HashMap<String, String>();
@@ -57,13 +57,13 @@ public class GameWorld {
 		/*
 		 * Entities initialization
 		 */
-		player = new Player(0, 100, 100); // TODO do not initialize until login is successful
 		targetMark = new TargetMark();
 	}
 	
 	public void putCharacter(GameCharacter character) {
 		characters.put(character.objectId, character);
 		gameObjects.put(character.objectId, character);
+		
 	}
 	
 	public void removeCharacter(int id) {
@@ -87,17 +87,17 @@ public class GameWorld {
 		return characters.get(id);
 	}
 	
+	public ConcurrentHashMap<Integer,GameCharacter> getCharacters() {
+		return characters;
+	}
+	
 	public void update(float deltaTime) {
-		player.update(deltaTime);
-		
 		// TODO optimize to avoid iterators (Make sure FastMap uses them first)
-		for (GameCharacter character : characters.values()) {
+		for (GameCharacter character : characters.values()) {			
 			character.update(deltaTime);
 		}
 		
-		if (!MapEditor.enabled){
-			cameraFollowPlayer(deltaTime);
-		}
+		cameraFollowPlayer(deltaTime);
 		
 		map.update(deltaTime);
 	}
@@ -137,14 +137,7 @@ public class GameWorld {
 		
 		for (GameObject go : gameObjects.values()) {
 			go.draw(spriteBatch);
-		}
-		
-		for (GameCharacter character : characters.values()) {
-			character.draw(spriteBatch);
-		}
-		
-		player.draw(spriteBatch);
-		
+		}	
 		
 		map.drawAbove(spriteBatch);
 	}
@@ -225,6 +218,25 @@ public class GameWorld {
 	*/
 	public int toWorldY(int y) {
 		return (int)(y*worldCam.zoom + camPos.y-MyGame.SCREEN_HALF_HEIGHT);
+	}
+	
+	
+	/**
+	 * Translate world x coordinate to screen x coordinate
+	 * @param x world coordinate
+	 * @return
+	 */
+	public int toScreenX(float x) {
+		return (int)((x + MyGame.SCREEN_HALF_WIDTH - camPos.x)/worldCam.zoom);
+	}
+	
+	/**
+	 * Translate world y coordinate to screen y coordinate
+	 * @param y world coordinate
+	 * @return
+	 */
+	public int toScreenY(float y) {
+		return (int)((y + MyGame.SCREEN_HALF_HEIGHT - camPos.y)/worldCam.zoom);
 	}
 	
 	/**

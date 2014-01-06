@@ -77,7 +77,7 @@ public class GamePacketHandler implements IPacketHandler<GameClient>,
 						response = new RequestAction();
 						break;
 					case 0x04:
-						response = new ClientChatMessage();
+						response = new ChatMessage();
 						break;
 					case 0x05:
 						response = new RequestResurrection();
