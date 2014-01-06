@@ -97,15 +97,15 @@ public class LoginScreen extends BaseScreen{
         
         Image image = new Image(Assets.getTextureRegion("gui/logo"));
         
-        // move down
+        // move up
         MoveByAction moveByAction = Actions.moveBy(0, 2, .7f, Interpolation.sineIn);
         MoveByAction moveByAction2 = Actions.moveBy(0, 2, .7f, Interpolation.sineOut);
 
-        // move up
+        // move down
         MoveByAction moveByActionBack = Actions.moveBy(0, -2, .7f, Interpolation.sineIn);
         MoveByAction moveByActionBack2 = Actions.moveBy(0, -2, .7f, Interpolation.sineOut);
 
-        // move down then up
+        // move up then down
         SequenceAction sequence = Actions.sequence(moveByAction, moveByAction2, moveByActionBack, moveByActionBack2);
         // repeat forever
         RepeatAction foreverAction = Actions.forever(sequence);
