@@ -16,7 +16,6 @@ public class ChatMessageNotification extends ServerPacket{
 
 	@Override
 	public void write() {
-		System.out.println("sending back");
 		writeC(0xA0);
 		writeD(objectId);
 		writeS(msg);

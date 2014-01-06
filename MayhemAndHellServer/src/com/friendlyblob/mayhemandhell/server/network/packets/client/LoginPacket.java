@@ -69,6 +69,8 @@ public class LoginPacket extends ClientPacket{
 				// not valid credentials/user doesn't exist
 				getClient().sendPacket(new LoginFailure("Please check your username and/or password"));
 			}
+			
+			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
