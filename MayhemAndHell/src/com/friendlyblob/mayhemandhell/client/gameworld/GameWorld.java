@@ -18,12 +18,14 @@ import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.entities.TargetMark;
-import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditor;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestAction;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 
 public class GameWorld {
 	public static GameWorld instance;
+	
+	private final int SORT_ON = 5;
+	private int sortFrameCount;
 	
 	/*-------------------------------------
 	 * Entities
@@ -33,8 +35,8 @@ public class GameWorld {
 	
 	public MyGame game;
 	
-	public List<GameCharacter> characters = new LinkedList<GameCharacter>();
-	public List<GameObject> gameObjects = new LinkedList<GameObject>();
+	public List<GameCharacter> characters = new ArrayList<GameCharacter>(128);
+	public List<GameObject> gameObjects = new ArrayList<GameObject>(128);
 		
 	private static ArrayList<EnvironmentObject> environmentObjects = new ArrayList<EnvironmentObject>();
 	
@@ -65,18 +67,25 @@ public class GameWorld {
 	}
 	
 	public void putCharacter(GameCharacter character) {
-		characters.add(character);
+		synchronized (characters) {
+			characters.add(character);
+		}
 		putObject(character);
 	}
 	
 	public void putObject(GameObject object) {
-		gameObjects.add(object);
+		synchronized (gameObjects) {
+			gameObjects.add(object);
+		}
 	}
 	
 	public void removeCharacter(int id) {
-		for	(GameCharacter gc : characters) {
-			if (gc.objectId == id) {
-				characters.remove(gc);
+		synchronized (characters) {
+			for	(GameCharacter gc : characters) {
+				if (gc.objectId == id) {
+					characters.remove(gc);
+					break;
+				}
 			}
 		}
 		
@@ -84,18 +93,22 @@ public class GameWorld {
 	}
 	
 	public void removeObject(int id) {
-		for	(GameObject go : gameObjects) {
-			if (go.objectId == id) {
-				gameObjects.remove(go);
-				break;
+		synchronized (gameObjects) {
+			for	(GameObject go : gameObjects) {
+				if (go.objectId == id) {
+					gameObjects.remove(go);
+					break;
+				}
 			}
 		}
 	}
 	
 	public boolean characterExists(int id) {
-		for	(GameCharacter gc : characters) {
-			if (gc.objectId == id) {
-				return true;
+		synchronized (characters) {
+			for	(GameCharacter gc : characters) {
+				if (gc.objectId == id) {
+					return true;
+				}
 			}
 		}
 		
@@ -103,9 +116,11 @@ public class GameWorld {
 	}
 	
 	public boolean objectExists(int id) {
-		for	(GameObject go : gameObjects) {
-			if (go.objectId == id) {
-				return true;
+		synchronized (gameObjects) {
+			for	(GameObject go : gameObjects) {
+				if (go.objectId == id) {
+					return true;
+				}
 			}
 		}
 		
@@ -113,9 +128,11 @@ public class GameWorld {
 	}
 	
 	public GameCharacter getCharacter(int id) {
-		for	(GameCharacter gc : characters) {
-			if (gc.objectId == id) {
-				return gc;
+		synchronized (characters) {
+			for	(GameCharacter gc : characters) {
+				if (gc.objectId == id) {
+					return gc;
+				}
 			}
 		}
 		
@@ -124,26 +141,35 @@ public class GameWorld {
 	
 	public void update(float deltaTime) {
 		// TODO optimize to avoid iterators (Make sure FastMap uses them first)
-		for (GameCharacter character : characters) {			
-			character.update(deltaTime);
+		synchronized (characters) {
+			for (GameCharacter character : characters) {			
+				character.update(deltaTime);
+			}
 		}
 		
 		cameraFollowPlayer(deltaTime);
 		
 		map.update(deltaTime);
 		
-		Collections.sort(gameObjects, new Comparator<GameObject>() {
-		    @Override
-		    public int compare(GameObject go1, GameObject go2) {
-		    	if (go1.position.y > go2.position.y) {
-		    		return -1;
-		    	} else if (go1.position.y == go2.position.y ) {
-		    		return 0;
-		    	}
-		    	
-		    	return 1;
-		    }
-		});
+		if (sortFrameCount++ == SORT_ON) {
+			synchronized (gameObjects) {
+				Collections.sort(gameObjects, new Comparator<GameObject>() {
+				    @Override
+				    public int compare(GameObject go1, GameObject go2) {
+				    	if (go1.position.y > go2.position.y) {
+				    		return -1;
+				    	} else if (go1.position.y == go2.position.y ) {
+				    		return 0;
+				    	}
+				    	
+				    	return 1;
+				    }
+				});	
+			}
+			
+			sortFrameCount = 0;
+		}
+
 	}
 	
 	/**
@@ -179,9 +205,11 @@ public class GameWorld {
 		
 		targetMark.draw(spriteBatch);
 		
-		for (GameObject go : gameObjects) {
-			go.draw(spriteBatch);
-		}	
+		synchronized (gameObjects) {
+			for (GameObject go : gameObjects) {
+				go.draw(spriteBatch);
+			}		
+		}
 		
 		map.drawAbove(spriteBatch);
 	}

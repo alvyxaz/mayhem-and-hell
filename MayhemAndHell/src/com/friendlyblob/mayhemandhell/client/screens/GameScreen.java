@@ -134,12 +134,12 @@ public class GameScreen extends BaseScreen{
 		/*---------------------------------------
 		 * GUI Elements
 		 */
-//		spriteBatch.begin();
-//		spriteBatch.setProjectionMatrix(guiCam.combined);
-//		
-//		Assets.defaultFont.draw(spriteBatch, "GAME ON", 20, 20);
-//		
-//		spriteBatch.end();
+		spriteBatch.begin();
+		spriteBatch.setProjectionMatrix(guiCam.combined);
+		
+		Assets.defaultFont.draw(spriteBatch, fpsText, 20, 20);
+		
+		spriteBatch.end();
 		
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
