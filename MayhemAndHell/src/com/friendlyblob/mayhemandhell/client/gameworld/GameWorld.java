@@ -1,7 +1,11 @@
 package com.friendlyblob.mayhemandhell.client.gameworld;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -29,8 +33,8 @@ public class GameWorld {
 	
 	public MyGame game;
 	
-	public ConcurrentHashMap<Integer,GameCharacter> characters = new ConcurrentHashMap<Integer,GameCharacter>();
-	public ConcurrentHashMap<Integer,GameObject> gameObjects = new ConcurrentHashMap<Integer,GameObject>();
+	public List<GameCharacter> characters = new LinkedList<GameCharacter>();
+	public List<GameObject> gameObjects = new LinkedList<GameObject>();
 		
 	private static ArrayList<EnvironmentObject> environmentObjects = new ArrayList<EnvironmentObject>();
 	
@@ -61,45 +65,85 @@ public class GameWorld {
 	}
 	
 	public void putCharacter(GameCharacter character) {
-		characters.put(character.objectId, character);
-		gameObjects.put(character.objectId, character);
-		
-	}
-	
-	public void removeCharacter(int id) {
-		characters.remove(id);
-		gameObjects.remove(id);
+		characters.add(character);
+		putObject(character);
 	}
 	
 	public void putObject(GameObject object) {
-		gameObjects.put(object.objectId, object);
+		gameObjects.add(object);
+	}
+	
+	public void removeCharacter(int id) {
+		for	(GameCharacter gc : characters) {
+			if (gc.objectId == id) {
+				characters.remove(gc);
+			}
+		}
+		
+		removeObject(id);
 	}
 	
 	public void removeObject(int id) {
-		gameObjects.remove(id);
+		for	(GameObject go : gameObjects) {
+			if (go.objectId == id) {
+				gameObjects.remove(go);
+				break;
+			}
+		}
 	}
 	
 	public boolean characterExists(int id) {
-		return characters.containsKey(id);
+		for	(GameCharacter gc : characters) {
+			if (gc.objectId == id) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean objectExists(int id) {
+		for	(GameObject go : gameObjects) {
+			if (go.objectId == id) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public GameCharacter getCharacter(int id) {
-		return characters.get(id);
-	}
-	
-	public ConcurrentHashMap<Integer,GameCharacter> getCharacters() {
-		return characters;
+		for	(GameCharacter gc : characters) {
+			if (gc.objectId == id) {
+				return gc;
+			}
+		}
+		
+		return null;
 	}
 	
 	public void update(float deltaTime) {
 		// TODO optimize to avoid iterators (Make sure FastMap uses them first)
-		for (GameCharacter character : characters.values()) {			
+		for (GameCharacter character : characters) {			
 			character.update(deltaTime);
 		}
 		
 		cameraFollowPlayer(deltaTime);
 		
 		map.update(deltaTime);
+		
+		Collections.sort(gameObjects, new Comparator<GameObject>() {
+		    @Override
+		    public int compare(GameObject go1, GameObject go2) {
+		    	if (go1.position.y > go2.position.y) {
+		    		return -1;
+		    	} else if (go1.position.y == go2.position.y ) {
+		    		return 0;
+		    	}
+		    	
+		    	return 1;
+		    }
+		});
 	}
 	
 	/**
@@ -135,7 +179,7 @@ public class GameWorld {
 		
 		targetMark.draw(spriteBatch);
 		
-		for (GameObject go : gameObjects.values()) {
+		for (GameObject go : gameObjects) {
 			go.draw(spriteBatch);
 		}	
 		
@@ -247,7 +291,7 @@ public class GameWorld {
 	 */
 	public GameObject getObjectAt(int x, int y) {
 		
-		for (GameObject object : gameObjects.values()) {
+		for (GameObject object : gameObjects) {
 			if (object.hitBox.contains(x, y)) {
 				return object;
 			}

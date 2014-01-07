@@ -77,4 +77,5 @@ public abstract class GameObject {
 		this.hitBox.x = x;
 		this.hitBox.y = y;
 	}
+	
 }

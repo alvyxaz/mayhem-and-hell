@@ -100,8 +100,7 @@ public class GameScreen extends BaseScreen{
         		@Override
                 public void changed (ChangeEvent event, Actor actor) {
             		touchedUiElement = true;
-
-        			System.out.println(chatMessageField.getText());
+            		// Send the packet with broadcast type
         			MyGame.connection.sendPacket(new ChatMessagePacket("/b " + chatMessageField.getText()));
         			// Lose the focus
         			chatMessageField.setText("");

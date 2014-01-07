@@ -42,7 +42,7 @@ public class NotifyCharacterMovement extends ReceivablePacket {
 				player.moveTo(destinationX, destinationY, movementSpeed);
 			}
 		} else {
-			GameCharacter character = GameWorld.getInstance().characters.get(objectId);
+			GameCharacter character = GameWorld.getInstance().getCharacter(objectId);
 			if (character != null) {
 				if (teleport) {
 					character.teleportTo(currentX, currentY);

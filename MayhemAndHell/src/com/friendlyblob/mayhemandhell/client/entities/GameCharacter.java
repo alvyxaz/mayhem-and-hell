@@ -17,7 +17,7 @@ import com.friendlyblob.mayhemandhell.client.gameworld.Map;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
 
-public class GameCharacter extends GameObject {
+public class GameCharacter extends GameObject  {
 
 	protected int targetX;
 	protected int targetY;
@@ -334,6 +334,5 @@ public class GameCharacter extends GameObject {
 		MovementDirection(int value) {
 			this.value = value;
 		}
-	};
-	
+	}
 }
