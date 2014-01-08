@@ -2,14 +2,11 @@ package com.friendlyblob.mayhemandhell.client.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.FloatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -33,59 +30,41 @@ public class LoginScreen extends BaseScreen{
 	// UI related
     private Skin skin;
     private Stage stage;
-    private SpriteBatch batch;
 	
     private MenuBackground background;
     
     // gui elements
-    private Label errorLabel;
-    
     private Table root;
     private Cell errorLabelCell;
+    private Label errorLabel;
     
 	public LoginScreen(MyGame game) {
 		super(game);
 		
 		initGuiElements();
-		
-//		GameWorld.initialize();
-//		world = GameWorld.getInstance();
-//		world.setGame(game);
-		
-//		game.connectToServer();
-		
-		// Temporary GUI implementation 
-//		guiManager = new GuiManager();
 	}
 
 	private void initGuiElements() {
 
 		background = new MenuBackground();
 		
-        batch = new SpriteBatch();
         stage = new Stage(MyGame.SCREEN_WIDTH, MyGame.SCREEN_HEIGHT);
-        
-        // A skin can be loaded via JSON or defined programmatically, either is fine. Using a skin is optional but strongly
-        // recommended solely for the convenience of getting a texture, region, etc as a drawable, tinted drawable, etc.
+
         skin = new Skin(Gdx.files.internal("data/ui2/uiskin.json"));
 
-        // Create a table that fills the screen. Everything else will go inside this table.
         root = new Table();
         root.setFillParent(true);
         stage.addActor(root);
         
-        root.debug();
-        
-        // add logo
-        
-        // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
         final TextField usernameField = new TextField("", skin);
         usernameField.setMessageText("Username");
+        usernameField.setMaxLength(15);
 
         final TextField passwordField = new TextField("", skin);
         passwordField.setMessageText("Password");
         passwordField.setPasswordCharacter('*');
         passwordField.setPasswordMode(true);
+        passwordField.setMaxLength(15);
         
         TextButtonStyle greenStyle = skin.get("green", TextButtonStyle.class);
         TextButtonStyle redStyle = skin.get("red", TextButtonStyle.class);
@@ -100,18 +79,14 @@ public class LoginScreen extends BaseScreen{
         // move up
         MoveByAction moveByAction = Actions.moveBy(0, 2, .7f, Interpolation.sineIn);
         MoveByAction moveByAction2 = Actions.moveBy(0, 2, .7f, Interpolation.sineOut);
-
         // move down
         MoveByAction moveByActionBack = Actions.moveBy(0, -2, .7f, Interpolation.sineIn);
         MoveByAction moveByActionBack2 = Actions.moveBy(0, -2, .7f, Interpolation.sineOut);
-
         // move up then down
         SequenceAction sequence = Actions.sequence(moveByAction, moveByAction2, moveByActionBack, moveByActionBack2);
         // repeat forever
         RepeatAction foreverAction = Actions.forever(sequence);
         image.addAction(foreverAction);
-        
-        
         
         root.add(image).padBottom(10).colspan(2);
         root.row();
@@ -119,38 +94,38 @@ public class LoginScreen extends BaseScreen{
         root.row();
         root.add(passwordField).colspan(2).padBottom(10).height(25);
         root.row();
-        errorLabelCell = root.add().colspan(2).padBottom(5);
-        root.row();
-        root.add(loginButton).width(60).height(25);
-        root.add(registerButton).width(60).height(25);
         
-        usernameField.setHeight(30);
+        errorLabel = new Label("", skin);
+        errorLabel.setWrap(true);
+        errorLabel.setWidth(150);
+        
+        errorLabelCell = root.add().colspan(2).padBottom(10).left().width(errorLabel.getWidth());
+        root.row();
+        root.add(loginButton).width(70).height(25).left();
+        root.add(registerButton).width(70).height(25).right();
         
         loginButton.addListener(new ChangeListener() {
-        		@Override
-                public void changed (ChangeEvent event, Actor actor) {
-        			hideErrorMessage();
+    		@Override
+            public void changed (ChangeEvent event, Actor actor) {
+    			hideErrorMessage();
 
-        			MyGame.connection.sendPacket(new LoginPacket(usernameField.getText(), passwordField.getText()));
-//        			MyGame.connection.sendPacket(new ClientVersion(5));
-        		}
-
+    			MyGame.connection.sendPacket(new LoginPacket(usernameField.getText(), passwordField.getText()));
+    		}
         });
-        
         
         registerButton.addListener(new ChangeListener() {
         	@Override
             public void changed (ChangeEvent event, Actor actor) {
         		game.setScreen(game.screenRegister);
         	}
-
         });
 
+        root.debug();
 	}
 	
 	public void showErrorMessage(String message) {
-		// TODO: reuse label?
-		errorLabelCell.setWidget(new Label(message, skin));
+		errorLabel.setText(message);
+		errorLabelCell.setWidget(errorLabel);
 	}
 	
 	public void hideErrorMessage() {
@@ -170,7 +145,6 @@ public class LoginScreen extends BaseScreen{
         
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        
 	}
 	
 	@Override

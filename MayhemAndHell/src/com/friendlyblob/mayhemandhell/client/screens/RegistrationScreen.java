@@ -1,31 +1,27 @@
 package com.friendlyblob.mayhemandhell.client.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.esotericsoftware.tablelayout.Cell;
 import com.friendlyblob.mayhemandhell.client.MyGame;
+import com.friendlyblob.mayhemandhell.client.entities.gui.CharacterViewer;
 import com.friendlyblob.mayhemandhell.client.entities.gui.MenuBackground;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
@@ -42,9 +38,9 @@ public class RegistrationScreen extends BaseScreen{
     // UI elements
     private Image character;
     private Cell notificationLabelCell;
+    private Label notificationLabel;
     
-    private int charId;
-	TextureRegion [] textures;
+    private CharacterViewer characterViewer;
 
 	private MenuBackground background;
     
@@ -52,150 +48,148 @@ public class RegistrationScreen extends BaseScreen{
 		super(game);
 		
 		initGuiElements();
-		
-//		GameWorld.initialize();
-//		world = GameWorld.getInstance();
-//		world.setGame(game);
-		
-//		game.connectToServer();
-		
-		// Temporary GUI implementation 
-//		guiManager = new GuiManager();
 	}
 
 	private void initGuiElements() {
-
 		background = new MenuBackground();
 		
-        batch = new SpriteBatch();
         stage = new Stage(MyGame.SCREEN_WIDTH, MyGame.SCREEN_HEIGHT);
 
-        // A skin can be loaded via JSON or defined programmatically, either is fine. Using a skin is optional but strongly
-        // recommended solely for the convenience of getting a texture, region, etc as a drawable, tinted drawable, etc.
         skin = new Skin(Gdx.files.internal("data/ui2/uiskin.json"));
 
-        // Create a table that fills the screen. Everything else will go inside this table.
+        // Set up root table
         Table root = new Table();
         root.setFillParent(true);
+//        root.debug();
         stage.addActor(root);
         
         // Set up field table
         Table fieldTable = new Table();
+        root.add(fieldTable).left();
         fieldTable.debug();
-        root.add(fieldTable);
         // Set up character selection table
-        Table charSelectionTable = new Table();
-        charSelectionTable.debug();
-        root.add(charSelectionTable);
-        
-        ImageButtonStyle imageButtonStyle = new ImageButtonStyle();
-        skin.add("default", imageButtonStyle);
-        
-        
-        Texture texture = Assets.manager.get("textures/characters/characters.png", Texture.class);
-		textures = new TextureRegion[12];
-        
-		for (int i = 0; i < textures.length; i++) {
-			textures[i] = new TextureRegion(texture, (i%3)*32, (i/3)*32, 32, 32);
-		}
-        
-		Image leftArrow = new Image(Assets.getTextureRegion("gui/arrow_left"));
-        Image rightArrow = new Image(Assets.getTextureRegion("gui/arrow_right"));
-		
-        ButtonStyle btnStyle = new ButtonStyle();
-        
-        Button prevButton = new Button();
-        prevButton.setStyle(btnStyle);
-        prevButton.add(leftArrow);
-        
-        prevButton.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if (charId > 0) {
-					charId--;
-					System.out.println("prev " + charId);
-				}
-				
-			}
-		});
-        
-        Button nextButton = new Button();
-        nextButton.setStyle(btnStyle);
-        nextButton.add(rightArrow);
-        nextButton.addListener(new ChangeListener() {
+//        Table charSelectionTable = new Table();
+//        root.add(charSelectionTable).padTop(28);
 
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				if (charId < textures.length) {
-					character.setDrawable(new TextureRegionDrawable(textures[charId++]));
-					System.out.println("next " + charId);
-				}
-				
-			}
-		});
-        
-        character = new Image(textures[charId]);
-        
-        charSelectionTable.add(prevButton).size(30);
-        charSelectionTable.add(character);
-        charSelectionTable.add(nextButton).size(30);
-
-        // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
+        // Add field elements
         final TextField usernameField = new TextField("", skin);
         usernameField.setMessageText("Username");
+		usernameField.setMaxLength(15);
         
         final TextField passwordField = new TextField("", skin);
         passwordField.setMessageText("Password");
         passwordField.setPasswordCharacter('*');
         passwordField.setPasswordMode(true);
+        passwordField.setMaxLength(15);
         
         final TextField passwordRepeatedField = new TextField("", skin);
         passwordRepeatedField.setMessageText("Repeat password");
         passwordRepeatedField.setPasswordCharacter('*');
         passwordRepeatedField.setPasswordMode(true);
-        
-        TextButtonStyle redStyle = skin.get("red", TextButtonStyle.class);
-        final TextButton registerButton = new TextButton("Complete registration", skin);
-        final TextButton backButton = new TextButton("I'm out!", redStyle);
+        passwordRepeatedField.setMaxLength(15);
         
         Label title = new Label("User Registration", skin);
         title.setColor(0.8f, 0.58f, 0.33f, 1);
         title.setFontScale(2);
         
-        fieldTable.add(title).height(30).align(Align.left).size(125, 30);
-        fieldTable.row();
-        fieldTable.add(usernameField).padBottom(10).height(25);
-        fieldTable.row();
-        fieldTable.add(passwordField).padBottom(10).height(25);
-        fieldTable.row();
-        fieldTable.add(passwordRepeatedField).padBottom(10).height(25);
-        root.row();
-        notificationLabelCell = root.add().colspan(2).padBottom(5);
+        ImageButtonStyle imageButtonStyle = new ImageButtonStyle();
+        skin.add("default", imageButtonStyle);
         
-        root.row();
-        root.add(new Label("By registering, you agree that you understand that this \n" +
-        		"app is just for fun, and it is not a subject of bashing. Be cool.", skin)).colspan(2);
-        root.row();
-        root.add(backButton).colspan(1).width(46);
-        root.add(registerButton).colspan(1).width(130);
-        root.debug();
+		final Image leftArrow = new Image(Assets.getTextureRegion("gui/arrow_left"));
+        final Image rightArrow = new Image(Assets.getTextureRegion("gui/arrow_right"));
+		
+        ButtonStyle btnStyle = new ButtonStyle();
+        
+        final Button prevButton = new Button(btnStyle);
+        prevButton.add(leftArrow);
+        
+        prevButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				characterViewer.prev();
+			}
+		});
+        
+        final Button nextButton = new Button(btnStyle);
+        nextButton.add(rightArrow);
+        
+        nextButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				characterViewer.next();
+			}
+		});
+        
+        fieldTable.add(title).colspan(4).left().padBottom(6);
+        fieldTable.row();
+        fieldTable.add(usernameField).colspan(4).size(120, 25).padBottom(10).left();
+        fieldTable.row();
+        fieldTable.add(passwordField).size(120, 25).padBottom(10).left();
+        
+        fieldTable.add(prevButton).size(30).padRight(2).padTop(-15).padLeft(25);
+        
+        characterViewer = new CharacterViewer("textures/characters/characters-select.png");
+        fieldTable.add(characterViewer).padTop(-15);
+        
+        fieldTable.add(nextButton).size(30).padLeft(2).padTop(-15);
+        
+        fieldTable.row();
+        fieldTable.add(passwordRepeatedField).colspan(4).size(120, 25).left();
+        
+        final TextButtonStyle redStyle = skin.get("red", TextButtonStyle.class);
+        
+        final TextButton backButton = new TextButton("I'm out!", redStyle);
+        backButton.setSize(55, 25);
+        
+        backButton.addListener(new ChangeListener() {
+    		@Override
+            public void changed (ChangeEvent event, Actor actor) {
+    			System.out.println("wat do?");
+            }
+        });
+        
+        final TextButton registerButton = new TextButton("Complete registration", skin);
+        registerButton.setSize(130, 25);
         
         registerButton.addListener(new ChangeListener() {
-        		@Override
-                public void changed (ChangeEvent event, Actor actor) {
-        			hideNoticeMessage();
-        			System.out.println("click");
-        			MyGame.connection.sendPacket(new RegisterPacket(usernameField.getText(), passwordField.getText(), passwordRepeatedField.getText(), charId));
-                }
-
+    		@Override
+            public void changed (ChangeEvent event, Actor actor) {
+    			hideNoticeMessage();
+    			MyGame.connection.sendPacket(new RegisterPacket(usernameField.getText(), passwordField.getText(), passwordRepeatedField.getText(), characterViewer.getCharId()));
+            }
         });
-
+        
+        root.row().padTop(5);
+        notificationLabel = new Label("", skin);
+        notificationLabel.setWrap(true);
+        notificationLabel.setWidth(250);
+        
+        notificationLabelCell = root.add().colspan(2).padBottom(5).left().width(notificationLabel.getWidth());
+        root.row();
+        root.add(new Label("By registering, you agree that you understand that this \n" +
+        		"app is just for fun, and it is not a subject of bashing. Be cool.", skin)).colspan(2).padBottom(5);
+        root.row();
+        
+        // TODO make this cleaner?
+        Group backButtonContainer = new Group();
+        backButtonContainer.addActor(backButton);
+        backButtonContainer.size(backButton.getWidth(), backButton.getHeight());
+        
+        Group registerButtonContainer = new Group();
+        registerButtonContainer.addActor(registerButton);
+        registerButtonContainer.size(registerButton.getWidth(), registerButton.getHeight());
+        
+        final HorizontalGroup buttonGroup = new HorizontalGroup();
+        buttonGroup.addActor(backButtonContainer);
+        buttonGroup.addActor(registerButtonContainer);
+        buttonGroup.setSpacing(8);
+        
+        root.add(buttonGroup).colspan(2).left();
 	}
 
 	public void showNoticeMessage(String message) {
-		// TODO: reuse label?
-		notificationLabelCell.setWidget(new Label(message, skin));
+		notificationLabel.setText(message);
+		notificationLabelCell.setWidget(notificationLabel);
 	}
 	
 	public void hideNoticeMessage() {
@@ -213,7 +207,6 @@ public class RegistrationScreen extends BaseScreen{
 		
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-//        Table.drawDebug(stage);
 	}
 	
 	@Override
@@ -225,5 +218,7 @@ public class RegistrationScreen extends BaseScreen{
 	public void prepare() {
 		Gdx.input.setInputProcessor(stage);
 	}
+	
+	
 
 }

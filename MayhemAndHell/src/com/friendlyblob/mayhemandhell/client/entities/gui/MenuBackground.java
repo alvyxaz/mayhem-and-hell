@@ -24,7 +24,7 @@ public class MenuBackground {
 		background = Assets.getTextureRegion("gui/bg");
 		bgPattern = Assets.getTextureRegion("gui/bg_pattern");
 		
-		patternWidth =(int)bgPattern.getRegionWidth();
+		patternWidth = (int) bgPattern.getRegionWidth();
 		
 		bgPatterns = new Rectangle[15];
 		

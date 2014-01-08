@@ -17,37 +17,44 @@ filter: Nearest,Nearest
 repeat: none
 gui/arrow_left
   rotate: false
-  xy: 2, 2
+  xy: 79, 33
   size: 15, 16
   orig: 15, 16
   offset: 0, 0
   index: -1
 gui/arrow_right
   rotate: false
-  xy: 79, 41
+  xy: 260, 259
   size: 15, 16
   orig: 15, 16
   offset: 0, 0
   index: -1
 gui/bg
   rotate: false
-  xy: 2, 59
+  xy: 2, 51
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 gui/bg_pattern
   rotate: false
-  xy: 260, 285
+  xy: 260, 277
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 gui/logo
   rotate: false
-  xy: 2, 20
+  xy: 2, 12
   size: 75, 37
   orig: 75, 37
+  offset: 0, 0
+  index: -1
+gui/pad
+  rotate: false
+  xy: 2, 2
+  size: 34, 8
+  orig: 34, 8
   offset: 0, 0
   index: -1
 

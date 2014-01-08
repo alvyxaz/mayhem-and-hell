@@ -5,6 +5,7 @@ com.badlogic.gdx.graphics.Color: {
 	inputMessageColor: { a: 1, r: 0.5, g: 0.41, b: 0.16 },
 	green: { a: 1, b: 0, g: 1, r: 0 },
 	white: { a: 1, b: 1, g: 1, r: 1 },
+	grey: { a: 1, b: 0.86 , g: 0.85, r: 0.85 },
 	red: { a: 1, b: 0, g: 0, r: 1 },
 	black: { a: 1, b: 0, g: 0, r: 0 }
 },
@@ -20,7 +21,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 },
 
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-	default: { font: default-font, fontColor: white }
+	default: { font: default-font, fontColor: grey }
 },
 
 }
