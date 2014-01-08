@@ -49,7 +49,7 @@ public class TargetInfoResponse extends ReceivablePacket {
 		if (info.objectId == GameWorld.getInstance().player.objectId) {
 			object = player;
 		} else {
-			object = GameWorld.getInstance().gameObjects.get(info.objectId);
+			object = GameWorld.getInstance().getObject(info.objectId);
 		}
 		
 		GameWorld.getInstance().targetMark.setTarget(object).setHostile(isHostile);

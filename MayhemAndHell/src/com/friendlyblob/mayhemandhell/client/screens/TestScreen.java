@@ -25,11 +25,11 @@ public class TestScreen extends BaseScreen {
 	public TestScreen(MyGame game) {
 		super(game);	
 		
-		collisions[3][3] = 1;
-		collisions[2][3] = 1;
-		collisions[2][4] = 1;
-		collisions[2][5] = 1;
-		collisions[3][5] = 1;
+//		collisions[3][3] = 1;
+//		collisions[2][3] = 1;
+//		collisions[2][4] = 1;
+//		collisions[2][5] = 1;
+//		collisions[3][5] = 1;
 		
 		redraw(3, 3);
 	}
@@ -68,7 +68,7 @@ public class TestScreen extends BaseScreen {
 		for (int i = 0; i < 60; i++) {
 			int endX = (int)(Math.random()*maxX);
 			int endY = (int)(Math.random()*maxY);
-		
+			
 			point = calculateDestination(startX, startY, endX, endY);
 			
 			pixmap.drawLine(startX, maxY-startY, point.x, maxY-point.y);

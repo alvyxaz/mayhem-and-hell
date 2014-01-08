@@ -229,6 +229,10 @@ public class Zone {
 		}
 	}
 	
+	public ZoneTemplate getTemplate() {
+		return template;
+	}
+	
 	/**
 	 * Fills regions with information about close regions
 	 */

@@ -1,6 +1,10 @@
 package com.friendlyblob.mayhemandhell.server.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.friendlyblob.mayhemandhell.server.model.stats.StatsSet;
+import com.friendlyblob.mayhemandhell.server.utils.ObjectPosition;
 
 public class ZoneTemplate {
 
@@ -8,16 +12,125 @@ public class ZoneTemplate {
 	
 	private String name;
 	
+	private int mapWidth;
+	private int mapHeight;
+	
 	private int tileWidth = 16;		// Tile width in pixels
 	private int tileHeight = 16;	// Tile height in pixels
 	
-	private int regionsCountX = 4;		// Zone width in regions
-	private int regionsCountY = 4; 		// Zone height in regions
+	private int regionsCountX = 4;	// Zone width in regions
+	private int regionsCountY = 4; 	// Zone height in regions
 	
-	private int regionWidth = 10;	// Region width in tiles
-	private int regionHeight = 10;	// Region height in tiles
+	private int regionWidth = 20;	// Region width in tiles
+	private int regionHeight = 20;	// Region height in tiles
 	
 	private StatsSet set;
+	
+	private Tile[] tiles;
+	
+	public ZoneTemplate(int mapWidth, int mapHeight) {
+		this.mapWidth = mapWidth;
+		this.mapHeight = mapHeight;
+		
+		initializeMap();
+	}
+	
+	public Tile[] getTiles() {
+		return tiles;
+	}
+	
+	public void initializeMap() {
+		tiles = new Tile[mapWidth*mapHeight];
+		
+		// Creating objects
+		for(int i = 0; i < tiles.length; i++) {
+			tiles[i] = new Tile(i);
+		}
+		
+		// Setting a collision
+		tiles[tileAt(4,4)].setType(TileType.COLLISION);
+		
+		// Finding nodes
+		for(int i = 0; i < tiles.length; i++) {
+			int x = i % mapWidth;
+			int y = (i / mapWidth);
+			
+			if (x > 0) { // LEFT NODE
+				tiles[i].addNode(tiles[i-1]);
+			}
+			if (x < mapWidth-1) { // RIGHT NODE
+				tiles[i].addNode(tiles[i+1]);
+			}
+			if (y > 0) { // BOTTOM NODE
+				tiles[i].addNode(tiles[tileAt(x, y-1)]);
+			}
+			if (y < mapHeight-1) { // TOP NODE
+				tiles[i].addNode(tiles[tileAt(x, y+1)]);
+			}
+		}
+		
+//		for(int i = 0; i < tiles.length; i++) {
+//			calculatePrev(tiles[i]);
+//		}
+		
+	}
+	
+	public int tileAt(int x, int y) {
+		return (y*mapWidth + x);
+	}
+	
+	public int tileAtPosition(ObjectPosition position) {
+		return (int)(position.getY()/tileHeight)*mapWidth + (int)(position.getX()/tileWidth);
+	}
+	
+	public void calculatePrev(Tile source) {
+		float dist[] = new float[mapWidth * mapHeight];
+		int prev[] = new int[mapWidth * mapHeight];
+		
+		ArrayList<Tile> q = new ArrayList<Tile>();
+		
+		for(int i = 0; i < tiles.length; i++) {
+			dist[i] = Integer.MAX_VALUE;
+			prev[i] = -1;
+			q.add(tiles[i]);
+		}
+		
+		dist[source.getId()] = 0;
+		
+		while(!q.isEmpty()) {
+			// Get lowest distance tile
+			Tile u = q.get(0);
+			for (Tile tile : q) {
+				if (dist[tile.getId()] < dist[u.getId()]) {
+					u = tile;
+				}
+			}
+			q.remove(u);
+			
+			// Remaining tile inaccessible from source
+			if (dist[u.getId()] >= Integer.MAX_VALUE) {
+				break;
+			}
+			
+			for(Tile v : u.getNodes()) {
+				float alt = dist[u.getId()] + distanceBetweenTiles(u, v);
+				if (alt < dist[v.getId()]) {
+					dist[v.getId()] = alt;
+					prev[v.getId()] = u.getId();
+				}
+			}
+			source.setPrev(prev);
+		}
+	}
+	
+	public float distanceBetweenTiles(Tile tileA, Tile tileB) {
+		int xA = tileA.getId() % mapWidth;
+		int yA = tileA.getId() / mapWidth;
+		int xB = tileB.getId() % mapWidth;
+		int yB = tileB.getId() / mapWidth;
+		
+		return (xA - xB)*(xA - xB) + (yA - yB)*(yA - yB);
+	}
 	
 	/**
 	 * Saves a set of settings and uses some of their values
@@ -40,6 +153,22 @@ public class ZoneTemplate {
 		return set;
 	}
 	
+	public int getMapWidth() {
+		return mapWidth;
+	}
+
+	public void setMapWidth(int mapWidth) {
+		this.mapWidth = mapWidth;
+	}
+
+	public int getMapHeight() {
+		return mapHeight;
+	}
+
+	public void setMapHeight(int mapHeight) {
+		this.mapHeight = mapHeight;
+	}
+
 	/**
 	 * @return the zoneId
 	 */
@@ -153,5 +282,75 @@ public class ZoneTemplate {
 	}
 	
 	
+	public static class Tile {
+		private TileType type;
+		private Tile[] nodes;
+		private int id;
+		
+		private int[] prev;
+		
+		public Tile(int id) {
+			this.id = id;
+			nodes = new Tile[0];
+			type = TileType.NORMAL;
+		}
+		
+		@Override
+		public String toString() {
+			String string = id + "," + type.ordinal() +","+ nodes.length + ";";
+			for(int p : prev) {
+				
+			}
+			return id + "," + type.ordinal() +","+ nodes.length;
+		}
+		
+		public void setPrev(int[] prev) {
+			this.prev = prev;
+		}
+		
+		public int[] getPrev() {
+			return prev;
+		}
+		
+		public void addNode(Tile node) {
+			if (node.getType() == TileType.COLLISION) {
+				return;
+			}
+			Tile[] temp = Arrays.copyOf(nodes, nodes.length+1);
+			temp[temp.length-1] = node;
+			nodes = temp;
+			temp = null;
+		}
+		
+		public Tile[] getNodes() {
+			return nodes;
+		}
+		
+		public TileType getType() {
+			return type;
+		}
+		
+		public void setType(TileType type) {
+			this.type = type;
+		}
+		
+		public int getId() {
+			return id;
+		}
+		
+	}
 	
+	public static enum TileType {
+		NORMAL,
+		COLLISION;
+		
+		public static TileType fromOrdinal(int ordinal) {
+			for(TileType type: TileType.values()) {
+				if(type.ordinal() == ordinal) {
+					return type;
+				}
+			}
+			return NORMAL;
+		}
+	}
 }

@@ -51,7 +51,7 @@ public class LoginPacket extends ClientPacket{
 				Player player = new Player(666, CharacterTemplateTable.getInstance().getTemplate("player"));
 				getClient().setPlayer(player);
 				player.setClient(getClient());
-				
+				player.setPosition(100, 100);
 
 				
 				getClient().sendPacket(

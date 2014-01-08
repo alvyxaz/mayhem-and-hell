@@ -45,6 +45,8 @@ public class MapData {
 	public int tilesInX;
 	public int tilesInY;
 	
+	public boolean drawMetaLayer = true;
+	
 	public MapData(int mapId) {
 		this.mapId = mapId;
 		requiredResources = new HashMap<Integer,AssetDescriptor>();
@@ -76,6 +78,8 @@ public class MapData {
 		XmlReader xmlReader = new XmlReader();
 		FileHandle file = Gdx.files.internal("data/zones/" + mapId + ".tmx");
 		
+		Element metaLayer = null;
+		
 		if (!file.exists()) {
 			// TODO send request to server and download a map
 		}
@@ -103,12 +107,14 @@ public class MapData {
 		 * Reading map porperties
 		 */
 		Element mapProperties = root.getChildByName("properties");
-		for (int i = 0; i < mapProperties.getChildCount(); i++) {
-			String property = mapProperties.getChild(i).getAttribute("name");
-			if (property.equals("regionsX")) {
-				regionsX = mapProperties.getChild(i).getIntAttribute("value", regionsX);
-			} else if (property.equals("regionsY")) {
-				regionsY = mapProperties.getChild(i).getIntAttribute("value", regionsY);
+		if (mapProperties != null) {
+			for (int i = 0; i < mapProperties.getChildCount(); i++) {
+				String property = mapProperties.getChild(i).getAttribute("name");
+				if (property.equals("regionsX")) {
+					regionsX = mapProperties.getChild(i).getIntAttribute("value", regionsX);
+				} else if (property.equals("regionsY")) {
+					regionsY = mapProperties.getChild(i).getIntAttribute("value", regionsY);
+				}
 			}
 		}
 		
@@ -133,19 +139,23 @@ public class MapData {
 		
 		// Counting above and below layers (feel free to change if there's a better way)
 		// If you have added new properties or etc, don't parse them here, because 
-		// this loops is just for counting a number of layers. New properties can
+		// this loop is just for counting a number of layers. New properties can
 		// and should be analyzed in a loop below
 		for (int i = 0; i < layers.size; i++) {
-			Element tempLayerProperties = layers.get(i).getChildByName("properties");
-			for (int j = 0; j < tempLayerProperties.getChildCount(); j++) {
-				String property = tempLayerProperties.getChild(j).getAttribute("name");
-				if (property.equals("above")) {
-					if (tempLayerProperties.getChild(j).getAttribute("value").equals("true")) {
-						layersAbove ++;
-					} else {
-						layersBelow ++;
-					}
-				} 
+			if (!layers.get(i).getAttribute("name").equals("Meta") || drawMetaLayer){
+				Element tempLayerProperties = layers.get(i).getChildByName("properties");
+				for (int j = 0; j < tempLayerProperties.getChildCount(); j++) {
+					String property = tempLayerProperties.getChild(j).getAttribute("name");
+					if (property.equals("above")) {
+						if (tempLayerProperties.getChild(j).getAttribute("value").equals("true")) {
+							layersAbove ++;
+						} else {
+							layersBelow ++;
+						}
+					} 
+				}
+			} else {
+				metaLayer = layers.get(i);
 			}
 		}
 		
@@ -157,33 +167,40 @@ public class MapData {
 		
 		// Counting above and below layers
 		for (int i = 0; i < layers.size; i++) {
-			TileMapLayer layer = new TileMapLayer(tilesInX, tilesInY);
-			
-			Element layerElement = layers.get(i);
-			
-			// Analyzing layer properties
-			Element tempLayerProperties = layerElement.getChildByName("properties");
-			for (int j = 0; j < tempLayerProperties.getChildCount(); j++) {
-				String property = tempLayerProperties.getChild(j).getAttribute("name");
+			if (!layers.get(i).getAttribute("name").equals("Meta") || drawMetaLayer){
+				TileMapLayer layer = new TileMapLayer(tilesInX, tilesInY);
 				
-				if (property.equals("above")) {
-					// Assigning a layer to either below or above layers collection
-					if (tempLayerProperties.getChild(j).getAttribute("value").equals("true")) {
-						// Above
-						this.layersAbove[layerAboveIndex] = layer;
-						layerAboveIndex++;
-					} else {
-						// Below
-						this.layersBelow[layerBelowIndex] = layer;
-						layerBelowIndex++;
-					}
-				} else if (property.equals("enableAlpha")) {
-					if (tempLayerProperties.getChild(j).getAttribute("value").equals("true")) {
-						layer.enableAlpha = true;
+				Element layerElement = layers.get(i);
+				
+				// Analyzing layer properties
+				Element tempLayerProperties = layerElement.getChildByName("properties");
+				for (int j = 0; j < tempLayerProperties.getChildCount(); j++) {
+					String property = tempLayerProperties.getChild(j).getAttribute("name");
+					
+					if (property.equals("above")) {
+						// Assigning a layer to either below or above layers collection
+						if (tempLayerProperties.getChild(j).getAttribute("value").equals("true")) {
+							// Above
+							this.layersAbove[layerAboveIndex] = layer;
+							layerAboveIndex++;
+						} else {
+							// Below
+							this.layersBelow[layerBelowIndex] = layer;
+							layerBelowIndex++;
+						}
+					} else if (property.equals("enableAlpha")) {
+						if (tempLayerProperties.getChild(j).getAttribute("value").equals("true")) {
+							layer.enableAlpha = true;
+						}
 					}
 				}
+				
+				layer.fillTileData(layerElement.getChildByName("data").getText());
 			}
-			layer.fillTileData(layerElement.getChildByName("data").getText());
+		}
+		
+		if (metaLayer != null) {
+			TileMapLayer layer = new TileMapLayer(tilesInX, tilesInY);
 		}
 		
 	}
@@ -217,8 +234,8 @@ public class MapData {
 			
 			// Create Texture Regions
 			int resourceId = entry.getKey();
-			tilesInX = texture.getWidth()/Map.TILE_WIDTH;
-			tilesInY = texture.getHeight()/Map.TILE_HEIGHT;
+			int tilesInX = texture.getWidth()/Map.TILE_WIDTH;
+			int tilesInY = texture.getHeight()/Map.TILE_HEIGHT;
 			int regionCount = tilesInX * tilesInY;
 		
 			for (int i = 0; i < regionCount; i++) {

@@ -54,12 +54,10 @@ public class GameScreen extends BaseScreen{
 		super(game);
 		
 		initGuiElements();
-
 		
 		GameWorld.initialize();
 		gameWorld = GameWorld.getInstance();
 		gameWorld.setGame(game);
-		
 		
 		notifications = new LiveNotifications();
 		eventNotifications = new EventNotifications();

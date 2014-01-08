@@ -139,6 +139,18 @@ public class GameWorld {
 		return null;
 	}
 	
+	public GameObject getObject(int id) {
+		synchronized (gameObjects) {
+			for	(GameObject go : gameObjects) {
+				if (go.objectId == id) {
+					return go;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	public void update(float deltaTime) {
 		// TODO optimize to avoid iterators (Make sure FastMap uses them first)
 		synchronized (characters) {
