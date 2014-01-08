@@ -1,15 +1,11 @@
 package com.friendlyblob.mayhemandhell.client.network.packets.server;
 
-import java.util.Map;
-
-import com.friendlyblob.mayhemandhell.client.entities.EnvironmentObject;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
-import com.friendlyblob.mayhemandhell.client.entities.GameObject;
-import com.friendlyblob.mayhemandhell.client.entities.gui.chat.Chat;
 import com.friendlyblob.mayhemandhell.client.entities.gui.chat.ChatMessage.ChatMessageType;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
-import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 
 public class ChatMessageNotification extends ReceivablePacket {
 	
@@ -28,12 +24,13 @@ public class ChatMessageNotification extends ReceivablePacket {
 
 	@Override
 	public void run() {
-//		Chat chat = connection.game.screenGame.guiManager.chat;
-//		
-//		chat.addMessage(playerName, msg, type);
 		GameCharacter gameCharacter = GameWorld.getInstance().getCharacter(objectId);
 
 		gameCharacter.chatBubbleNotifications.addRegularNotification(msg);
+		
+		// TODO: move to assets and preload
+		Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/chat-notification.mp3"));
+		sound.play();
 
 
 	}

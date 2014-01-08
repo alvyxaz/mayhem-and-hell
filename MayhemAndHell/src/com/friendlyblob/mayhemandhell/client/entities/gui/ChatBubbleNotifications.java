@@ -20,13 +20,13 @@ public class ChatBubbleNotifications {
 	
 	private static final Color REGULAR_COLOR = new Color(1f, 0.86f, 0f, 1);// Color(1f, 0.7f, 0, 1f);
 	
-	private static final int BUFFER_SIZE = 5;
+	private static final int BUFFER_SIZE = 2;
 	private static final float MAX_TIMER = 2; 
+	private static final int BUBBLE_MAX_WIDTH = 100;
 	
 	private String[] notifications;
 	private Color[] colors;
 	private float[] timers;
-	private float[] y;
 	
 	private StringBuilder strBuilder;
 	private int count;
@@ -42,7 +42,6 @@ public class ChatBubbleNotifications {
 		notifications = new String[BUFFER_SIZE];
 		colors = new Color[BUFFER_SIZE];
 		timers = new float[BUFFER_SIZE];
-		y = new float[BUFFER_SIZE];
 		
 		for (int i = 0; i < BUFFER_SIZE; i++) {
 			notifications[i] = "";
@@ -58,9 +57,16 @@ public class ChatBubbleNotifications {
 			return;
 		}
 		
-		for (int i = 0; i < BUFFER_SIZE; i++) {
+		for (int i = 0; i < BUFFER_SIZE; i++) {			
 			font.setColor(colors[i]);
-			font.draw(spriteBatch, notifications[i], gameCharacter.position.x, gameCharacter.position.y + 32);
+			// TODO: center the text
+			font.drawWrapped(
+				spriteBatch, 
+				notifications[i], 
+				gameCharacter.position.x, 
+				gameCharacter.position.y + gameCharacter.hitBox.height + gameCharacter.hitBox.height/2,
+				BUBBLE_MAX_WIDTH
+			);
 		}
 		// Restore regular color
 		font.setColor(Color.WHITE);
@@ -86,16 +92,12 @@ public class ChatBubbleNotifications {
 			if (timers[i] < timers[oldest]) {
 				oldest = i;
 			}
-			if (timers[i] > 0) {
-				y[i] += font.getLineHeight();
-			}
 		}
 		
 		// Pushing notification
 		this.timers[oldest] = MAX_TIMER;
 		this.notifications[oldest] = notification;
 		this.colors[oldest] = color;
-		this.y[oldest] = MyGame.SCREEN_HEIGHT * 0.75f;
 		count++;
 	}
 	

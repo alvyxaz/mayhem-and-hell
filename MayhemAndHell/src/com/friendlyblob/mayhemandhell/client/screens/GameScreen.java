@@ -84,8 +84,6 @@ public class GameScreen extends BaseScreen{
         root.padTop(5);
         stage.addActor(root);
         
-        root.debug();
-        
         // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
         final TextField chatMessageField = new TextField("", skin);
         chatMessageField.setMessageText("Say something!");
@@ -109,7 +107,6 @@ public class GameScreen extends BaseScreen{
         });
         
         chatMessageField.addListener(new ClickListener() {
-        	
         	@Override
         	public void clicked (InputEvent event, float x, float y) {
         		super.clicked(event, x, y);
