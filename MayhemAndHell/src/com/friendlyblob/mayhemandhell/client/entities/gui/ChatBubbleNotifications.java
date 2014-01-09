@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
+import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
@@ -33,10 +34,10 @@ public class ChatBubbleNotifications {
 	
 	private BitmapFont font;
 	
-	private GameCharacter gameCharacter;
+	private GameObject gameObject;
 	
-	public ChatBubbleNotifications(GameCharacter gameCharacter) {
-		this.gameCharacter = gameCharacter;
+	public ChatBubbleNotifications(GameObject gameObject) {
+		this.gameObject = gameObject;
 		
 		font = Assets.defaultFontStroked;
 		notifications = new String[BUFFER_SIZE];
@@ -57,14 +58,14 @@ public class ChatBubbleNotifications {
 			return;
 		}
 		
-		for (int i = 0; i < BUFFER_SIZE; i++) {			
+		for (int i = 0; i < BUFFER_SIZE; i++) {	
 			font.setColor(colors[i]);
 			// TODO: center the text
 			font.drawWrapped(
 				spriteBatch, 
 				notifications[i], 
-				gameCharacter.position.x, 
-				gameCharacter.position.y + gameCharacter.hitBox.height + gameCharacter.hitBox.height/2,
+				gameObject.position.x, 
+				gameObject.position.y + gameObject.hitBox.height + gameObject.hitBox.height/2,
 				BUBBLE_MAX_WIDTH
 			);
 		}

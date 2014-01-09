@@ -25,7 +25,7 @@ public class ObjectsLeft extends ReceivablePacket {
 			
 			// Remove target if character that left is the one that was targeted
 			if (GameWorld.getInstance().getPlayer().targetId == ids[i]) {
-				GameWorld.getInstance().game.screenGame.guiManager.targetBar.removeTarget();
+//				GameWorld.getInstance().game.screenGame.guiManager.targetBar.removeTarget();
 			}
 		}
 		

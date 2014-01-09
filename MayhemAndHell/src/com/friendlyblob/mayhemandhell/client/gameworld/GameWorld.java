@@ -18,6 +18,7 @@ import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.entities.TargetMark;
+import com.friendlyblob.mayhemandhell.client.entities.TopicTv;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestAction;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 
@@ -43,6 +44,7 @@ public class GameWorld {
 	public static HashMap<String, String> environmentObjectTypes = new HashMap<String, String>();
 	
 	public TargetMark targetMark;
+	public TopicTv topicTv;
 	
 	/*-------------------------------------
 	 * Camera
@@ -64,6 +66,8 @@ public class GameWorld {
 		 * Entities initialization
 		 */
 		targetMark = new TargetMark();
+		
+		topicTv = new TopicTv();
 	}
 	
 	public void putCharacter(GameCharacter character) {
@@ -216,6 +220,7 @@ public class GameWorld {
 		}
 		
 		targetMark.draw(spriteBatch);
+		topicTv.draw(spriteBatch);
 		
 		synchronized (gameObjects) {
 			for (GameObject go : gameObjects) {
