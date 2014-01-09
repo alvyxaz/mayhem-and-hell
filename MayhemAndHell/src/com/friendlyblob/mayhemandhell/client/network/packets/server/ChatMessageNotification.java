@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
 import com.friendlyblob.mayhemandhell.client.entities.gui.chat.ChatMessage.ChatMessageType;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
+import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 
 public class ChatMessageNotification extends ReceivablePacket {
@@ -28,10 +29,7 @@ public class ChatMessageNotification extends ReceivablePacket {
 
 		gameCharacter.chatBubbleNotifications.addRegularNotification(msg);
 		
-		// TODO: move to assets and preload
-		Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/chat-notification.mp3"));
+		Sound sound = Assets.manager.get("sounds/chat-notification.mp3");
 		sound.play();
-
-
 	}
 }

@@ -1,6 +1,7 @@
 package com.friendlyblob.mayhemandhell.client.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -39,11 +40,17 @@ public class GameScreen extends BaseScreen{
 	
 	public LiveNotifications notifications;
 	public EventNotifications eventNotifications;
+	
+	// Music stuff
+	private Music music;
+	private final float MAX_VOLUME = .4f;
+	private final float VOLUME_GROWTH_SPEED = .01f;
+	private float currVolume;
+	
 		
 	// UI related
     private Skin skin;
     private Stage stage;
-    private SpriteBatch batch;
     
     // TODO: find better solution
     private boolean touchedUiElement;
@@ -61,16 +68,9 @@ public class GameScreen extends BaseScreen{
 		
 		notifications = new LiveNotifications();
 		eventNotifications = new EventNotifications();
-//		
-//		game.connectToServer();
-//		
-//		// Temporary GUI implementation 
-//		guiManager = new GuiManager();
-		
 	}
 
 	private void initGuiElements() {		
-        batch = new SpriteBatch();
         stage = new Stage(MyGame.SCREEN_WIDTH, MyGame.SCREEN_HEIGHT);
         
         skin = new Skin(Gdx.files.internal("data/ui2/uiskin.json"));
@@ -123,8 +123,6 @@ public class GameScreen extends BaseScreen{
 		 */
 		gameWorld.draw(spriteBatch);
 		
-		notifications.draw(spriteBatch, deltaTime);
-		
 		spriteBatch.end();
 		/*---------------------------------------
 		 * GUI Elements
@@ -149,10 +147,23 @@ public class GameScreen extends BaseScreen{
 		}
 		
 		touchedUiElement = false;
+		
+		if (currVolume < MAX_VOLUME) {
+			currVolume += deltaTime * VOLUME_GROWTH_SPEED;
+			music.setVolume(currVolume);	
+		}
 	}
 
 	@Override
 	public void prepare() {
+		currVolume = 0;
+		
+		music = Assets.manager.get("sounds/bg.wav", Music.class);
+		music.setLooping(true);
+		music.setVolume(currVolume);
+		music.stop();
+		music.play();
+		
 		Gdx.input.setInputProcessor(stage);
 	}
 	
