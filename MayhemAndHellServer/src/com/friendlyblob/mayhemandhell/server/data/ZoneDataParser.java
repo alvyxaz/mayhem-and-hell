@@ -94,12 +94,13 @@ public class ZoneDataParser extends DataParser {
 				try {
 					TileType type = Integer.parseInt(strTiles[x]) > 0 ? 
 							TileType.COLLISION : TileType.NORMAL; // TODO more than one type
-					tiles[zone.tileAt(x, zone.getMapHeight()-1-i)].setType(type);
+					tiles[zone.tileAtIndex(x, zone.getMapHeight()-i)].setType(type);
 				} catch (Exception e) {
 					
 				}
 			}
 		}
+		zone.establishNodeConnections();
 	}
 	
 }

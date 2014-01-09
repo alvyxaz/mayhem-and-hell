@@ -26,6 +26,11 @@ public class RequestMove extends ClientPacket{
 	public void run() {
 		if (!getClient().getPlayer().isDead()) {
 			getClient().getPlayer().getAi().setIntention(Intention.MOVE_TO, new ObjectPosition(x, y));
+			getClient().getPlayer().getZone().getTemplate().calculatePathBetween(109, 313);
+			
+			int tile = getClient().getPlayer().getZone().getTemplate().tileAtPosition(new ObjectPosition(x, y));
+//			System.out.println(getClient().getPlayer().getZone().getTemplate().getTiles()[tile].getType());
+//			System.out.println(tile);
 		}
 	}
 

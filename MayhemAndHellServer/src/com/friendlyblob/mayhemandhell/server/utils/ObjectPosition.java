@@ -17,6 +17,10 @@ public class ObjectPosition {
 		this.y = y;
 	}
 	
+	public float angleTo(int x, int y) {
+		return (float)Math.atan2(y - this.y, x - this.x);
+	}
+	
 	public float angleTo(ObjectPosition target) {
 		return (float)Math.atan2(target.y - y, target.x - x);
 	}
@@ -51,6 +55,11 @@ public class ObjectPosition {
 	public void offset(float dX, float dY) {
 		this.x += dX;
 		this.y += dY;
+	}
+	
+	public void offsetByAngle(float angle, float offset) {
+		offset((float) Math.cos(angle) * offset, 
+				(float) Math.sin(angle) * offset);
 	}
 	
 	@Override

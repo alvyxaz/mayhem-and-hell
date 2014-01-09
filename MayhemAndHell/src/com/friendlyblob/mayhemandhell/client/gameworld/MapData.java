@@ -45,7 +45,7 @@ public class MapData {
 	public int tilesInX;
 	public int tilesInY;
 	
-	public boolean drawMetaLayer = true;
+	public boolean drawMetaLayer = false;
 	
 	public MapData(int mapId) {
 		this.mapId = mapId;

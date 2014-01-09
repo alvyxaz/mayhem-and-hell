@@ -2,6 +2,7 @@ package com.friendlyblob.mayhemandhell.server;
 
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.MobInstance;
+import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 
 import javolution.util.FastMap;
 

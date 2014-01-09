@@ -39,6 +39,14 @@ public class ZoneTemplate {
 		return tiles;
 	}
 	
+	public int xPositionOfTile(int tile) {
+		return (tile%mapWidth)*tileWidth + tileWidth/2; 
+	}
+	
+	public int yPositionOfTile(int tile) {
+		return (tile/mapWidth)*tileHeight + tileHeight/2;
+	}
+	
 	public void initializeMap() {
 		tiles = new Tile[mapWidth*mapHeight];
 		
@@ -46,10 +54,9 @@ public class ZoneTemplate {
 		for(int i = 0; i < tiles.length; i++) {
 			tiles[i] = new Tile(i);
 		}
-		
-		// Setting a collision
-		tiles[tileAt(4,4)].setType(TileType.COLLISION);
-		
+	}
+	
+	public void establishNodeConnections() {
 		// Finding nodes
 		for(int i = 0; i < tiles.length; i++) {
 			int x = i % mapWidth;
@@ -62,20 +69,61 @@ public class ZoneTemplate {
 				tiles[i].addNode(tiles[i+1]);
 			}
 			if (y > 0) { // BOTTOM NODE
-				tiles[i].addNode(tiles[tileAt(x, y-1)]);
+				tiles[i].addNode(tiles[tileAtIndex(x, y-1)]);
 			}
 			if (y < mapHeight-1) { // TOP NODE
-				tiles[i].addNode(tiles[tileAt(x, y+1)]);
+				tiles[i].addNode(tiles[tileAtIndex(x, y+1)]);
 			}
 		}
-		
-//		for(int i = 0; i < tiles.length; i++) {
-//			calculatePrev(tiles[i]);
-//		}
-		
 	}
 	
-	public int tileAt(int x, int y) {
+	public int[] calculatePathBetween(int tileA, int tileB) {
+		// If any of the tiles are invalid
+		if (tileA < 0 || tileA >= tiles.length ||
+				tileB < 0 || tileB >= tiles.length) {
+			return null;
+		}
+
+		calculatePrev(tiles[tileA]);
+		
+		return getPathBetween(tileA, tileB);
+	}
+	
+	/**
+	 * Returns an inverted path between two tiles
+	 * @param tileA
+	 * @param tileB
+	 * @return
+	 */
+	public int [] getPathBetween(int tileA, int tileB) {
+		// If we're trying to go to collision point
+		if (tiles[tileB].getType() == TileType.COLLISION) {
+			return null;
+		}
+
+		int size = 0;
+		
+		int u = tileB;
+		while (tiles[tileA].getPrev()[u] != -1) {
+			u = tiles[tileA].getPrev()[u];
+			size++;
+		}
+		
+		int path[] = new int[size];
+		
+		u = tileB;
+		path[--size] = tileB;	// Add the final position
+		while (size > 0) {
+			u = tiles[tileA].getPrev()[u];
+			path[size - 1] = u;
+			size--;
+		}
+		
+		return path;
+	}
+	
+	
+	public int tileAtIndex(int x, int y) {
 		return (y*mapWidth + x);
 	}
 	
@@ -96,7 +144,6 @@ public class ZoneTemplate {
 		}
 		
 		dist[source.getId()] = 0;
-		
 		while(!q.isEmpty()) {
 			// Get lowest distance tile
 			Tile u = q.get(0);

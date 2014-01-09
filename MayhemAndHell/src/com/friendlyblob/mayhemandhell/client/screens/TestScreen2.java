@@ -33,8 +33,8 @@ public class TestScreen2 extends BaseScreen {
 	public int charWidth = 20;
 	public int charHeight = 10;
 	
-	private int tilesInX = 50;
-	private int tilesInY = 50;
+	private int tilesInX = 51;
+	private int tilesInY = 38;
 	
 	public Tile[] tiles;
 	
@@ -76,9 +76,9 @@ public class TestScreen2 extends BaseScreen {
 			}
 		}
 		
-		for(int i = 0; i < tiles.length; i++) {
-			calculatePrev(tiles[i]);
-		}
+//		for(int i = 0; i < tiles.length; i++) {
+//			calculatePrev(tiles[i]);
+//		}
 		
 		prepareArt();
 		
