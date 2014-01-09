@@ -12,18 +12,21 @@ public class LoginSuccessful extends ReceivablePacket{
 	int playerId;
 	int x;
 	int y;
+	int charId;
 	
 	@Override
 	public boolean read() {
 		playerId = readD();
 		x = readD();
 		y = readD();
+		charId = readD();
+		
 		return true;
 	}
 
 	@Override
 	public void run() {
-		Player player = new Player(playerId, x, y);
+		Player player = new Player(playerId, x, y, charId);
 		
 		GameWorld.getInstance().player = player;
 		GameWorld.getInstance().putCharacter(player);

@@ -1,23 +1,12 @@
 package com.friendlyblob.mayhemandhell.server.network.packets.client;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.friendlyblob.mayhemandhell.server.DatabaseFactory;
-import com.friendlyblob.mayhemandhell.server.model.World;
-import com.friendlyblob.mayhemandhell.server.model.actors.Player;
-import com.friendlyblob.mayhemandhell.server.model.datatables.CharacterTemplateTable;
-import com.friendlyblob.mayhemandhell.server.network.GameClient;
-import com.friendlyblob.mayhemandhell.server.network.GameClient.GameClientState;
-import com.friendlyblob.mayhemandhell.server.network.GameClientPacket;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.DeathNotification;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.LoginSuccessful;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.RegistrationFailure;
 import com.friendlyblob.mayhemandhell.server.network.packets.server.RegistrationSuccessful;
 
@@ -56,7 +45,7 @@ public class RegistrationPacket extends ClientPacket{
 			return;
 		}
 		
-		// try finding whether such username taken
+		// try finding whether such username is taken
 		try {
 			Connection con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement selectionQuery = con.prepareStatement("SELECT * FROM users WHERE username = ?");
@@ -68,20 +57,15 @@ public class RegistrationPacket extends ClientPacket{
 				getClient().sendPacket(new RegistrationFailure("Sorry, but this username is already taken"));
 				return;
 			}
-
 		
 			// Everything's fine, insert new user
-			PreparedStatement insertionQuery = con.prepareStatement("INSERT INTO users(username, password) VALUES(?, SHA1(?))");
+			PreparedStatement insertionQuery = con.prepareStatement("INSERT INTO users(username, password, char_id, last_x, last_y) VALUES(?, SHA1(?), ?, 100, 100)");
 	
 			insertionQuery.setString(1, username);
 			insertionQuery.setString(2, password);
+			// TODO check whether character id is valid
+			insertionQuery.setInt(3, charId);
 			insertionQuery.executeUpdate();
-			
-			// TODO fetch player data from database and attach Player object to connection.
-			// TODO Remove random generated ID at player
-//				Player player = new Player(666, CharacterTemplateTable.getInstance().getTemplate("player"));
-//				getClient().setPlayer(player);
-//				player.setClient(getClient());
 			
 			getClient().sendPacket(new RegistrationSuccessful());
 				

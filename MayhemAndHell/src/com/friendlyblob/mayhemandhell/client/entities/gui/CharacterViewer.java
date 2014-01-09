@@ -34,7 +34,7 @@ public class CharacterViewer extends Widget {
 		// draw the pad underneath the character
 		Color currentColor = spriteBatch.getColor();
 		spriteBatch.setColor(currentColor.r, currentColor.g, currentColor.b, .15f);
-		spriteBatch.draw(padTexture, getX()-1, getY()+1);
+		spriteBatch.draw(padTexture, getX()-1, getY()-1);
 		spriteBatch.setColor(currentColor);
 		// draw the character texture
 		spriteBatch.draw(textures[charId], getX(), getY());

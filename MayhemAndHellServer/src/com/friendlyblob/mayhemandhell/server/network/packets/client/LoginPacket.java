@@ -45,24 +45,24 @@ public class LoginPacket extends ClientPacket{
 			ResultSet rset = ps.executeQuery();
 
 			if (rset.next()) {
-				getClient().setState(GameClient.GameClientState.AUTHORIZED);
+				getClient().setState(GameClientState.IN_GAME);
 //				 TODO fetch player data from database and attach Player object to connection.
 //				 TODO Remove random generated ID at player
 				Player player = new Player(666, CharacterTemplateTable.getInstance().getTemplate("player"));
-				getClient().setPlayer(player);
+				player.setCharId(rset.getInt("char_id"));
+				player.setPosition(rset.getInt("last_x"), rset.getInt("last_y"));
 				player.setClient(getClient());
-				player.setPosition(100, 100);
-
+				
+				getClient().setPlayer(player);
 				
 				getClient().sendPacket(
 						new LoginSuccessful(
 								player.getObjectId(),
 								(int) player.getPosition().getX(),
-								(int) player.getPosition().getY()));
-				
+								(int) player.getPosition().getY(),
+								player.getCharId()
+				));
 
-				
-				getClient().setState(GameClientState.IN_GAME);
 				World.getInstance().addPlayer(getClient().getPlayer());
 				
 			} else {

@@ -93,7 +93,7 @@ public class MyGame extends Game implements ApplicationListener {
 		screenLoading = new LoadingScreen(this);
 		
 		// Setting first screen to render
-		setScreen(screenLoading);//new TestScreen2(this));
+		setScreen(screenLoading);//);
     }
     
     /**

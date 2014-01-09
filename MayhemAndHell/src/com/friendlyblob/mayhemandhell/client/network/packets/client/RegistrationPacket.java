@@ -2,14 +2,14 @@ package com.friendlyblob.mayhemandhell.client.network.packets.client;
 
 import com.friendlyblob.mayhemandhell.client.network.packets.SendablePacket;
 
-public class RegisterPacket extends SendablePacket{
+public class RegistrationPacket extends SendablePacket{
 
 	private String username;
 	private String password;
 	private String passwordRepeated;
 	private int charId;
 	
-	public RegisterPacket(String username, String password,
+	public RegistrationPacket(String username, String password,
 			String passwordRepeated, int charId) {
 		this.username = username;
 		this.password = password;

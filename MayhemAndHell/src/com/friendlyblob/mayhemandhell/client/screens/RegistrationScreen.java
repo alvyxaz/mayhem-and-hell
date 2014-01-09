@@ -25,7 +25,7 @@ import com.friendlyblob.mayhemandhell.client.entities.gui.CharacterViewer;
 import com.friendlyblob.mayhemandhell.client.entities.gui.MenuBackground;
 import com.friendlyblob.mayhemandhell.client.gameworld.GameWorld;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
-import com.friendlyblob.mayhemandhell.client.network.packets.client.RegisterPacket;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.RegistrationPacket;
 
 public class RegistrationScreen extends BaseScreen{
 	private GameWorld world;
@@ -155,7 +155,7 @@ public class RegistrationScreen extends BaseScreen{
     		@Override
             public void changed (ChangeEvent event, Actor actor) {
     			hideNoticeMessage();
-    			MyGame.connection.sendPacket(new RegisterPacket(usernameField.getText(), passwordField.getText(), passwordRepeatedField.getText(), characterViewer.getCharId()));
+    			MyGame.connection.sendPacket(new RegistrationPacket(usernameField.getText(), passwordField.getText(), passwordRepeatedField.getText(), characterViewer.getCharId()));
             }
         });
         

@@ -16,9 +16,11 @@ public class Player extends GameCharacter {
 	public int targetId;
 	
 	public Inventory inventory = new Inventory(3, 4);
+
+	private int charId;
 		
-	public Player (int id, int x, int y){
-		super(id, x, y, 0);
+	public Player (int id, int x, int y, int charId){
+		super(id, x, y, charId);
 
 		int width = 32;
 		int height = 32;
