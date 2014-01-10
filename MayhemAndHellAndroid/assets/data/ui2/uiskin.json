@@ -22,8 +22,8 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 },
 
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
-	default: { selection: selection, background: input, font: default-font, fontColor: inputColor, messageFontColor: inputMessageColor, cursor: cursor },
-	input_white: { selection: selection, background: input_white, font: default-font, fontColor: inputColor, messageFontColor: inputMessageColor, cursor: cursor }
+	default: { selection: selection, background: input, font: default-font, fontColor: inputColor, messageFontColor: inputMessageColor },
+	input_white: { selection: selection, background: input_white, font: default-font, fontColor: inputColor, messageFontColor: inputMessageColor }
 },
 
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
