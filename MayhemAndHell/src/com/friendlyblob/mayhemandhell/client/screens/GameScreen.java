@@ -7,9 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -17,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
@@ -36,15 +41,15 @@ import com.friendlyblob.mayhemandhell.client.network.packets.client.LoginPacket;
 public class GameScreen extends BaseScreen{
 	private GameWorld gameWorld;
 	
-	public GuiManager guiManager;
-	
 	public LiveNotifications notifications;
 	public EventNotifications eventNotifications;
 	
+	public GuiManager guiManager;
+	
 	// Music stuff
 	private Music music;
-	private final float MAX_VOLUME = .4f;
-	private final float VOLUME_GROWTH_SPEED = .01f;
+	private final float MAX_VOLUME = .2f;
+	private final float VOLUME_GROWTH_SPEED = .05f;
 	private float currVolume;
 		
 	// UI related
@@ -82,26 +87,10 @@ public class GameScreen extends BaseScreen{
         stage.addActor(root);
         
         // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
-        final TextField chatMessageField = new TextField("", skin);
+        TextFieldStyle whiteStyle = skin.get("input_white", TextFieldStyle.class);
+        final TextField chatMessageField = new TextField("", whiteStyle);
         chatMessageField.setMessageText("Say something!");
-
-        TextButtonStyle greenStyle = skin.get("green", TextButtonStyle.class);        
-        final TextButton loginButton = new TextButton("Say", greenStyle);
-        
-        root.add(chatMessageField).padRight(5);
-        root.add(loginButton).width(35);
-                
-        loginButton.addListener(new ChangeListener() {
-        		@Override
-                public void changed (ChangeEvent event, Actor actor) {
-            		touchedUiElement = true;
-            		// Send the packet with broadcast type
-        			MyGame.connection.sendPacket(new ChatMessagePacket("/b " + chatMessageField.getText()));
-        			// Lose the focus
-        			chatMessageField.setText("");
-        			stage.unfocusAll();
-        		}
-        });
+        chatMessageField.setVisible(false);
         
         chatMessageField.addListener(new ClickListener() {
         	@Override
@@ -110,6 +99,53 @@ public class GameScreen extends BaseScreen{
         		touchedUiElement = true;
         	}
         });
+        
+        TextButtonStyle greenStyle = skin.get("green", TextButtonStyle.class);        
+        final TextButton sayButton = new TextButton("Say", greenStyle);
+        sayButton.setWidth(35);
+        sayButton.setVisible(false);
+        
+		sayButton.addListener(new ChangeListener() {
+				@Override
+		        public void changed (ChangeEvent event, Actor actor) {
+		    		touchedUiElement = true;
+		    		// Send the packet with broadcast type
+					MyGame.connection.sendPacket(new ChatMessagePacket("/b " + chatMessageField.getText()));
+					// Lose the focus
+					chatMessageField.setText("");
+					stage.unfocusAll();
+				}
+		});
+
+		Group textGroup = new Group();
+		textGroup.addActor(chatMessageField);
+		textGroup.size(chatMessageField.getWidth(), chatMessageField.getHeight());
+		
+		Group sayButtonGroup = new Group();
+		sayButtonGroup.addActor(sayButton);
+		sayButtonGroup.size(sayButton.getWidth(), sayButton.getHeight());
+		
+		HorizontalGroup horizontalGroup = new HorizontalGroup();
+		horizontalGroup.addActor(textGroup);
+		horizontalGroup.addActor(sayButtonGroup);
+		horizontalGroup.setSpacing(5);
+		
+		root.add(horizontalGroup).expandX().padLeft(25);
+		
+        ButtonStyle toggleStyle = skin.get("button_chat", ButtonStyle.class);        
+        final Button chatToggleButton = new Button(toggleStyle);
+        
+        chatToggleButton.addListener(new ChangeListener() {
+				@Override
+		        public void changed (ChangeEvent event, Actor actor) {
+		    		boolean visible = chatMessageField.isVisible();
+		    		
+		    		chatMessageField.setVisible(!visible);
+		    		sayButton.setVisible(!visible);
+				}
+		});
+        
+        root.add(chatToggleButton).right().padRight(5);
 	}
 
 	@Override
@@ -157,7 +193,7 @@ public class GameScreen extends BaseScreen{
 	public void prepare() {
 		currVolume = 0;
 		
-		music = Assets.manager.get("sounds/bg.wav", Music.class);
+		music = Assets.manager.get("sounds/bg.wav");
 		music.setLooping(true);
 		music.setVolume(currVolume);
 		music.stop();

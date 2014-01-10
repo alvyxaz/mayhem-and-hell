@@ -68,8 +68,6 @@ public class RegistrationScreen extends BaseScreen{
         root.add(fieldTable).left();
         fieldTable.debug();
         // Set up character selection table
-//        Table charSelectionTable = new Table();
-//        root.add(charSelectionTable).padTop(28);
 
         // Add field elements
         final TextField usernameField = new TextField("", skin);

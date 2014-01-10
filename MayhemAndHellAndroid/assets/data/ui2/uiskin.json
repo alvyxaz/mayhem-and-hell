@@ -16,8 +16,14 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	red: { down: button_red, up: button_red, font: default-font, fontColor: white },
 },
 
+
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	button_chat: { down: button_chat, up: button_chat},
+},
+
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
-	default: { selection: selection, background: input, font: default-font, fontColor: inputColor, messageFontColor: inputMessageColor, cursor: cursor }
+	default: { selection: selection, background: input, font: default-font, fontColor: inputColor, messageFontColor: inputMessageColor, cursor: cursor },
+	input_white: { selection: selection, background: input_white, font: default-font, fontColor: inputColor, messageFontColor: inputMessageColor, cursor: cursor }
 },
 
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
