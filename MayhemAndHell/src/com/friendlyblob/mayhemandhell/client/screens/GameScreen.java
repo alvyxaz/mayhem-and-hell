@@ -126,6 +126,8 @@ public class GameScreen extends BaseScreen{
         chatToggleButton.addListener(new ChangeListener() {
 				@Override
 		        public void changed (ChangeEvent event, Actor actor) {
+		    		touchedUiElement = true;
+					
 		    		boolean visible = chatMessageField.isVisible();
 		    		
 		    		chatMessageField.setVisible(!visible);
