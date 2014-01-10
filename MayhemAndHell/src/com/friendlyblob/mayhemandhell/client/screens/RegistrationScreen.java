@@ -153,7 +153,13 @@ public class RegistrationScreen extends BaseScreen{
     		@Override
             public void changed (ChangeEvent event, Actor actor) {
     			hideNoticeMessage();
-    			MyGame.connection.sendPacket(new RegistrationPacket(usernameField.getText(), passwordField.getText(), passwordRepeatedField.getText(), characterViewer.getCharId()));
+    			
+    			if (game.getConnection() == null) {
+    				showNoticeMessage("Couldn't connect to server");
+    				return;
+    			}
+    			
+    			game.getConnection().sendPacket(new RegistrationPacket(usernameField.getText(), passwordField.getText(), passwordRepeatedField.getText(), characterViewer.getCharId()));
             }
         });
         

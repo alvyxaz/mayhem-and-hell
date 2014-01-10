@@ -1,5 +1,8 @@
 package com.friendlyblob.mayhemandhell.client;
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.Random;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -87,7 +90,7 @@ public class MyGame extends Game implements ApplicationListener {
 			host = "158.129.18.169";
 		}
 		
-		connectToServer();
+		getConnection();
 		
 		// Initializing screens;
 		screenLoading = new LoadingScreen(this);
@@ -109,13 +112,34 @@ public class MyGame extends Game implements ApplicationListener {
 
     public void connectToServer() {
     	try {
-			MyGame.connection = new Connection(new PacketHandler(), host, 7777);
-			MyGame.connection.game = this;
-			MyGame.connection.start();
-			MyGame.connection.sendPacket(new ClientVersion(5));
-		} catch (Exception e){
+    		if (MyGame.connection == null) {
+    			MyGame.connection = new Connection(new PacketHandler(), host, 7777);
+    			MyGame.connection.game = this;
+    			MyGame.connection.start();
+    			MyGame.connection.sendPacket(new ClientVersion(5));
+    		}
+    	} catch (ConnectException e) {
+    		
+    	} catch (Exception e){
 			System.out.println();
 		}
+    }
+    
+    public Connection getConnection() {
+    	try {
+    		if (connection == null) {
+    			connection = new Connection(new PacketHandler(), host, 7777);
+    			connection.game = this;
+    			connection.start();
+    			connection.sendPacket(new ClientVersion(5));
+    		}	
+    	} catch (ConnectException e) {
+    		connection = null;
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return connection;
     }
     
     public void render () {

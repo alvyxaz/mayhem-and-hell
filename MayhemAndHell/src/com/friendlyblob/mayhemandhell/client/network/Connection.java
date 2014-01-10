@@ -79,10 +79,10 @@ public class Connection extends Thread {
 			serverSocket = new Socket(host, port);
 		} catch (UnknownHostException e) {
 			System.err.println("Can't connect to host");
-            System.exit(1);
+//            System.exit(1);
 		} catch (IOException e) {
             e.printStackTrace();
-            System.exit(1);
+//            System.exit(1);
         }
 		
 		outputStream = serverSocket.getOutputStream();
@@ -110,15 +110,12 @@ public class Connection extends Thread {
 
 	}
 	
-	int kakis = 0;
-	
 	final int write(final ByteBuffer buf) throws IOException {
 		byte temp [] = new byte [buf.remaining()];
 
 		buf.get(temp);
 		outputStream.write(temp);
 		
-		kakis++;
 		return 0;
 	}
 	
@@ -374,6 +371,7 @@ public class Connection extends Thread {
 	
 	protected void onForcedDisconnection() {
 		// TODO add more appropriate methods of notification and etc
+		MyGame.connection = null;
 		System.out.println("Connection with server lost");
 		shutdown = true;
 	}
