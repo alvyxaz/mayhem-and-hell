@@ -109,6 +109,10 @@ public class ZoneTemplate {
 			size++;
 		}
 		
+		if (size == 0) {
+			return null;
+		}
+		
 		int path[] = new int[size];
 		
 		u = tileB;

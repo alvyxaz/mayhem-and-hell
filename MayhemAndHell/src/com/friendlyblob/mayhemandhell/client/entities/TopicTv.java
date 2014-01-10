@@ -32,6 +32,6 @@ public class TopicTv extends GameObject {
 	}
 	
 	public void setTopic(String topic) {
-		chatBubbleNotifications.addRegularNotification(topic);
+		chatBubbleNotifications.addTvNotification(topic);
 	}
 }

@@ -121,6 +121,9 @@ public class LoginScreen extends BaseScreen{
         });
 
         root.debug();
+        
+        usernameField.setText("Alvys");
+        passwordField.setText("alvys");
 	}
 	
 	public void showErrorMessage(String message) {

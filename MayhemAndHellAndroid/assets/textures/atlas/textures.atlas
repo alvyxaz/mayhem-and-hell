@@ -146,6 +146,21 @@ gui/ingame/skill_slot
   orig: 16, 16
   offset: 0, 0
   index: -1
+gui/ingame/speech
+  rotate: false
+  xy: 57, 3
+  size: 9, 9
+  split: 4, 4, 4, 4
+  orig: 9, 9
+  offset: 0, 0
+  index: -1
+gui/ingame/speech_arrow
+  rotate: false
+  xy: 260, 9
+  size: 3, 3
+  orig: 3, 3
+  offset: 0, 0
+  index: -1
 gui/ingame/status_bar
   rotate: false
   xy: 330, 19
