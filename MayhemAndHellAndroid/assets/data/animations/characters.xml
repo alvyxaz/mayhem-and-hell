@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <characters>
     
-    <character id="0"> <!--  BOY -->
+    <character id="0"> <!--  GURL1 -->
     
         <animation type="DEFAULT" file="characters/characters.png" 
 		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
@@ -30,17 +30,17 @@
 		
 		<animation type="WALKING_LEFT" file="characters/characters.png" 
 		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
-			<frame startX="0" startY="66" startMark="0" />
-			<frame startX="25" startY="66" startMark="0.25" />
-			<frame startX="0" startY="66" startMark="0.50" />
-			<frame startX="50" startY="66" startMark="0.75" />
+			<frame startX="50" startY="65" startMark="0" />
+			<frame startX="0" startY="66" startMark="0.25" />
+			<frame startX="50" startY="65" startMark="0.50" />
+			<frame startX="25" startY="66" startMark="0.75" />
 		</animation>
 		
 		<animation type="WALKING_RIGHT" file="characters/characters.png" 
 		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
-			<frame startX="50" startY="99" startMark="0" />
+			<frame startX="50" startY="98" startMark="0" />
 			<frame startX="0" startY="99" startMark="0.25" />
-			<frame startX="50" startY="99" startMark="0.50" />
+			<frame startX="50" startY="98" startMark="0.50" />
 			<frame startX="25" startY="99" startMark="0.75" />
 		</animation>
 		
@@ -60,7 +60,7 @@
 		
 		<animation type="IDLE_LEFT" file="characters/characters.png" 
 		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
-			<frame startX="0" startY="66" startMark="0" />
+			<frame startX="50" startY="66" startMark="0" />
 		</animation>
 		
 		<animation type="IDLE_RIGHT" file="characters/characters.png" 
@@ -68,85 +68,49 @@
 			<frame startX="50" startY="99" startMark="0" />
 		</animation>
 		
-		<!-- ************************************************* -->
-        <!-- * ATTACKING -->
+	</character>
+    
+    <character id="1"> <!--  BOY1 -->
+    
+        <animation type="DEFAULT" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="100" startY="0" startMark="0" />
+		</animation>
+        
+        <!-- ************************************************* -->
+        <!-- * WALKING -->
        	<!-- ************************************************* --> 
        	
-		<animation type="ATTACK_UP" file="characters/characters.png" 
-		    	frameWidth="25" frameHeight="33" looped="false" duration="0.4">
-			<frame startX="25" startY="33" startMark="0" />
-			<frame startX="75" startY="33" startMark="0.25" />
-			<frame startX="100" startY="33" startMark="0.50" />
-			<frame startX="125" startY="33" startMark="0.75" />
+		<animation type="WALKING_UP" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="75" startY="33" startMark="0" />
+			<frame startX="100" startY="33" startMark="0.25" />
+			<frame startX="125" startY="33" startMark="0.50" />
+			<frame startX="100" startY="33" startMark="0.75" />
 		</animation>
 		
-		<animation type="ATTACK_DOWN" file="characters/characters.png" 
-		    	frameWidth="25" frameHeight="33" looped="false" duration="0.4">
-			<frame startX="25" startY="0" startMark="0" />
-			<frame startX="75" startY="0" startMark="0.25" />
-			<frame startX="100" startY="0" startMark="0.50" />
-			<frame startX="125" startY="0" startMark="0.75" />
+		<animation type="WALKING_DOWN" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="75" startY="0" startMark="0" />
+			<frame startX="100" startY="0" startMark="0.25" />
+			<frame startX="125" startY="0" startMark="0.50" />
+			<frame startX="100" startY="0" startMark="0.75" />
 		</animation>
 		
-		<animation type="ATTACK_LEFT" file="characters/characters.png" 
-		    	frameWidth="25" frameHeight="33" looped="false" duration="0.4">
-			<frame startX="0" startY="66" startMark="0" />
+		<animation type="WALKING_LEFT" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="125" startY="65" startMark="0" />
 			<frame startX="75" startY="66" startMark="0.25" />
-			<frame startX="100" startY="66" startMark="0.50" />
-			<frame startX="125" startY="66" startMark="0.75" />
+			<frame startX="125" startY="65" startMark="0.50" />
+			<frame startX="100" startY="66" startMark="0.75" />
 		</animation>
 		
-		<animation type="ATTACK_RIGHT" file="characters/characters.png" 
-		    	frameWidth="25" frameHeight="33" looped="false" duration="0.4">
-			<frame startX="50" startY="99" startMark="0" />
+		<animation type="WALKING_RIGHT" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="125" startY="98" startMark="0" />
 			<frame startX="75" startY="99" startMark="0.25" />
-			<frame startX="100" startY="99" startMark="0.50" />
-			<frame startX="125" startY="99" startMark="0.75" />
-		</animation>
-		
-	</character>
-    
-    <character id="1"> <!--  GURL -->
-    
-        <animation type="DEFAULT" file="characters/characters.png" 
-		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
-			<frame startX="25" startY="132" startMark="0" />
-		</animation>
-        
-        <!-- ************************************************* -->
-        <!-- * WALKING -->
-       	<!-- ************************************************* --> 
-       	
-		<animation type="WALKING_UP" file="characters/characters.png" 
-		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
-			<frame startX="0" startY="165" startMark="0" />
-			<frame startX="25" startY="165" startMark="0.25" />
-			<frame startX="50" startY="165" startMark="0.50" />
-			<frame startX="25" startY="165" startMark="0.75" />
-		</animation>
-		
-		<animation type="WALKING_DOWN" file="characters/characters.png" 
-		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
-			<frame startX="0" startY="132" startMark="0" />
-			<frame startX="25" startY="132" startMark="0.25" />
-			<frame startX="50" startY="132" startMark="0.50" />
-			<frame startX="25" startY="132" startMark="0.75" />
-		</animation>
-		
-		<animation type="WALKING_LEFT" file="characters/characters.png" 
-		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
-			<frame startX="50" startY="198" startMark="0" />
-			<frame startX="0" startY="198" startMark="0.25" />
-			<frame startX="50" startY="198" startMark="0.50" />
-			<frame startX="25" startY="198" startMark="0.75" />
-		</animation>
-		
-		<animation type="WALKING_RIGHT" file="characters/characters.png" 
-		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
-			<frame startX="50" startY="231" startMark="0" />
-			<frame startX="0" startY="231" startMark="0.25" />
-			<frame startX="50" startY="231" startMark="0.50" />
-			<frame startX="25" startY="231" startMark="0.75" />
+			<frame startX="125" startY="98" startMark="0.50" />
+			<frame startX="100" startY="99" startMark="0.75" />
 		</animation>
 		
 		<!-- ************************************************* -->
@@ -155,31 +119,31 @@
 		
 		<animation type="IDLE_UP" file="characters/characters.png" 
 		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
-			<frame startX="25" startY="165" startMark="0" />
+			<frame startX="100" startY="33" startMark="0" />
 		</animation>
 		
 		<animation type="IDLE_DOWN" file="characters/characters.png" 
 		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
-			<frame startX="25" startY="132" startMark="0" />
+			<frame startX="100" startY="0" startMark="0" />
 		</animation>
 		
 		<animation type="IDLE_LEFT" file="characters/characters.png" 
 		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
-			<frame startX="50" startY="198" startMark="0" />
+			<frame startX="125" startY="66" startMark="0" />
 		</animation>
 		
 		<animation type="IDLE_RIGHT" file="characters/characters.png" 
 		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
-			<frame startX="50" startY="231" startMark="0" />
+			<frame startX="125" startY="99" startMark="0" />
 		</animation>
 		
 	</character>
-	
-    <character id="24"> <!--  RAT -->
+    
+    <character id="2"> <!--  GURL2 -->
     
         <animation type="DEFAULT" file="characters/characters.png" 
-		    	frameWidth="24" frameHeight="12" looped="true" duration="0.5">
-			<frame startX="0" startY="264" startMark="0" />
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="175" startY="0" startMark="0" />
 		</animation>
         
         <!-- ************************************************* -->
@@ -187,31 +151,35 @@
        	<!-- ************************************************* --> 
        	
 		<animation type="WALKING_UP" file="characters/characters.png" 
-		    	frameWidth="24" frameHeight="12" looped="true" duration="0.5">
-			<frame startX="0" startY="264" startMark="0" />
-			<frame startX="25" startY="264" startMark="0.33" />
-			<frame startX="50" startY="264" startMark="0.66" />
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="150" startY="33" startMark="0" />
+			<frame startX="175" startY="33" startMark="0.25" />
+			<frame startX="200" startY="33" startMark="0.50" />
+			<frame startX="175" startY="33" startMark="0.75" />
 		</animation>
 		
 		<animation type="WALKING_DOWN" file="characters/characters.png" 
-		    	frameWidth="24" frameHeight="12" looped="true" duration="0.5">
-			<frame startX="0" startY="276" startMark="0" />
-			<frame startX="25" startY="276" startMark="0.33" />
-			<frame startX="50" startY="276" startMark="0.66" />
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="150" startY="0" startMark="0" />
+			<frame startX="175" startY="0" startMark="0.25" />
+			<frame startX="200" startY="0" startMark="0.50" />
+			<frame startX="175" startY="0" startMark="0.75" />
 		</animation>
 		
 		<animation type="WALKING_LEFT" file="characters/characters.png" 
-		    	frameWidth="24" frameHeight="12" looped="true" duration="0.5">
-			<frame startX="0" startY="276" startMark="0" />
-			<frame startX="25" startY="276" startMark="0.33" />
-			<frame startX="50" startY="276" startMark="0.66" />
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="200" startY="65" startMark="0" />
+			<frame startX="150" startY="66" startMark="0.25" />
+			<frame startX="200" startY="65" startMark="0.50" />
+			<frame startX="175" startY="66" startMark="0.75" />
 		</animation>
 		
 		<animation type="WALKING_RIGHT" file="characters/characters.png" 
-		    	frameWidth="24" frameHeight="12" looped="true" duration="0.5">
-			<frame startX="0" startY="264" startMark="0" />
-			<frame startX="25" startY="264" startMark="0.33" />
-			<frame startX="50" startY="264" startMark="0.66" />
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="200" startY="98" startMark="0" />
+			<frame startX="150" startY="99" startMark="0.25" />
+			<frame startX="200" startY="98" startMark="0.50" />
+			<frame startX="175" startY="99" startMark="0.75" />
 		</animation>
 		
 		<!-- ************************************************* -->
@@ -219,33 +187,92 @@
        	<!-- ************************************************* --> 
 		
 		<animation type="IDLE_UP" file="characters/characters.png" 
-		    	frameWidth="24" frameHeight="12" looped="true" duration="1">
-			<frame startX="0" startY="264" startMark="0" />
+		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
+			<frame startX="175" startY="33" startMark="0" />
 		</animation>
 		
 		<animation type="IDLE_DOWN" file="characters/characters.png" 
-		    	frameWidth="24" frameHeight="12" looped="true" duration="1">
-			<frame startX="0" startY="264" startMark="0" />
+		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
+			<frame startX="175" startY="0" startMark="0" />
 		</animation>
 		
 		<animation type="IDLE_LEFT" file="characters/characters.png" 
-		    	frameWidth="24" frameHeight="12" looped="true" duration="1">
-			<frame startX="0" startY="276" startMark="0" />
+		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
+			<frame startX="200" startY="66" startMark="0" />
 		</animation>
 		
 		<animation type="IDLE_RIGHT" file="characters/characters.png" 
-		    	frameWidth="24" frameHeight="12" looped="true" duration="1">
-			<frame startX="50" startY="264" startMark="0" />
+		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
+			<frame startX="200" startY="99" startMark="0" />
 		</animation>
 		
-		
 	</character>
-	
-	<character id="100"> <!--  SMITH -->
-	
-		<animation type="DEFAULT" file="characters/characters.png" 
-		    	frameWidth="22" frameHeight="30" looped="true" duration="1">
-			<frame startX="0" startY="289" startMark="0" />
+    
+    <character id="3"> <!--  BOY2 -->
+    
+        <animation type="DEFAULT" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="250" startY="0" startMark="0" />
+		</animation>
+        
+        <!-- ************************************************* -->
+        <!-- * WALKING -->
+       	<!-- ************************************************* --> 
+       	
+		<animation type="WALKING_UP" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="225" startY="33" startMark="0" />
+			<frame startX="250" startY="33" startMark="0.25" />
+			<frame startX="275" startY="33" startMark="0.50" />
+			<frame startX="250" startY="33" startMark="0.75" />
+		</animation>
+		
+		<animation type="WALKING_DOWN" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="225" startY="0" startMark="0" />
+			<frame startX="250" startY="0" startMark="0.25" />
+			<frame startX="275" startY="0" startMark="0.50" />
+			<frame startX="250" startY="0" startMark="0.75" />
+		</animation>
+		
+		<animation type="WALKING_LEFT" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="275" startY="66" startMark="0" />
+			<frame startX="225" startY="66" startMark="0.25" />
+			<frame startX="275" startY="66" startMark="0.50" />
+			<frame startX="250" startY="66" startMark="0.75" />
+		</animation>
+		
+		<animation type="WALKING_RIGHT" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="0.5">
+			<frame startX="275" startY="99" startMark="0" />
+			<frame startX="225" startY="99" startMark="0.25" />
+			<frame startX="275" startY="99" startMark="0.50" />
+			<frame startX="250" startY="99" startMark="0.75" />
+		</animation>
+		
+		<!-- ************************************************* -->
+        <!-- * IDLE -->
+       	<!-- ************************************************* --> 
+		
+		<animation type="IDLE_UP" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
+			<frame startX="250" startY="33" startMark="0" />
+		</animation>
+		
+		<animation type="IDLE_DOWN" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
+			<frame startX="250" startY="0" startMark="0" />
+		</animation>
+		
+		<animation type="IDLE_LEFT" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
+			<frame startX="275" startY="66" startMark="0" />
+		</animation>
+		
+		<animation type="IDLE_RIGHT" file="characters/characters.png" 
+		    	frameWidth="25" frameHeight="33" looped="true" duration="1">
+			<frame startX="275" startY="99" startMark="0" />
 		</animation>
 		
 	</character>
