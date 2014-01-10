@@ -11,6 +11,6 @@ public class TexturePackerRun {
 		TexturePacker2.process(settings, "textures/atlas", "../MayhemAndHellAndroid/assets/textures/atlas", "textures");
 	
 		// UI
-//		TexturePacker2.process(settings, "C:/Users/Alvys/Desktop/skin", "../MayhemAndHellAndroid/assets/data/ui2", "uiskin");
+		TexturePacker2.process(settings, "C:/Users/Alvys/Desktop/skin", "../MayhemAndHellAndroid/assets/data/ui2", "uiskin");
 	}
 }

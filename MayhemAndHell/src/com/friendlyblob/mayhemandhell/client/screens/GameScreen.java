@@ -46,7 +46,6 @@ public class GameScreen extends BaseScreen{
 	private final float MAX_VOLUME = .4f;
 	private final float VOLUME_GROWTH_SPEED = .01f;
 	private float currVolume;
-	
 		
 	// UI related
     private Skin skin;
