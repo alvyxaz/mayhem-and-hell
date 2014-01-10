@@ -2,6 +2,7 @@ package com.friendlyblob.mayhemandhell.server.network.packets.server;
 
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
+import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
 
@@ -23,7 +24,13 @@ public class ObjectAppeared extends ServerPacket {
 		// ObjectGameType specific
 		switch (object.getType()) {
 			case PLAYER:
+				writeD(((Player) object).getCharId());
+				writeC(((Player) object).getHint(getClient().getPlayer()).value);
+				break;
 			case FRIENDLY_NPC:
+				writeD(((GameCharacter) object).getSprite());
+				writeC(((GameCharacter) object).getHint(getClient().getPlayer()).value);
+				break;
 			case HOSTILE_NPC:
 				writeD(((GameCharacter) object).getSprite());
 				writeC(((GameCharacter) object).getHint(getClient().getPlayer()).value);
