@@ -19,7 +19,6 @@ public class ChatMessageNotification extends ReceivablePacket {
 		objectId = readD();
 		msg = readS();
 		type = ChatMessageType.fromValue(readD());
-		
 		return true;
 	}
 
@@ -27,9 +26,6 @@ public class ChatMessageNotification extends ReceivablePacket {
 	public void run() {
 		GameCharacter gameCharacter = GameWorld.getInstance().getCharacter(objectId);
 
-		gameCharacter.chatBubbleNotifications.addRegularNotification(msg);
-		
-		Sound sound = Assets.manager.get("sounds/chat-notification.mp3");
-		sound.play();
+		GameWorld.instance.chatBubbles.addRegularNotification(msg, gameCharacter.hitBox);
 	}
 }

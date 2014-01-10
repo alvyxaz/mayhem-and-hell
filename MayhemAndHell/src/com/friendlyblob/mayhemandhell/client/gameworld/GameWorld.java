@@ -19,6 +19,7 @@ import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.entities.TargetMark;
 import com.friendlyblob.mayhemandhell.client.entities.TopicTv;
+import com.friendlyblob.mayhemandhell.client.entities.gui.ChatBubbleNotifications;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestAction;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 
@@ -46,6 +47,8 @@ public class GameWorld {
 	public TargetMark targetMark;
 	public TopicTv topicTv;
 	
+	public ChatBubbleNotifications chatBubbles;
+	
 	/*-------------------------------------
 	 * Camera
 	 */
@@ -53,6 +56,7 @@ public class GameWorld {
 	private Vector3 camPos;
 	
 	public GameWorld() {
+		chatBubbles = new ChatBubbleNotifications();
 		
 		/*--------------------------------
 		 * World camera setup
@@ -163,6 +167,8 @@ public class GameWorld {
 			}
 		}
 		
+		chatBubbles.update(deltaTime);
+		
 		cameraFollowPlayer(deltaTime);
 		
 		map.update(deltaTime);
@@ -229,6 +235,8 @@ public class GameWorld {
 		}
 		
 		map.drawAbove(spriteBatch);
+		
+		GameWorld.instance.chatBubbles.draw(spriteBatch);
 	}
 	
 	public void cameraFollowPlayer(float deltaTime){

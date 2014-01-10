@@ -47,8 +47,6 @@ public class GameCharacter extends GameObject  {
 	private int hintXOffset;
 	private int hintYOffset;
 
-	public ChatBubbleNotifications chatBubbleNotifications;
-	
 	public GameCharacter(int id, int x, int y, int animationId){
 		super(id);
 		position.set(x, y);
@@ -58,8 +56,6 @@ public class GameCharacter extends GameObject  {
 		
 		prepareAnimations(animationId);
 		twoDirectionalAnimations = animationHandler.isTwoDirectional();
-		
-		chatBubbleNotifications = new ChatBubbleNotifications(this);
 	}
 	
 	public void prepareAnimations(int animationId) {
@@ -134,7 +130,6 @@ public class GameCharacter extends GameObject  {
 		}
 		currentFrame = (int)(( animationCycle /timePerFrame)) % frameCount;
 		
-		chatBubbleNotifications.update(deltaTime);
 	}
 	
 	public void onArrived() {
@@ -180,7 +175,6 @@ public class GameCharacter extends GameObject  {
 			spriteBatch.draw(hint, hitBox.x + hintXOffset, hitBox.y + hintYOffset);
 		}
 		
-		chatBubbleNotifications.draw(spriteBatch);
 	}
 	
 	/**
