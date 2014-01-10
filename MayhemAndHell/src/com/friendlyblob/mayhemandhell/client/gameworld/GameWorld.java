@@ -201,18 +201,18 @@ public class GameWorld {
 	public void updateWorldInput() {
 		if (Input.isReleasing()) {
 			
-			GameObject gameObject = getObjectAt(toWorldX(Input.getX()), toWorldY(Input.getY()));
-			
-			if (gameObject != null) {
-				if (gameObject == targetMark.getTarget()) {
-					MyGame.connection.sendPacket(new RequestAction(0));
-				} else {
-					MyGame.connection.sendPacket(new RequestTarget(gameObject.objectId));
-				}
-			} else {
+//			GameObject gameObject = getObjectAt(toWorldX(Input.getX()), toWorldY(Input.getY()));
+//			
+//			if (gameObject != null) {
+//				if (gameObject == targetMark.getTarget()) {
+//					MyGame.connection.sendPacket(new RequestAction(0));
+//				} else {
+//					MyGame.connection.sendPacket(new RequestTarget(gameObject.objectId));
+//				}
+//			} else {
 				// Movement should be the last case
 				getPlayer().requestMovementDestination(toWorldX(Input.getX()), toWorldY(Input.getY()));
-			}
+//			}
 		}
 	}
 	
