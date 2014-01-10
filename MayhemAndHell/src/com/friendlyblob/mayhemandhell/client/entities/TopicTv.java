@@ -12,7 +12,7 @@ public class TopicTv extends GameObject {
 	public TopicTv() {
 		super(-1);
 		
-		setPosition(100, 100);
+		setPosition(423, 482);
 		
 		chatBubbleNotifications = new ChatBubbleNotifications(this);
 	}
