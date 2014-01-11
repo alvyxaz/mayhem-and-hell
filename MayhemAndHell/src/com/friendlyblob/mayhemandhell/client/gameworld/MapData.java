@@ -212,11 +212,14 @@ public class MapData {
 		int textureIndex = 0;
 		int textureCount = 0;
 		
+		int tileTextureWidth = Map.TILE_WIDTH+2; // Extra 2 px for border padding
+		int tileTextureHeight = Map.TILE_HEIGHT+2; // Extra 2 px for border padding
+		
 		// Calculating a number of texture regions
 		for (Entry<Integer,AssetDescriptor> entry : requiredResources.entrySet()) {
 			if (entry.getValue().type == Texture.class) {
 				Texture texture = Assets.manager.get(entry.getValue().fileName);
-				textureCount += texture.getWidth()/Map.TILE_WIDTH * texture.getHeight()/Map.TILE_HEIGHT;
+				textureCount += texture.getWidth()/tileTextureWidth * tileTextureHeight;
 			}
 		}
 		
@@ -234,15 +237,21 @@ public class MapData {
 			
 			// Create Texture Regions
 			int resourceId = entry.getKey();
-			int tilesInX = texture.getWidth()/Map.TILE_WIDTH;
-			int tilesInY = texture.getHeight()/Map.TILE_HEIGHT;
+			int tilesInX = texture.getWidth()/tileTextureWidth;
+			int tilesInY = texture.getHeight()/tileTextureHeight;
 			int regionCount = tilesInX * tilesInY;
-		
+			
+			// Padding between every line except for first lines
+//			int xAddition = 0;
+//			int yAddition = 0;
+			
 			for (int i = 0; i < regionCount; i++) {
+//				xAddition = (i % tilesInX) == 0 ? 0 : 1; // Every time except if it's the first column
+//				yAddition = (i < tilesInX) ? 0 : 1; // Every time except if it's first row
 				textureRegions[textureIndex++] = new TextureRegion(
 						texture, 
-						(i % tilesInX)*Map.TILE_WIDTH, 
-						(i/tilesInX)*Map.TILE_HEIGHT, 
+						(i % tilesInX)*tileTextureWidth ,
+						(i/tilesInX)*tileTextureHeight, 
 						Map.TILE_WIDTH, 
 						Map.TILE_HEIGHT);
 			}

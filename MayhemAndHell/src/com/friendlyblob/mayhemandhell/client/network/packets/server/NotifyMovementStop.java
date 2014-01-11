@@ -28,6 +28,7 @@ public class NotifyMovementStop extends ReceivablePacket {
 			player.setPosition(x, y);
 		} else {
 			GameCharacter character = GameWorld.getInstance().characters.get(objectId);
+			System.out.println(objectId);
 			if (character != null) {
 				character.setPosition(x, y);
 			}

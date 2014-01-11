@@ -74,6 +74,28 @@ public class ZoneTemplate {
 			if (y < mapHeight-1) { // TOP NODE
 				tiles[i].addNode(tiles[tileAtIndex(x, y+1)]);
 			}
+			
+			// Diagonal
+			if (x > 0 && y < mapHeight-1 
+					&& !tiles[tileAtIndex(x-1, y)].isCollision() 
+					&& !tiles[tileAtIndex(x, y+1)].isCollision()) { // TOP LEFT
+				tiles[i].addNode(tiles[tileAtIndex(x-1, y+1)]);
+			}
+			if (x < mapWidth-1 && y < mapHeight-1
+					&& !tiles[tileAtIndex(x, y+1)].isCollision() 
+					&& !tiles[tileAtIndex(x+1, y)].isCollision()) { // TOP RIGHT
+				tiles[i].addNode(tiles[tileAtIndex(x+1, y+1)]);
+			}
+			if (x > 0 && y > 0
+					&& !tiles[tileAtIndex(x, y-1)].isCollision()
+					&& !tiles[tileAtIndex(x-1, y)].isCollision()) { // BOTTOM LEFT
+				tiles[i].addNode(tiles[tileAtIndex(x-1, y-1)]);
+			}
+			if (x < mapWidth-1 && y > 0
+					&& !tiles[tileAtIndex(x, y-1)].isCollision()
+					&& !tiles[tileAtIndex(x+1, y)].isCollision()) { // BOTTOM RIGHT
+				tiles[i].addNode(tiles[tileAtIndex(x+1, y-1)]);
+			}
 		}
 	}
 	
@@ -344,6 +366,10 @@ public class ZoneTemplate {
 			this.id = id;
 			nodes = new Tile[0];
 			type = TileType.NORMAL;
+		}
+		
+		public boolean isCollision() {
+			return type == TileType.COLLISION;
 		}
 		
 		@Override

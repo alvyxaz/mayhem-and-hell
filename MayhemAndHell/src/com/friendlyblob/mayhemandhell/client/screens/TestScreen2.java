@@ -74,11 +74,34 @@ public class TestScreen2 extends BaseScreen {
 			if (y < tilesInY-1) { // TOP NODE
 				tiles[i].addNode(tiles[tileAt(x, y+1)]);
 			}
+			// Diagonal
+			if (x > 0 && y < tilesInY-1 
+					&& !tiles[tileAt(x-1, y)].isCollision() 
+					&& !tiles[tileAt(x, y+1)].isCollision()) { // TOP LEFT
+				tiles[i].addNode(tiles[tileAt(x-1, y+1)]);
+			}
+			if (x < tilesInX-1 && y < tilesInY-1
+					&& !tiles[tileAt(x, y+1)].isCollision() 
+					&& !tiles[tileAt(x+1, y)].isCollision()) { // TOP RIGHT
+				tiles[i].addNode(tiles[tileAt(x+1, y+1)]);
+			}
+			if (x > 0 && y > 0
+					&& !tiles[tileAt(x, y-1)].isCollision()
+					&& !tiles[tileAt(x-1, y)].isCollision()) { // BOTTOM LEFT
+				tiles[i].addNode(tiles[tileAt(x-1, y-1)]);
+			}
+			if (x < tilesInX-1 && y > 0
+					&& !tiles[tileAt(x, y-1)].isCollision()
+					&& !tiles[tileAt(x+1, y)].isCollision()) { // BOTTOM RIGHT
+				tiles[i].addNode(tiles[tileAt(x+1, y-1)]);
+			}
 		}
 		
 //		for(int i = 0; i < tiles.length; i++) {
 //			calculatePrev(tiles[i]);
 //		}
+		
+		calculatePrev(tiles[0]);
 		
 		prepareArt();
 		
@@ -286,6 +309,10 @@ public class TestScreen2 extends BaseScreen {
 				
 			}
 			return id + "," + type.ordinal() +","+ nodes.length;
+		}
+		
+		public boolean isCollision() {
+			return type == TileType.COLLISION;
 		}
 		
 		public void setPrev(int[] prev) {

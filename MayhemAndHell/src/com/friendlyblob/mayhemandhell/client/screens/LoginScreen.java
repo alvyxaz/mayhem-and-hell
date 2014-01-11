@@ -107,14 +107,14 @@ public class LoginScreen extends BaseScreen{
         loginButton.addListener(new ChangeListener() {
     		@Override
             public void changed (ChangeEvent event, Actor actor) {
-    			hideErrorMessage();
+    			showErrorMessage("Connecting...");
     			
     			if (game.getConnection() == null) {
-    				showErrorMessage("Couldn't connect to server");
+    				showErrorMessage("Could not connect to server");
     				return;
+    			} else {
+    				game.getConnection().sendPacket(new LoginPacket(usernameField.getText(), passwordField.getText()));
     			}
-
-    			game.getConnection().sendPacket(new LoginPacket(usernameField.getText(), passwordField.getText()));
     		}
         });
         
@@ -127,8 +127,8 @@ public class LoginScreen extends BaseScreen{
 
         root.debug();
         
-        usernameField.setText("vycka");
-        passwordField.setText("labas");
+        usernameField.setText("alvys");
+        passwordField.setText("alvys");
 	}
 	
 	public void showErrorMessage(String message) {

@@ -247,7 +247,6 @@ public class Connection extends Thread {
 				}
 				return false;
 			default:
-				
 				// data size excluding header size :>
 				final int dataPending = (buf.getShort() & 0xFFFF) - HEADER_SIZE;
 				

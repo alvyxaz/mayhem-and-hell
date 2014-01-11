@@ -90,13 +90,11 @@ public class MyGame extends Game implements ApplicationListener {
 			host = "158.129.18.169";
 		}
 		
-		getConnection();
-		
 		// Initializing screens;
 		screenLoading = new LoadingScreen(this);
 		
 		// Setting first screen to render
-		setScreen(screenLoading);//);
+		setScreen(screenLoading);
     }
     
     /**
