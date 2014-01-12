@@ -18,6 +18,7 @@ public class ChatBubbleNotifications {
 	
 	private static final int BUFFER_SIZE = 15;
 	private static final float MAX_TIMER = 5; 
+	private static final float MAX_TV_TIMER = 80;
 	private static final int BUBBLE_MAX_WIDTH = 100;
 	
 	private static final int H_PADDING = 6;
@@ -99,7 +100,8 @@ public class ChatBubbleNotifications {
 		}
 	}
 	
-	public synchronized void addNotification (String notification, Rectangle hitbox, Color fontColor, Color bgColor) {
+	public synchronized void addNotification (String notification, Rectangle hitbox, 
+			Color fontColor, Color bgColor, float time) {
 		int oldest = 0;
 		for (int i = 0; i < BUFFER_SIZE; i++) {
 			if (timers[i] < timers[oldest]) {
@@ -114,7 +116,7 @@ public class ChatBubbleNotifications {
 		TextBounds bounds = font.getWrappedBounds(notification, BUBBLE_MAX_WIDTH);
 		
 		// Pushing notification
-		this.timers[oldest] = MAX_TIMER;
+		this.timers[oldest] = time;
 		this.notifications[oldest] = notification;
 		this.fontColors[oldest] = fontColor;
 		this.bgColors[oldest] = bgColor;
@@ -128,11 +130,11 @@ public class ChatBubbleNotifications {
 	}
 	
 	public void addRegularNotification(String notification, Rectangle hitbox) {
-		addNotification(notification, hitbox, REGULAR_COLOR, Color.WHITE);
+		addNotification(notification, hitbox, REGULAR_COLOR, Color.WHITE, MAX_TIMER);
 	}
 	
 	public void addTvNotification(String notification, Rectangle hitbox) {
-		addNotification(notification, hitbox, Color.WHITE, TV_BG_COLOR);
+		addNotification(notification, hitbox, Color.WHITE, TV_BG_COLOR, MAX_TV_TIMER);
 	}
 	
 }

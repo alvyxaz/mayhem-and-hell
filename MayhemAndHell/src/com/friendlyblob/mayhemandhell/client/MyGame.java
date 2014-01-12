@@ -60,7 +60,7 @@ public class MyGame extends Game implements ApplicationListener {
 	
 	public static Connection connection;
 	
-	private String host = "localhost";
+	private String host = "158.129.18.169";
 	
 	public MyGame(GoogleInterface google, ActionResolver actionResolver){
 		this.google = google;
