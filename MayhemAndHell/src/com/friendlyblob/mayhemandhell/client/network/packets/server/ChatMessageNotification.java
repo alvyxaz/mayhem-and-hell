@@ -24,8 +24,12 @@ public class ChatMessageNotification extends ReceivablePacket {
 
 	@Override
 	public void run() {
-		GameCharacter gameCharacter = GameWorld.getInstance().getCharacter(objectId);
-
-		GameWorld.instance.chatBubbles.addRegularNotification(msg, gameCharacter.hitBox);
+		try {
+			GameCharacter gameCharacter = GameWorld.getInstance().getCharacter(objectId);
+			GameWorld.instance.chatBubbles.addRegularNotification(msg, gameCharacter.hitBox);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
