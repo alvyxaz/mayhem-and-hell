@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.friendlyblob.mayhemandhell.server.model.GameObject;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
+import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.model.instances.ItemInstance;
 import com.friendlyblob.mayhemandhell.server.model.resources.Resource;
 import com.friendlyblob.mayhemandhell.server.network.packets.ServerPacket;
@@ -31,7 +32,15 @@ public class ObjectsInRegion extends ServerPacket{
 			
 			switch (object.getType()) {
 				case PLAYER:
+					writeD(((Player) object).getMovementSpeed());			// Movement speed
+					writeD(((Player) object).getCharId());					// Sprite (animation)
+					writeC(((Player) object).getHint(getClient().getPlayer()).value);
+					break;
 				case FRIENDLY_NPC:
+					writeD(((GameCharacter) object).getMovementSpeed());			// Movement speed
+					writeD(((GameCharacter) object).getSprite());					// Sprite (animation)
+					writeC(((GameCharacter) object).getHint(getClient().getPlayer()).value);
+					break;
 				case HOSTILE_NPC:
 					writeD(((GameCharacter) object).getMovementSpeed());			// Movement speed
 					writeD(((GameCharacter) object).getSprite());					// Sprite (animation)
