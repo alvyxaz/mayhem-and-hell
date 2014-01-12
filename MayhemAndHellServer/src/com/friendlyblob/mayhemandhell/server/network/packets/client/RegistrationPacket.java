@@ -45,9 +45,11 @@ public class RegistrationPacket extends ClientPacket{
 			return;
 		}
 		
+		Connection con = null;
+		
 		// try finding whether such username is taken
 		try {
-			Connection con = DatabaseFactory.getInstance().getConnection();
+			con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement selectionQuery = con.prepareStatement("SELECT * FROM users WHERE username = ?");
 
 			selectionQuery.setString(1, username);
@@ -68,11 +70,10 @@ public class RegistrationPacket extends ClientPacket{
 			insertionQuery.executeUpdate();
 			
 			getClient().sendPacket(new RegistrationSuccessful());
-				
+			con.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 		
 	}
 

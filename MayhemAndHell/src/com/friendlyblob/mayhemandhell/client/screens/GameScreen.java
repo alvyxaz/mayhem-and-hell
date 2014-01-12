@@ -155,7 +155,7 @@ public class GameScreen extends BaseScreen{
 		spriteBatch.begin();
 		spriteBatch.setProjectionMatrix(guiCam.combined);
 		
-		Assets.defaultFont.draw(spriteBatch, fpsText, 20, 20);
+//		Assets.defaultFont.draw(spriteBatch, fpsText, 20, 20);
 		
 		spriteBatch.end();
 		

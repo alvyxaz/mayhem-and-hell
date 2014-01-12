@@ -141,8 +141,13 @@ public class MyGame extends Game implements ApplicationListener {
     }
     
     public void render () {
-    	Input.update();
-		getScreen().render(Gdx.graphics.getDeltaTime());
+    	try {
+    		Input.update();
+    		getScreen().render(Gdx.graphics.getDeltaTime());
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		Gdx.app.exit();
+    	}
     }
     
     /*

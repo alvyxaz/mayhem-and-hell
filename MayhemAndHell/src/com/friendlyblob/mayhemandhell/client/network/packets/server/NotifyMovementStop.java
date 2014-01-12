@@ -20,19 +20,24 @@ public class NotifyMovementStop extends ReceivablePacket {
 
 	@Override
 	public void run() {
-		Player player = GameWorld.getInstance().player;
-		if (player.objectId == objectId) {
-			// TODO if setting a position like this with a ping > 200 causes visible
-			// glitches, perhaps try to just stop the movement and not set a new position
-			// (if difference is not too big).
-			player.setPosition(x, y);
-		} else {
-			GameCharacter character = GameWorld.getInstance().characters.get(objectId);
-			System.out.println(objectId);
-			if (character != null) {
-				character.setPosition(x, y);
+		try {
+			Player player = GameWorld.getInstance().player;
+			if (player.objectId == objectId) {
+				// TODO if setting a position like this with a ping > 200 causes visible
+				// glitches, perhaps try to just stop the movement and not set a new position
+				// (if difference is not too big).
+				player.setPosition(x, y);
+			} else {
+				GameCharacter character = GameWorld.getInstance().characters.get(objectId);
+				System.out.println(objectId);
+				if (character != null) {
+					character.setPosition(x, y);
+				}
 			}
+		} catch (Exception e) {
+			
 		}
+		
 	}
 	
 }

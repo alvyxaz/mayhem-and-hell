@@ -18,6 +18,7 @@ import javolution.util.FastList;
 import org.mmocore.network.NioNetStackList;
 import org.mmocore.network.NioNetStringBuffer;
 
+import com.badlogic.gdx.Gdx;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 import com.friendlyblob.mayhemandhell.client.network.packets.SendablePacket;
@@ -132,7 +133,12 @@ public class Connection extends Thread {
 		readerThread = new Thread() {
 			public void run() {
 				while(!shutdown){
-					readPacket();
+					try {
+						readPacket();
+					} catch (Exception e) {
+						e.printStackTrace();
+						Gdx.app.exit();
+					}
 				}
 			}
 		};
@@ -585,6 +591,8 @@ public class Connection extends Thread {
 	
 	
 	protected void onDisconnection() {
+		game.screenLogin.showErrorMessage("We are sorry. Server has been shut down (or restarted). Come back soon");
+		game.setScreen(game.screenLogin);
 	}
 	
 	final void setReadBuffer(final ByteBuffer buf) {

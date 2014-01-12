@@ -13,7 +13,7 @@ import com.friendlyblob.mayhemandhell.server.network.packets.server.TopicChanged
 
 public class TopicTv implements Runnable {
 	
-	private final int TOPIC_DURATION = 5000; 
+	private final int TOPIC_DURATION = 80 * 1000; 
 	
 	@Override
 	public void run() {
