@@ -1,5 +1,6 @@
 package com.friendlyblob.mayhemandhell.server.network.packets.client;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -7,6 +8,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
+import org.eclipse.jdt.internal.compiler.batch.Main;
 
 import com.friendlyblob.mayhemandhell.server.DatabaseFactory;
 import com.friendlyblob.mayhemandhell.server.model.World;
@@ -62,7 +69,9 @@ public class LoginPacket extends ClientPacket{
 								(int) player.getPosition().getY(),
 								player.getCharId()
 				));
-
+				
+				playSound("beep-02.wav");
+				
 				World.getInstance().addPlayer(getClient().getPlayer());
 				
 			} else {
@@ -77,5 +86,23 @@ public class LoginPacket extends ClientPacket{
 		}
 		
 	}
+	
+	public static synchronized void playSound(final String url) {
+		final File file = new File("./resources/" + url);
+		  new Thread(new Runnable() {
+		  // The wrapper thread is unnecessary, unless it blocks on the
+		  // Clip finishing; see comments.
+		    public void run() {
+		      try {
+		        Clip clip = AudioSystem.getClip();
+		        AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
+		        clip.open(inputStream);
+		        clip.start(); 
+		      } catch (Exception e) {
+		        e.printStackTrace();
+		      }
+		    }
+		  }).start();
+		}
 
 }
