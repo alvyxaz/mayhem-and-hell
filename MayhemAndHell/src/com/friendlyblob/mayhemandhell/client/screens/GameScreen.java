@@ -1,8 +1,11 @@
 package com.friendlyblob.mayhemandhell.client.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -18,7 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.friendlyblob.mayhemandhell.client.MyGame;
+import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.entities.gui.EventNotifications;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiManager;
 import com.friendlyblob.mayhemandhell.client.entities.gui.LiveNotifications;
@@ -43,16 +49,22 @@ public class GameScreen extends BaseScreen{
 	// UI related
     private Skin skin;
     private Stage stage;
+    private Stage resumeStage;
     
     // TODO: find better solution
     private boolean touchedUiElement;
     
     private Table root;
+    
+    private int state;
+    private static final int STATE_PLAYING = 0;
+    private static final int STATE_PAUSE = 1;
 	
 	public GameScreen(MyGame game) {
 		super(game);
 		
 		initGuiElements();
+		initResumeGui();
 		
 		GameWorld.initialize();
 		gameWorld = GameWorld.getInstance();
@@ -62,6 +74,38 @@ public class GameScreen extends BaseScreen{
 		eventNotifications = new EventNotifications();
 	}
 
+	private void initResumeGui() {
+		resumeStage = new Stage(MyGame.SCREEN_WIDTH, MyGame.SCREEN_HEIGHT);
+		
+		Table root = new Table();
+        root.setFillParent(true);
+        root.padTop(5);
+        resumeStage.addActor(root);
+        
+        Label title = new Label("Tap to continue", skin);
+        title.setColor(1f, 0.8f, 0.4f, 1);
+        title.setFontScale(2);
+        
+        final TextButtonStyle redStyle = skin.get("red", TextButtonStyle.class);
+        
+        final TextButton button = new TextButton("Log out", redStyle);
+        button.setSize(55, 25);
+        button.setScale(2);
+        
+        button.addListener(new ChangeListener() {
+    		@Override
+            public void changed (ChangeEvent event, Actor actor) {
+    			game.connection.setShutdownMessage("Successfully logged out");
+    			game.connection.closeConnection();
+            }
+        });
+        
+        root.add(title).colspan(1);
+        root.row();
+        root.add(button).colspan(1);
+        
+	}
+	
 	private void initGuiElements() {		
         stage = new Stage(MyGame.SCREEN_WIDTH, MyGame.SCREEN_HEIGHT);
         
@@ -157,26 +201,70 @@ public class GameScreen extends BaseScreen{
 		
 //		Assets.defaultFont.draw(spriteBatch, fpsText, 20, 20);
 		
+		if (state == STATE_PAUSE) {
+			spriteBatch.setColor(0, 0, 0, 0.7f);
+			spriteBatch.draw(Assets.px, 0, 0, MyGame.SCREEN_WIDTH, MyGame.SCREEN_HEIGHT);
+			spriteBatch.setColor(Color.WHITE);
+		}
+		
 		spriteBatch.end();
 		
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
+        switch (state) {
+			case STATE_PLAYING:
+				stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+				stage.draw();
+				break;
+			case STATE_PAUSE:
+				resumeStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+				resumeStage.draw();
+				break;
+		}
+		
+	}
+	
+	public void startPauseState() {
+		state = STATE_PAUSE;
+		Gdx.input.setInputProcessor(resumeStage);
+	}
+	
+	public void startGameplayState() {
+		state = STATE_PLAYING;
+		Gdx.input.setInputProcessor(stage);
 	}
 	
 	@Override
 	public void update(float deltaTime) {
-		gameWorld.update(deltaTime);
-
-		if (!touchedUiElement) {
-			gameWorld.updateWorldInput();
+		if (Gdx.input.isKeyPressed(Keys.BACK) || Gdx.input.isKeyPressed(Keys.ESCAPE)){
+			startPauseState();
 		}
 		
-		touchedUiElement = false;
+		gameWorld.update(deltaTime);
+
 		
 		if (currVolume < MAX_VOLUME) {
 			currVolume += deltaTime * VOLUME_GROWTH_SPEED;
 			music.setVolume(currVolume);	
 		}
+		
+		switch (state) {
+			case STATE_PLAYING:
+				if (!touchedUiElement) {
+					gameWorld.updateWorldInput();
+				}
+				
+				touchedUiElement = false;
+				break;
+			case STATE_PAUSE:
+				if (Input.isReleasing()) {
+					startGameplayState();
+				}
+				break;
+		}
+	}
+	
+	@Override
+	public void resume() {
+		startPauseState();
 	}
 
 	@Override

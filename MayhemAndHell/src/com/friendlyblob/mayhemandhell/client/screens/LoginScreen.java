@@ -1,6 +1,7 @@
 package com.friendlyblob.mayhemandhell.client.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -127,8 +128,8 @@ public class LoginScreen extends BaseScreen{
 
         root.debug();
         
-        usernameField.setText("alvys");
-        passwordField.setText("alvys");
+//        usernameField.setText("alvys");
+//        passwordField.setText("alvys");
 	}
 	
 	public void showErrorMessage(String message) {
@@ -157,7 +158,9 @@ public class LoginScreen extends BaseScreen{
 	
 	@Override
 	public void update(float deltaTime) {
-
+		if (Gdx.input.isKeyPressed(Keys.BACK)){
+			Gdx.app.exit();
+		}
 	}
 
 	@Override

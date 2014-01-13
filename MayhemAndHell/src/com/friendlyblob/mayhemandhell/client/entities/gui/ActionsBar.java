@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestAction;
-import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 
 public class ActionsBar extends GuiElement{
 

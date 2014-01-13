@@ -66,7 +66,6 @@ public class MyGame extends Game implements ApplicationListener {
 		this.google = google;
 		this.actionResolver = actionResolver; 
 		random = new Random();
-		
 		this.instance = this;
 	}
 	
@@ -164,15 +163,16 @@ public class MyGame extends Game implements ApplicationListener {
 		if(mismatch <= 0.5f){
 			SCREEN_WIDTH = (int)(Gdx.graphics.getWidth()/scale);
 			SCREEN_HEIGHT= (int)(Gdx.graphics.getHeight()/scale);
-		} else if(mismatch > 0.5f){
+		} else { // if(mismatch > 0.5f){
 			scale += 1;
 			SCREEN_WIDTH = (int)(Gdx.graphics.getWidth() / scale);
 			SCREEN_HEIGHT= (int)(Gdx.graphics.getHeight()/scale);
-		} else {
-			int minSize = SCREEN_WIDTH;
-			SCREEN_WIDTH = (minSize);
-			SCREEN_HEIGHT = (int) (minSize * ratio);
-		}
+		} 
+//		else {
+//			int minSize = SCREEN_WIDTH;
+//			SCREEN_WIDTH = (minSize);
+//			SCREEN_HEIGHT = (int) (minSize * ratio);
+//		}
 		
 		SCREEN_HALF_WIDTH = SCREEN_WIDTH / 2;
 		SCREEN_HALF_HEIGHT = SCREEN_HEIGHT / 2;

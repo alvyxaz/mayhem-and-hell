@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -36,7 +39,6 @@ public class LoginPacket extends ClientPacket{
 	protected boolean read() {
 		username = readS();
 		password = readS();
-		
 		return true;
 	}
 
@@ -69,6 +71,13 @@ public class LoginPacket extends ClientPacket{
 								(int) player.getPosition().getY(),
 								player.getCharId()
 				));
+				
+				
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				Calendar cal = Calendar.getInstance();
+				
+				System.out.println("\"" + username +  "\""  + " has joined " + 
+						dateFormat.format(cal.getTime()));
 				
 				playSound("beep-02.wav");
 				

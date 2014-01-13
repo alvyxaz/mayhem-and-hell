@@ -1,4 +1,4 @@
-package com.friendlyblob.mayhemandhellandroid;
+package com.friendlyblob.laughterlounge;
 
 // tag:^(?!.*(Netlink|HWC|gralloc)).*$
 

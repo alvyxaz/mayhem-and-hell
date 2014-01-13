@@ -73,6 +73,10 @@ public class Connection extends Thread {
 	
 	public MyGame game;
 	
+	private boolean showCustomShutdownMessage = false;
+	private String customShutdownMessage = "";
+	private static final String SHUTDOWN_MESSAGE = "We are sorry. Server has been shut down (or restarted). Come back soon";
+	
 	public Connection(final PacketHandler packetHandler, String host, int port) throws IOException{
 		super.setName("PacketHandlerThread-" + super.getId());
 
@@ -559,7 +563,7 @@ public class Connection extends Thread {
 		closeConnection();
 	}
 	
-	final void closeConnection() {
+	public final void closeConnection() {
 		close();
 	}
 	
@@ -589,9 +593,19 @@ public class Connection extends Thread {
 		}
 	}
 	
+	public void setShutdownMessage(String message) {
+		showCustomShutdownMessage = true;
+		customShutdownMessage = message;
+	}
 	
 	protected void onDisconnection() {
-		game.screenLogin.showErrorMessage("We are sorry. Server has been shut down (or restarted). Come back soon");
+		if (showCustomShutdownMessage) {
+			game.screenLogin.showErrorMessage(customShutdownMessage);
+			showCustomShutdownMessage = false;
+		} else {
+			game.screenLogin.showErrorMessage(SHUTDOWN_MESSAGE);
+		}
+		
 		game.setScreen(game.screenLogin);
 	}
 	
