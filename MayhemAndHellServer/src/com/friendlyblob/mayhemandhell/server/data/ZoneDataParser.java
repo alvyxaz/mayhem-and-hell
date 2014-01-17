@@ -12,6 +12,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.friendlyblob.mayhemandhell.server.model.ZoneTemplate;
+import com.friendlyblob.mayhemandhell.server.model.ZoneTemplate.Tile;
+import com.friendlyblob.mayhemandhell.server.model.ZoneTemplate.TileType;
 
 import javolution.util.FastList;
 
@@ -51,9 +53,11 @@ public class ZoneDataParser extends DataParser {
 	
 	public ZoneTemplate parseZone(Node zoneNode) throws InvocationTargetException {
 		int templateId = Integer.parseInt(zoneNode.getAttributes().getNamedItem("id").getNodeValue());
+		int mapWidth = Integer.parseInt(zoneNode.getAttributes().getNamedItem("width").getNodeValue());
+		int mapHeight = Integer.parseInt(zoneNode.getAttributes().getNamedItem("height").getNodeValue());
 		String zoneName = zoneNode.getAttributes().getNamedItem("name").getNodeValue();
 		
-		ZoneTemplate zone = new ZoneTemplate();
+		ZoneTemplate zone = new ZoneTemplate(mapWidth, mapHeight);
 		
 		for (zoneNode = zoneNode.getFirstChild(); zoneNode != null; 
 				zoneNode = zoneNode.getNextSibling()) {
@@ -66,9 +70,37 @@ public class ZoneDataParser extends DataParser {
 			if ("set".equalsIgnoreCase(zoneNode.getNodeName())) {
 				parseSetPair(zoneNode, zone.getStatsSet());
 			}
+			
+			if ("metadata".equalsIgnoreCase(zoneNode.getNodeName())) {
+				parseTileTypes(zoneNode.getTextContent(), zone);
+			}
+			
 		}
 		
 		return zone;
+	}
+	
+	/**
+	 * Fills tile meta data from a string
+	 * @param data string of data in csv encoding
+	 */
+	public void parseTileTypes(String data,  ZoneTemplate zone) {
+		Tile[] tiles = zone.getTiles();
+		String [] lines = data.split("\n");
+		// Going backwards, because tiles from source go from top to bottom
+		for (int i = lines.length-1; i >= 0; i--) {
+			String [] strTiles = lines[i].split(",");
+			for (int x = 0; x < strTiles.length; x++) {
+				try {
+					TileType type = Integer.parseInt(strTiles[x]) > 0 ? 
+							TileType.COLLISION : TileType.NORMAL; // TODO more than one type
+					tiles[zone.tileAtIndex(x, zone.getMapHeight()-i)].setType(type);
+				} catch (Exception e) {
+					
+				}
+			}
+		}
+		zone.establishNodeConnections();
 	}
 	
 }

@@ -138,6 +138,7 @@ public class Input {
 	// TODO cleanup tracked keys before publishing
 	public static void initialize(){
 		touch = new Touch[2];
+		Gdx.input.setCatchBackKey(true);
 		
 		xRatio = MyGame.SCREEN_WIDTH / (float)Gdx.graphics.getWidth();
 		yRatio = MyGame.SCREEN_HEIGHT / (float)Gdx.graphics.getHeight();

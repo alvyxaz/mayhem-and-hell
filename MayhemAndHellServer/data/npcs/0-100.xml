@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- "type" should be a classname of the npc without Instance postfix  !-->
 <list>
-	<npc id="1" type="NpcAttackable" name="Rat" sprite="1">
+	<npc id="24" type="NpcAttackable" name="Rat" sprite="24">
 		<set name="baseStrength" val="5" />
 		<set name="baseMaxHealth" val="25" />
 	    <set name="baseWalkingSpeed" val="20" />

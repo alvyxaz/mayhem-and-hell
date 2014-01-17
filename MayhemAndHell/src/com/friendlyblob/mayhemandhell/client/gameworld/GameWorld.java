@@ -1,9 +1,15 @@
 package com.friendlyblob.mayhemandhell.client.gameworld;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -14,12 +20,16 @@ import com.friendlyblob.mayhemandhell.client.entities.GameCharacter;
 import com.friendlyblob.mayhemandhell.client.entities.GameObject;
 import com.friendlyblob.mayhemandhell.client.entities.Player;
 import com.friendlyblob.mayhemandhell.client.entities.TargetMark;
-import com.friendlyblob.mayhemandhell.client.mapeditor.MapEditor;
+import com.friendlyblob.mayhemandhell.client.entities.TopicTv;
+import com.friendlyblob.mayhemandhell.client.entities.gui.ChatBubbleNotifications;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestAction;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 
 public class GameWorld {
 	public static GameWorld instance;
+	
+	private final int SORT_ON = 5;
+	private int sortFrameCount;
 	
 	/*-------------------------------------
 	 * Entities
@@ -29,14 +39,17 @@ public class GameWorld {
 	
 	public MyGame game;
 	
-	public ConcurrentHashMap<Integer,GameCharacter> characters = new ConcurrentHashMap<Integer,GameCharacter>();
-	public ConcurrentHashMap<Integer,GameObject> gameObjects = new ConcurrentHashMap<Integer,GameObject>();
-	
+	public List<GameCharacter> characters = new ArrayList<GameCharacter>(128);
+	public List<GameObject> gameObjects = new ArrayList<GameObject>(128);
+		
 	private static ArrayList<EnvironmentObject> environmentObjects = new ArrayList<EnvironmentObject>();
 	
 	public static HashMap<String, String> environmentObjectTypes = new HashMap<String, String>();
 	
 	public TargetMark targetMark;
+	public TopicTv topicTv;
+	
+	public ChatBubbleNotifications chatBubbles;
 	
 	/*-------------------------------------
 	 * Camera
@@ -45,6 +58,7 @@ public class GameWorld {
 	private Vector3 camPos;
 	
 	public GameWorld() {
+		chatBubbles = new ChatBubbleNotifications();
 		
 		/*--------------------------------
 		 * World camera setup
@@ -57,49 +71,129 @@ public class GameWorld {
 		/*
 		 * Entities initialization
 		 */
-		player = new Player(0, 100, 100); // TODO do not initialize until login is successful
 		targetMark = new TargetMark();
+		
+		topicTv = new TopicTv();
 	}
 	
 	public void putCharacter(GameCharacter character) {
-		characters.put(character.objectId, character);
-		gameObjects.put(character.objectId, character);
-	}
-	
-	public void removeCharacter(int id) {
-		characters.remove(id);
-		gameObjects.remove(id);
+		synchronized (characters) {
+			characters.add(character);
+		}
+		putObject(character);
 	}
 	
 	public void putObject(GameObject object) {
-		gameObjects.put(object.objectId, object);
+		synchronized (gameObjects) {
+			gameObjects.add(object);
+		}
+	}
+	
+	public void removeCharacter(int id) {
+		synchronized (characters) {
+			for	(GameCharacter gc : characters) {
+				if (gc.objectId == id) {
+					characters.remove(gc);
+					break;
+				}
+			}
+		}
+		
+		removeObject(id);
 	}
 	
 	public void removeObject(int id) {
-		gameObjects.remove(id);
+		synchronized (gameObjects) {
+			for	(GameObject go : gameObjects) {
+				if (go.objectId == id) {
+					gameObjects.remove(go);
+					break;
+				}
+			}
+		}
 	}
 	
 	public boolean characterExists(int id) {
-		return characters.containsKey(id);
+		synchronized (characters) {
+			for	(GameCharacter gc : characters) {
+				if (gc.objectId == id) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean objectExists(int id) {
+		synchronized (gameObjects) {
+			for	(GameObject go : gameObjects) {
+				if (go.objectId == id) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	public GameCharacter getCharacter(int id) {
-		return characters.get(id);
+		synchronized (characters) {
+			for	(GameCharacter gc : characters) {
+				if (gc.objectId == id) {
+					return gc;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	public GameObject getObject(int id) {
+		synchronized (gameObjects) {
+			for	(GameObject go : gameObjects) {
+				if (go.objectId == id) {
+					return go;
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 	public void update(float deltaTime) {
-		player.update(deltaTime);
-		
 		// TODO optimize to avoid iterators (Make sure FastMap uses them first)
-		for (GameCharacter character : characters.values()) {
-			character.update(deltaTime);
+		synchronized (characters) {
+			for (GameCharacter character : characters) {			
+				character.update(deltaTime);
+			}
 		}
 		
-		if (!MapEditor.enabled){
-			cameraFollowPlayer(deltaTime);
-		}
+		chatBubbles.update(deltaTime);
+		
+		cameraFollowPlayer(deltaTime);
 		
 		map.update(deltaTime);
+		
+		if (sortFrameCount++ == SORT_ON) {
+			synchronized (gameObjects) {
+				Collections.sort(gameObjects, new Comparator<GameObject>() {
+				    @Override
+				    public int compare(GameObject go1, GameObject go2) {
+				    	if (go1.position.y > go2.position.y) {
+				    		return -1;
+				    	} else if (go1.position.y == go2.position.y ) {
+				    		return 0;
+				    	}
+				    	
+				    	return 1;
+				    }
+				});	
+			}
+			
+			sortFrameCount = 0;
+		}
+
 	}
 	
 	/**
@@ -109,18 +203,18 @@ public class GameWorld {
 	public void updateWorldInput() {
 		if (Input.isReleasing()) {
 			
-			GameObject gameObject = getObjectAt(toWorldX(Input.getX()), toWorldY(Input.getY()));
-			
-			if (gameObject != null) {
-				if (gameObject == targetMark.getTarget()) {
-					MyGame.connection.sendPacket(new RequestAction(0));
-				} else {
-					MyGame.connection.sendPacket(new RequestTarget(gameObject.objectId));
-				}
-			} else {
+//			GameObject gameObject = getObjectAt(toWorldX(Input.getX()), toWorldY(Input.getY()));
+//			
+//			if (gameObject != null) {
+//				if (gameObject == targetMark.getTarget()) {
+//					MyGame.connection.sendPacket(new RequestAction(0));
+//				} else {
+//					MyGame.connection.sendPacket(new RequestTarget(gameObject.objectId));
+//				}
+//			} else {
 				// Movement should be the last case
 				getPlayer().requestMovementDestination(toWorldX(Input.getX()), toWorldY(Input.getY()));
-			}
+//			}
 		}
 	}
 	
@@ -134,19 +228,17 @@ public class GameWorld {
 		}
 		
 		targetMark.draw(spriteBatch);
+		topicTv.draw(spriteBatch);
 		
-		for (GameObject go : gameObjects.values()) {
-			go.draw(spriteBatch);
+		synchronized (gameObjects) {
+			for (GameObject go : gameObjects) {
+				go.draw(spriteBatch);
+			}		
 		}
-		
-		for (GameCharacter character : characters.values()) {
-			character.draw(spriteBatch);
-		}
-		
-		player.draw(spriteBatch);
-		
 		
 		map.drawAbove(spriteBatch);
+		
+		GameWorld.instance.chatBubbles.draw(spriteBatch);
 	}
 	
 	public void cameraFollowPlayer(float deltaTime){
@@ -227,6 +319,25 @@ public class GameWorld {
 		return (int)(y*worldCam.zoom + camPos.y-MyGame.SCREEN_HALF_HEIGHT);
 	}
 	
+	
+	/**
+	 * Translate world x coordinate to screen x coordinate
+	 * @param x world coordinate
+	 * @return
+	 */
+	public int toScreenX(float x) {
+		return (int)((x + MyGame.SCREEN_HALF_WIDTH - camPos.x)/worldCam.zoom);
+	}
+	
+	/**
+	 * Translate world y coordinate to screen y coordinate
+	 * @param y world coordinate
+	 * @return
+	 */
+	public int toScreenY(float y) {
+		return (int)((y + MyGame.SCREEN_HALF_HEIGHT - camPos.y)/worldCam.zoom);
+	}
+	
 	/**
 	 * Gets a visible object that is at location x y
 	 * @param x
@@ -235,7 +346,7 @@ public class GameWorld {
 	 */
 	public GameObject getObjectAt(int x, int y) {
 		
-		for (GameObject object : gameObjects.values()) {
+		for (GameObject object : gameObjects) {
 			if (object.hitBox.contains(x, y)) {
 				return object;
 			}

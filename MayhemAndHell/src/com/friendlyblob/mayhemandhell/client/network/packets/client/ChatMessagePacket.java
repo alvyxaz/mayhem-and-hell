@@ -2,11 +2,11 @@ package com.friendlyblob.mayhemandhell.client.network.packets.client;
 
 import com.friendlyblob.mayhemandhell.client.network.packets.SendablePacket;
 
-public class ClientChatMessage extends SendablePacket {
+public class ChatMessagePacket extends SendablePacket {
 
 	private String msg;
 	
-	public ClientChatMessage(String message) {
+	public ChatMessagePacket(String message) {
 		this.msg = message;
 	}
 	

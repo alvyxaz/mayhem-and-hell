@@ -42,14 +42,14 @@ public class TargetInfoResponse extends ReceivablePacket {
 	@Override
 	public void run() {
 		GameWorld.getInstance().getPlayer().targetId = info.objectId;
-		GameWorld.getInstance().game.screenGame.guiManager.targetBar.showTarget(info, actions);
+//		GameWorld.getInstance().game.screenGame.guiManager.targetBar.showTarget(info, actions);
 		
 		GameObject object = null;
 		
 		if (info.objectId == GameWorld.getInstance().player.objectId) {
 			object = player;
 		} else {
-			object = GameWorld.getInstance().gameObjects.get(info.objectId);
+			object = GameWorld.getInstance().getObject(info.objectId);
 		}
 		
 		GameWorld.getInstance().targetMark.setTarget(object).setHostile(isHostile);

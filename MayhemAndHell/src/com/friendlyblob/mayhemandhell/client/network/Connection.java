@@ -18,6 +18,7 @@ import javolution.util.FastList;
 import org.mmocore.network.NioNetStackList;
 import org.mmocore.network.NioNetStringBuffer;
 
+import com.badlogic.gdx.Gdx;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 import com.friendlyblob.mayhemandhell.client.network.packets.SendablePacket;
@@ -72,6 +73,10 @@ public class Connection extends Thread {
 	
 	public MyGame game;
 	
+	private boolean showCustomShutdownMessage = false;
+	private String customShutdownMessage = "";
+	private static final String SHUTDOWN_MESSAGE = "We are sorry. Server has been shut down (or restarted). Come back soon";
+	
 	public Connection(final PacketHandler packetHandler, String host, int port) throws IOException{
 		super.setName("PacketHandlerThread-" + super.getId());
 
@@ -79,10 +84,10 @@ public class Connection extends Thread {
 			serverSocket = new Socket(host, port);
 		} catch (UnknownHostException e) {
 			System.err.println("Can't connect to host");
-            System.exit(1);
+//            System.exit(1);
 		} catch (IOException e) {
             e.printStackTrace();
-            System.exit(1);
+//            System.exit(1);
         }
 		
 		outputStream = serverSocket.getOutputStream();
@@ -110,15 +115,12 @@ public class Connection extends Thread {
 
 	}
 	
-	int kakis = 0;
-	
 	final int write(final ByteBuffer buf) throws IOException {
 		byte temp [] = new byte [buf.remaining()];
 
 		buf.get(temp);
 		outputStream.write(temp);
 		
-		kakis++;
 		return 0;
 	}
 	
@@ -135,7 +137,12 @@ public class Connection extends Thread {
 		readerThread = new Thread() {
 			public void run() {
 				while(!shutdown){
-					readPacket();
+					try {
+						readPacket();
+					} catch (Exception e) {
+						e.printStackTrace();
+						Gdx.app.exit();
+					}
 				}
 			}
 		};
@@ -250,7 +257,6 @@ public class Connection extends Thread {
 				}
 				return false;
 			default:
-				
 				// data size excluding header size :>
 				final int dataPending = (buf.getShort() & 0xFFFF) - HEADER_SIZE;
 				
@@ -374,6 +380,7 @@ public class Connection extends Thread {
 	
 	protected void onForcedDisconnection() {
 		// TODO add more appropriate methods of notification and etc
+		MyGame.connection = null;
 		System.out.println("Connection with server lost");
 		shutdown = true;
 	}
@@ -556,7 +563,7 @@ public class Connection extends Thread {
 		closeConnection();
 	}
 	
-	final void closeConnection() {
+	public final void closeConnection() {
 		close();
 	}
 	
@@ -586,8 +593,20 @@ public class Connection extends Thread {
 		}
 	}
 	
+	public void setShutdownMessage(String message) {
+		showCustomShutdownMessage = true;
+		customShutdownMessage = message;
+	}
 	
 	protected void onDisconnection() {
+		if (showCustomShutdownMessage) {
+			game.screenLogin.showErrorMessage(customShutdownMessage);
+			showCustomShutdownMessage = false;
+		} else {
+			game.screenLogin.showErrorMessage(SHUTDOWN_MESSAGE);
+		}
+		
+		game.setScreen(game.screenLogin);
 	}
 	
 	final void setReadBuffer(final ByteBuffer buf) {

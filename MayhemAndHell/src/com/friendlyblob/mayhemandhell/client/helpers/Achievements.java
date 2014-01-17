@@ -17,23 +17,23 @@ public class Achievements {
 	private static GoogleInterface google;
 	
 	public static void initialize(GoogleInterface googleService){
-		prefs = Gdx.app.getPreferences("achievements");
-		achievements = new HashMap<String,Achievement>();
-		google = googleService;
-		
-		XmlReader reader = new XmlReader();
-		try {
-			Element achievementsXml = reader
-					.parse(Gdx.files.local("data/achievements.xml"));
-			
-			for(int i = 0; i < achievementsXml.getChildCount(); i++){
-				achievements.put(achievementsXml.getChild(i).get("id"),
-						new Achievement(achievementsXml.getChild(i)));
-			}
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+//		prefs = Gdx.app.getPreferences("achievements");
+//		achievements = new HashMap<String,Achievement>();
+//		google = googleService;
+//		
+//		XmlReader reader = new XmlReader();
+//		try {
+//			Element achievementsXml = reader
+//					.parse(Gdx.files.local("data/achievements.xml"));
+//			
+//			for(int i = 0; i < achievementsXml.getChildCount(); i++){
+//				achievements.put(achievementsXml.getChild(i).get("id"),
+//						new Achievement(achievementsXml.getChild(i)));
+//			}
+//			
+//		} catch (Exception e){
+//			e.printStackTrace();
+//		}
 	}
 	
 	public static void pushOnline(){

@@ -358,7 +358,8 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>> implements 
 		try
 		{
 			if (state == GameClientState.CONNECTED) {
-				if (getStats().processedPackets > 3) {
+				// TODO: revert to sensible value AND do something about it
+				if (getStats().processedPackets > 999) {
 					if (Config.PACKET_HANDLER_DEBUG) {
 						log.severe("Client " + toString() + " - Disconnected, too many packets in non-authed state.");
 					}

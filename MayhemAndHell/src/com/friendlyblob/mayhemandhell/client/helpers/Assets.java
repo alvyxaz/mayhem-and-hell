@@ -1,7 +1,8 @@
 package com.friendlyblob.mayhemandhell.client.helpers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -21,12 +22,16 @@ public class Assets {
 		assets = new Assets();
 		manager = new AssetManager();
 		
-		System.out.println();
-		
 		// Loading critical resources
 		manager.load("textures/atlas/debugging/px.png", Texture.class);
 		manager.load("fonts/arial_normal.fnt", BitmapFont.class);
 		manager.load("fonts/arial_border.fnt", BitmapFont.class);
+
+		manager.load("textures/characters/characters-select.png", Texture.class);
+		
+		manager.load("sounds/bg.wav", Music.class);
+		manager.load("sounds/chat-notification.mp3", Sound.class);
+		
 		
 		// Making sure critical resources are loaded before going further
 		manager.finishLoading();

@@ -1,5 +1,5 @@
 /** Automatically generated file. DO NOT MODIFY */
-package com.friendlyblob.mayhemandhellandroid;
+package com.friendlyblob.laughterlounge;
 
 public final class BuildConfig {
     public final static boolean DEBUG = true;

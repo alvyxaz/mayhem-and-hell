@@ -143,20 +143,40 @@ public class GameCharacter extends GameObject{
 		int movementSpeed = getMovementSpeed();
 		float distanceCovered = GameTimeController.DELTA_TIME*movementSpeed;
 		
-		getPosition().offset((float) Math.cos(angle) * distanceCovered, 
-				(float) Math.sin(angle) * distanceCovered);
+		getPosition().offsetByAngle(angle, distanceCovered);
 		
 		int dX = (int)(movement.destinationX - getPosition().getX());
 		int dY = (int)(movement.destinationY - getPosition().getY());
 
 		// Check if destination is reached
 		if (dX * dX + dY * dY <= distanceCovered * distanceCovered) {
-			getPosition().set(movement.destinationX, movement.destinationY);
-			movement = null;
 			
-			getAi().notifyEvent(Event.ARRIVED);
-			
-			return true;
+			// Checking if moving on path
+			if (movement.onPath) {
+				// If we arrived at the last tile
+				if(movement.advanceOnPath()) {
+					getPosition().set(movement.destinationX, movement.destinationY);
+					movement = null;
+					getAi().notifyEvent(Event.ARRIVED);
+					return true;
+				} else {
+					// Set destination to another tile
+					int nextTile = movement.getNextTile();
+					movement.destinationX = getZone().getTemplate().xPositionOfTile(nextTile);
+					movement.destinationY = getZone().getTemplate().yPositionOfTile(nextTile);
+					// Use "movement points" that are left after reaching
+					// one of the path nodes
+					
+					// Notify nearby characters about movement
+					getRegion().broadcastToCloseRegions(new NotifyCharacterMovement(this));
+				}
+				
+			} else {
+				getPosition().set(movement.destinationX, movement.destinationY);
+				movement = null;
+				getAi().notifyEvent(Event.ARRIVED);
+				return true;
+			}
 		}
 		
 		return false;
@@ -185,6 +205,18 @@ public class GameCharacter extends GameObject{
 		movementData.destinationY = y;
 		movementData.movementSpeed = getMovementSpeed();
 		movementData.timeStamp = GameTimeController.getInstance().getGameTicks();
+		
+		if (this instanceof Player) {
+			int sourceTile = getZone().getTemplate().tileAtPosition(this.getPosition());
+			int destinationTile = getZone().getTemplate().tileAtPosition(new ObjectPosition(x, y));
+			int[] path = getZone().getTemplate().calculatePathBetween(sourceTile, destinationTile);
+			if (path == null) {
+				return false;
+			}
+			movementData.enableTileMode(path);
+			movementData.destinationX = getZone().getTemplate().xPositionOfTile(path[0]);
+			movementData.destinationY = getZone().getTemplate().yPositionOfTile(path[0]);
+		}
 		
 		moveCharacterTo(movementData);
 		
@@ -834,14 +866,44 @@ public class GameCharacter extends GameObject{
 		}
 	}
 	
-	public static class MovementData {
+	public class MovementData {
 		public float destinationX;
 		public float destinationY;
 		public int movementSpeed;
 		public int timeStamp;
 		
+		public boolean onPath = false;
+		public int[] tilePath;
+		private int nextTileIndex;
+		
 		/**
-		 * Fills moevement data with characters current position.
+		 * Advances movement to another tile
+		 * @return true if arrived at the final destination
+		 */
+		public boolean advanceOnPath() {
+			nextTileIndex++;
+			if (nextTileIndex >= tilePath.length) {
+				return true;
+			}
+			return false;
+		}
+		
+		public int getNextTile() {
+			return tilePath[nextTileIndex];
+		}
+		
+		/**
+		 * Enables walking through a set of tiles
+		 * @param tilePath
+		 */
+		public void enableTileMode(int[] tilePath) {
+			onPath = true;
+			this.tilePath = tilePath;
+			this.nextTileIndex = 0;
+		}
+		
+		/**
+		 * Fills movement data with characters current position.
 		 * @param character
 		 * @return
 		 */

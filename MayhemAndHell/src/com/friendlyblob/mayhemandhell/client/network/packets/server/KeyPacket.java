@@ -29,9 +29,7 @@ public class KeyPacket extends ReceivablePacket{
 		key[15] = (byte) 0x97;
 		
 		connection.getCrypt().setKey(key);
-		connection.getCrypt().enable();
-		
-		connection.sendPacket(new LoginPacket());
+		connection.getCrypt().enable();	
 	}
 
 }

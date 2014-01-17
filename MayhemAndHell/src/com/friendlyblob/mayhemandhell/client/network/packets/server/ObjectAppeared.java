@@ -51,7 +51,7 @@ public class ObjectAppeared extends ReceivablePacket {
 			return;
 		}
 		
-		if (!world.characters.containsKey(objectId)) {
+		if (!world.objectExists(objectId)) {
 			switch (type) {
 				case PLAYER:
 				case FRIENDLY_NPC:

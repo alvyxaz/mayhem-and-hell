@@ -12,11 +12,12 @@ import com.friendlyblob.mayhemandhell.client.animations.Animation.AnimationData;
 import com.friendlyblob.mayhemandhell.client.animations.AnimationParser;
 import com.friendlyblob.mayhemandhell.client.animations.CharacterAnimation;
 import com.friendlyblob.mayhemandhell.client.animations.CharacterAnimation.CharacterAnimationType;
+import com.friendlyblob.mayhemandhell.client.entities.gui.ChatBubbleNotifications;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestMove;
 
-public class GameCharacter extends GameObject {
+public class GameCharacter extends GameObject  {
 
 	protected int targetX;
 	protected int targetY;
@@ -45,7 +46,7 @@ public class GameCharacter extends GameObject {
 	private TextureRegion hint;
 	private int hintXOffset;
 	private int hintYOffset;
-	
+
 	public GameCharacter(int id, int x, int y, int animationId){
 		super(id);
 		position.set(x, y);
@@ -128,6 +129,7 @@ public class GameCharacter extends GameObject {
 			animationCycle = 0;
 		}
 		currentFrame = (int)(( animationCycle /timePerFrame)) % frameCount;
+		
 	}
 	
 	public void onArrived() {
@@ -162,8 +164,8 @@ public class GameCharacter extends GameObject {
 	}
 	
 	public void draw(SpriteBatch spriteBatch){
-		spriteBatch.setColor(1f, 1f, 1f, 0.1f);
-		spriteBatch.draw(Assets.px, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+//		spriteBatch.setColor(1f, 1f, 1f, 0.1f);
+//		spriteBatch.draw(Assets.px, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 //		Assets.defaultFont.draw(spriteBatch, objectId + "", hitBox.x + 10, hitBox.y - 10);
 		spriteBatch.setColor(Color.WHITE);
 		
@@ -172,6 +174,7 @@ public class GameCharacter extends GameObject {
 		if (hint != null) {
 			spriteBatch.draw(hint, hitBox.x + hintXOffset, hitBox.y + hintYOffset);
 		}
+		
 	}
 	
 	/**
@@ -325,6 +328,5 @@ public class GameCharacter extends GameObject {
 		MovementDirection(int value) {
 			this.value = value;
 		}
-	};
-	
+	}
 }

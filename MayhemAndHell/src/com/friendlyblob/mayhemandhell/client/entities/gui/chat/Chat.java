@@ -15,7 +15,7 @@ import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.entities.gui.GuiElement;
 import com.friendlyblob.mayhemandhell.client.entities.gui.chat.ChatMessage.ChatMessageType;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
-import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientChatMessage;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.ChatMessagePacket;
 
 /**
  * Manages chat related stuff.
@@ -201,7 +201,7 @@ public class Chat extends GuiElement implements InputProcessor {
 							tempBuilder.append(sb.toString());
 						}
 	            		
-	        			MyGame.connection.sendPacket(new ClientChatMessage(tempBuilder.toString()));
+	        			MyGame.connection.sendPacket(new ChatMessagePacket(tempBuilder.toString()));
 	        		
 	        			for (int i = tempMsgs.size() - 1; i > 0; i--) {
 							tempMsgs.remove(i);

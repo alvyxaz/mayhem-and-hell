@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +29,7 @@ import com.friendlyblob.mayhemandhell.server.network.GamePacketHandler;
 import com.friendlyblob.mayhemandhell.server.network.ThreadPoolManager;
 import com.friendlyblob.mayhemandhell.server.network.utils.IPv4Filter;
 import com.friendlyblob.mayhemandhell.server.scripting.ScriptEngineAdapter;
+import com.friendlyblob.mayhemandhell.server.simple_runnables.TopicTv;
 
 public class GameServer{
 	private static final Logger log = Logger.getLogger(GameServer.class.getName());
@@ -83,6 +85,8 @@ public class GameServer{
     	GameTimeController.initialize();
     	
     	World.getInstance();
+    	
+		ThreadPoolManager.getInstance().executeTask(new TopicTv());
     	
     	// Shutdown hook
     	Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());

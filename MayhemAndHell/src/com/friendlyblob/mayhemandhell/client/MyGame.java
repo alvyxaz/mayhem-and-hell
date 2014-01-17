@@ -1,5 +1,8 @@
 package com.friendlyblob.mayhemandhell.client;
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.Random;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -7,6 +10,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Rectangle;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
@@ -15,9 +19,13 @@ import com.friendlyblob.mayhemandhell.client.helpers.Assets;
 import com.friendlyblob.mayhemandhell.client.network.Connection;
 import com.friendlyblob.mayhemandhell.client.network.PacketHandler;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.ClientVersion;
+import com.friendlyblob.mayhemandhell.client.screens.BaseScreen;
 import com.friendlyblob.mayhemandhell.client.screens.GameScreen;
 import com.friendlyblob.mayhemandhell.client.screens.LoadingScreen;
+import com.friendlyblob.mayhemandhell.client.screens.RegistrationScreen;
+import com.friendlyblob.mayhemandhell.client.screens.LoginScreen;
 import com.friendlyblob.mayhemandhell.client.screens.TestScreen;
+import com.friendlyblob.mayhemandhell.client.screens.TestScreen2;
 import com.friendlyblob.mayhemandhell.client.screens.ZoneLoadingScreen;
 
 public class MyGame extends Game implements ApplicationListener {
@@ -40,19 +48,25 @@ public class MyGame extends Game implements ApplicationListener {
 	
 	public ActionResolver actionResolver;
 	
+	// MyGame instance
+	private static MyGame instance;
+	
 	// Screens
 	public LoadingScreen screenLoading;
-	public ZoneLoadingScreen screenZoneLoading;
+	public RegistrationScreen screenRegister;
+	public LoginScreen screenLogin;
 	public GameScreen screenGame;
+	public ZoneLoadingScreen screenZoneLoading;
 	
 	public static Connection connection;
 	
-	private String host = "localhost";
+	private String host = "158.129.18.169";
 	
 	public MyGame(GoogleInterface google, ActionResolver actionResolver){
 		this.google = google;
 		this.actionResolver = actionResolver; 
 		random = new Random();
+		this.instance = this;
 	}
 	
     public void create () {
@@ -87,24 +101,52 @@ public class MyGame extends Game implements ApplicationListener {
      * with loading main resources
      */
     public void prepareScreens() {
-    	screenZoneLoading = new ZoneLoadingScreen(this, "mainIsland");
+    	screenRegister = new RegistrationScreen(this);
+    	screenLogin = new LoginScreen(this);
     	screenGame = new GameScreen(this);
+    	screenZoneLoading = new ZoneLoadingScreen(this, "mainIsland");
     }
 
     public void connectToServer() {
     	try {
-			MyGame.connection = new Connection(new PacketHandler(), host, 7777);
-			MyGame.connection.game = this;
-			MyGame.connection.start();
-			MyGame.connection.sendPacket(new ClientVersion(5));
-		} catch (Exception e){
+    		if (MyGame.connection == null) {
+    			MyGame.connection = new Connection(new PacketHandler(), host, 7777);
+    			MyGame.connection.game = this;
+    			MyGame.connection.start();
+    			MyGame.connection.sendPacket(new ClientVersion(5));
+    		}
+    	} catch (ConnectException e) {
+    		
+    	} catch (Exception e){
 			System.out.println();
 		}
     }
     
+    public Connection getConnection() {
+    	try {
+    		if (connection == null) {
+    			connection = new Connection(new PacketHandler(), host, 7777);
+    			connection.game = this;
+    			connection.start();
+    			connection.sendPacket(new ClientVersion(5));
+    		}	
+    	} catch (ConnectException e) {
+    		connection = null;
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return connection;
+    }
+    
     public void render () {
-    	Input.update();
-		getScreen().render(Gdx.graphics.getDeltaTime());
+    	try {
+    		Input.update();
+    		getScreen().render(Gdx.graphics.getDeltaTime());
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		Gdx.app.exit();
+    	}
     }
     
     /*
@@ -121,15 +163,16 @@ public class MyGame extends Game implements ApplicationListener {
 		if(mismatch <= 0.5f){
 			SCREEN_WIDTH = (int)(Gdx.graphics.getWidth()/scale);
 			SCREEN_HEIGHT= (int)(Gdx.graphics.getHeight()/scale);
-		} else if(mismatch > 0.5f){
+		} else { // if(mismatch > 0.5f){
 			scale += 1;
 			SCREEN_WIDTH = (int)(Gdx.graphics.getWidth() / scale);
 			SCREEN_HEIGHT= (int)(Gdx.graphics.getHeight()/scale);
-		} else {
-			int minSize = SCREEN_WIDTH;
-			SCREEN_WIDTH = (minSize);
-			SCREEN_HEIGHT = (int) (minSize * ratio);
-		}
+		} 
+//		else {
+//			int minSize = SCREEN_WIDTH;
+//			SCREEN_WIDTH = (minSize);
+//			SCREEN_HEIGHT = (int) (minSize * ratio);
+//		}
 		
 		SCREEN_HALF_WIDTH = SCREEN_WIDTH / 2;
 		SCREEN_HALF_HEIGHT = SCREEN_HEIGHT / 2;
@@ -139,6 +182,14 @@ public class MyGame extends Game implements ApplicationListener {
 		GUI_WIDTH = SCREEN_WIDTH*2;
 		GUI_HEIGHT = SCREEN_HEIGHT*2;
 	}
+    
+    @Override
+    public void setScreen(Screen screen) {
+    	super.setScreen(screen);
+    	if (screen instanceof BaseScreen) {
+    		((BaseScreen)screen).prepare();
+    	}
+    }
     
     public void resize (int width, int height) {
     	
@@ -153,5 +204,9 @@ public class MyGame extends Game implements ApplicationListener {
 
     public void dispose () {
     	Assets.manager.clear();
+    }
+    
+    public static MyGame getInstance() {
+    	return instance;
     }
 }

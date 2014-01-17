@@ -18,7 +18,7 @@
 		<link>
 			<name>assets</name>
 			<type>2</type>
-			<location>D:/Programming/workspace/MayhemAndHell/MayhemAndHellAndroid/assets</location>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/MayhemAndHellAndroid/assets</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

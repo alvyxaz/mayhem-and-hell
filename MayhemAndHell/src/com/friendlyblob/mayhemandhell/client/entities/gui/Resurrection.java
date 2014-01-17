@@ -6,9 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.friendlyblob.mayhemandhell.client.MyGame;
 import com.friendlyblob.mayhemandhell.client.controls.Input;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
-import com.friendlyblob.mayhemandhell.client.network.Connection;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestResurrection;
-import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 
 public class Resurrection extends GuiElement {
 

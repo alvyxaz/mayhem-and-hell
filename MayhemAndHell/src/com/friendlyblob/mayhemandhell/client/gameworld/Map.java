@@ -64,7 +64,6 @@ public class Map {
 	// TODO cache map data if performance is low
 	public void drawLayer(TileMapLayer layer, SpriteBatch spriteBatch) {
 		int [][] tiles = layer.tiles;
-		
 		if (layer.enableAlpha) {
 			spriteBatch.enableBlending();
 		} else {

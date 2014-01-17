@@ -47,7 +47,7 @@ public class ZoneLoadingScreen extends BaseScreen{
 			
 			loadedMapData.initializeTextureRegions();
 			
-			game.setScreen(game.screenGame);
+			game.setScreen(game.screenLogin);
 		}
 		
 		// Between 0 and 1

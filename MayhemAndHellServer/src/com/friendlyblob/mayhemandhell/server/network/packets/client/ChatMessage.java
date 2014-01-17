@@ -6,9 +6,9 @@ import com.friendlyblob.mayhemandhell.server.model.World;
 import com.friendlyblob.mayhemandhell.server.model.actors.GameCharacter;
 import com.friendlyblob.mayhemandhell.server.model.actors.Player;
 import com.friendlyblob.mayhemandhell.server.network.packets.ClientPacket;
-import com.friendlyblob.mayhemandhell.server.network.packets.server.ChatMessageNotify;
+import com.friendlyblob.mayhemandhell.server.network.packets.server.ChatMessageNotification;
 
-public class ClientChatMessage extends ClientPacket {
+public class ChatMessage extends ClientPacket {
 
 	String msg;
 
@@ -29,9 +29,9 @@ public class ClientChatMessage extends ClientPacket {
 	public void run() {
 		// Parse message
 		if (msg.length() > 0) {
-			String playerName = getClient().getPlayer().getName();
+			int playerObjectId = getClient().getPlayer().getObjectId();
     		
-    		ChatMessageNotify packet;
+    		ChatMessageNotification packet;
     		String actualMessage;
 			try {
 				// check whether we should try to parse a command
@@ -43,7 +43,7 @@ public class ClientChatMessage extends ClientPacket {
 					switch (cmd) {
 	    	    		case "b":
 		    				if (params.length() > 0) {
-			    				packet = new ChatMessageNotify(playerName, params, 4);
+			    				packet = new ChatMessageNotification(playerObjectId, params, 4);
 								
 								ConcurrentHashMap<Integer, GameCharacter> players = World.getInstance().getPlayers();
 								
@@ -61,7 +61,7 @@ public class ClientChatMessage extends ClientPacket {
 	        					GameCharacter gc = World.getInstance().getPlayersByNames().get(recipientPlayer);
 	            				
 	        					if (gc != null) {
-	            					packet = new ChatMessageNotify(playerName, actualMessage, 1);
+	            					packet = new ChatMessageNotification(playerObjectId, actualMessage, 1);
 	            					
 	            					// Send to recipient   						
 	        						((Player) gc).sendPacket(packet);
@@ -82,7 +82,7 @@ public class ClientChatMessage extends ClientPacket {
 	        		}
 				} else {
 					// TALK
-					packet = new ChatMessageNotify(playerName, msg, 0);
+					packet = new ChatMessageNotification(playerObjectId, msg, 0);
 					getClient().getPlayer().getRegion().broadcastToCloseRegions(packet);
 				}
 			} catch (StringIndexOutOfBoundsException e) {

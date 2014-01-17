@@ -55,6 +55,7 @@ public abstract class GameObject {
 		this.objectId = objectId;
 		this.name = "Unknown";
 		this.position = new Vector2();
+		this.hitBox = new Rectangle();
 	}
 	
 	public void setHitBox(Rectangle rectangle) {
@@ -77,4 +78,5 @@ public abstract class GameObject {
 		this.hitBox.x = x;
 		this.hitBox.y = y;
 	}
+	
 }

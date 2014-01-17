@@ -38,6 +38,8 @@ public class Player extends GameCharacter {
 	
 	private Map<Integer, QuestState> quests = new HashMap<Integer, QuestState>();
 	
+	private int charId;
+	
 	public QuestState getQuestState(int questId) {
 		return quests.get(questId);
 	}
@@ -215,6 +217,14 @@ public class Player extends GameCharacter {
 	
 	public void setMoney(int money) {
 		this.money = money;
+	}
+	
+	public void setCharId(int charId) {
+		this.charId = charId;
+	}
+	
+	public int getCharId() {
+		return charId;
 	}
 	
 	@Override
