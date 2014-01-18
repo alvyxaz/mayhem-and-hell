@@ -158,7 +158,7 @@ public class LoginScreen extends BaseScreen{
 	
 	@Override
 	public void update(float deltaTime) {
-		game.getConnection().sendPacket(new LoginPacket("alvys", "alvys"));
+//		game.getConnection().sendPacket(new LoginPacket("alvys", "alvys"));
 		if (Gdx.input.isKeyPressed(Keys.BACK)){
 			Gdx.app.exit();
 		}

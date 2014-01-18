@@ -113,7 +113,6 @@ public abstract class Ai implements Control {
 	}
 	
 	public final void notifyEvent(Event event, Object arg0, Object arg1) {
-		System.out.println("[Ai] Event " + event);
 		switch (event) {
 			case THINK:
 				onEventThink();
