@@ -79,7 +79,7 @@ public class LoginPacket extends ClientPacket{
 				System.out.println("\"" + username +  "\""  + " has joined " + 
 						dateFormat.format(cal.getTime()));
 				
-				playSound("beep-02.wav");
+//				playSound("beep-02.wav");
 				
 				World.getInstance().addPlayer(getClient().getPlayer());
 				

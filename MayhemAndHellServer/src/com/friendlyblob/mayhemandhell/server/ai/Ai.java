@@ -76,19 +76,11 @@ public abstract class Ai implements Control {
 	 * @param arg1
 	 */
 	public final void setIntention(Intention intention, Object arg0, Object arg1) {
-<<<<<<< Updated upstream
 		// Every intention, except for follow and attack, needs to break following
 		if (intention != Intention.FOLLOW && intention != Intention.ATTACK) {
 			stopFollowing();
 		}
 		
-//		if (actor.isPlayer()) {
-//			System.out.println("--[Ai intention " + intention);
-//		}
-		
-=======
-		System.out.println("[Ai] Intention " + intention);
->>>>>>> Stashed changes
 		switch(intention) {
 			case IDLE:
 				onIntentionIdle();

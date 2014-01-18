@@ -12,7 +12,10 @@ public class Input {
 	public static float xRatio;
 	public static float yRatio;
 	
-	private static KeyboardKey [] keys;
+	private static int[] trackedKeys;
+	private static KeyState[] keys;
+	
+	private static Direction direction;
 	
 	public static int getX(){
 		return touch[0].x;
@@ -24,7 +27,6 @@ public class Input {
 	
 	private static float acceleratorMaxValue = 5;
 	public static float accelerometer = 0;
-	
 	
 	public static void update() {
 		for(int i= 0; i < touch.length; i++){
@@ -45,9 +47,9 @@ public class Input {
 			}
 		}
 		
-		for(int i = 0; i < keys.length; i++){
-			keys[i].lastPressed = keys[i].pressed;
-			keys[i].pressed = Gdx.input.isKeyPressed(keys[i].key);
+		for(int i = 0; i < trackedKeys.length; i++){
+			keys[trackedKeys[i]].lastPressed = keys[trackedKeys[i]].pressed;
+			keys[trackedKeys[i]].pressed = Gdx.input.isKeyPressed(trackedKeys[i]);
 		}
 		
 		// Updating accelerometer value
@@ -57,7 +59,57 @@ public class Input {
 			accelerometer = (MyGame.SCREEN_HALF_WIDTH - (Gdx.input.getX() * xRatio))
 					/MyGame.SCREEN_HALF_WIDTH * acceleratorMaxValue;
 		}
-
+		
+		updateDirectionInput(5);
+	}
+	
+	private static void updateDirectionInput(int key) {
+		Direction prevDirection = direction;
+		boolean cought = false;
+		
+		if (keys[Keys.W].pressed) {
+			if (keys[Keys.D].pressed) {
+				direction = Direction.UP_RIGHT;
+				return;
+			} else {
+				direction = Direction.UP;
+			}
+			cought = true;
+		}
+		
+		if (keys[Keys.D].pressed) {
+			if (keys[Keys.S].pressed) {
+				direction = Direction.DOWN_RIGHT;
+				return;
+			} else {
+				direction = Direction.RIGHT;
+			}
+			cought = true;
+		}
+		
+		if (keys[Keys.S].pressed) {
+			if (keys[Keys.A].pressed) {
+				direction = Direction.DOWN_LEFT;
+				return;
+			} else {
+				direction = Direction.DOWN;
+			}
+			cought = true;
+		}
+		
+		if (keys[Keys.A].pressed) {
+			if (keys[Keys.W].pressed) {
+				direction = Direction.UP_LEFT;
+				return;
+			} else {
+				direction = Direction.LEFT;
+			}
+			cought = true;
+		}
+		
+		if (!cought) {
+			direction = Direction.NONE;
+		}
 	}
 	
 	/*
@@ -110,11 +162,7 @@ public class Input {
 	 * @param rect Rectangle of interest
 	 */
 	public static boolean keyReleased(int key){
-		for(int i = 0; i < keys.length; i++){
-			if(keys[i].key == key)
-				return keys[i].lastPressed && ! keys[i].pressed;
-		}
-		return false;
+		return keys[key].lastPressed && ! keys[key].pressed;
 	}
 	
 	/**
@@ -137,6 +185,7 @@ public class Input {
 	
 	// TODO cleanup tracked keys before publishing
 	public static void initialize(){
+		direction = Direction.NONE;
 		touch = new Touch[2];
 		Gdx.input.setCatchBackKey(true);
 		
@@ -145,17 +194,34 @@ public class Input {
 		for(int i= 0; i < touch.length; i++)
 			touch[i] = new Touch();
 		
-		keys = new KeyboardKey[8];
-		keys[0] = new KeyboardKey(Keys.F1);
-		keys[1] = new KeyboardKey(Keys.PLUS);
-		keys[2] = new KeyboardKey(Keys.MINUS);
-		keys[3] = new KeyboardKey(Keys.G);
-		keys[4] = new KeyboardKey(Keys.C);
-		keys[5] = new KeyboardKey(Keys.F2);
-		keys[6] = new KeyboardKey(Keys.ENTER);
-		keys[7] = new KeyboardKey(Keys.BACKSPACE);
+		trackedKeys = new int[4];
+		trackedKeys[0] = Keys.W;
+		trackedKeys[1] = Keys.A;
+		trackedKeys[2] = Keys.S;
+		trackedKeys[3] = Keys.D;
+		
+		keys = new KeyState[Keys.F12+1];
+		
+		for(int i = 0; i < trackedKeys.length; i++) {
+			keys[trackedKeys[i]] = new KeyState();
+		}
 	}
 	
-	
+	public static enum Direction {
+		NONE,
+		UP,
+		UP_RIGHT,
+		RIGHT,
+		DOWN_RIGHT,
+		DOWN,
+		DOWN_LEFT,
+		LEFT,
+		UP_LEFT
+	}
 
+	public static class KeyState {
+		public boolean pressed;
+		public boolean lastPressed;
+	}
+	
 }
