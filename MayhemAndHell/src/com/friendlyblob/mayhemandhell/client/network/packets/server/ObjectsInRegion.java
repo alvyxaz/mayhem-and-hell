@@ -82,7 +82,6 @@ public class ObjectsInRegion extends ReceivablePacket {
 			e.printStackTrace();
 		}
 		
-		
 		return false;
 	}
 

@@ -6,6 +6,9 @@ import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 
 public class UpdateCharacterHint extends ReceivablePacket {
 
+	/**
+	 * @WARNING Might cause trouble with PING emulation
+	 */
 	@Override
 	public boolean read() {
 		int size = readD();

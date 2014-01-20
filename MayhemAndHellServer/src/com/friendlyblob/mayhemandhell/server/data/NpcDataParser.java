@@ -47,7 +47,7 @@ public class NpcDataParser extends DataParser {
 			for (int fileIndex = 0; fileIndex < files.length; fileIndex++) {
 				Document doc = dBuilder.parse(files[fileIndex]);
 				doc.getDocumentElement().normalize();
-				
+
 				NodeList npcs = doc.getElementsByTagName("npc");
 				
 				for (int i = 0; i < npcs.getLength(); i++) {

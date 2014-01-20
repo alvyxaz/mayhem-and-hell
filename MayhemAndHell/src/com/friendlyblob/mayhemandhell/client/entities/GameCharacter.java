@@ -12,6 +12,7 @@ import com.friendlyblob.mayhemandhell.client.animations.Animation.AnimationData;
 import com.friendlyblob.mayhemandhell.client.animations.AnimationParser;
 import com.friendlyblob.mayhemandhell.client.animations.CharacterAnimation;
 import com.friendlyblob.mayhemandhell.client.animations.CharacterAnimation.CharacterAnimationType;
+import com.friendlyblob.mayhemandhell.client.controls.Input.Direction;
 import com.friendlyblob.mayhemandhell.client.entities.gui.ChatBubbleNotifications;
 import com.friendlyblob.mayhemandhell.client.gameworld.Map;
 import com.friendlyblob.mayhemandhell.client.helpers.Assets;
@@ -26,7 +27,7 @@ public class GameCharacter extends GameObject  {
 	private float easeY;
 	private float easeTime;
 	
-	private int movementSpeed = 0; // Pixels per second
+	private int movementSpeed = 50; // TODO get from server
 	
 	// States
 	private int state = 0;
@@ -96,6 +97,9 @@ public class GameCharacter extends GameObject  {
 	}
 	
 	public void update(float deltaTime) {
+		if (this instanceof Player) {
+			
+		}
 		switch (state) {
 		case IDLE :
 			break;
@@ -107,7 +111,7 @@ public class GameCharacter extends GameObject  {
 				onArrived();
 				return;
 			}
-						
+					
 			float angle = (float)Math.atan2(targetY - position.y, targetX - position.x);
 			float movementX = (float) Math.cos(angle) * movementSpeed * deltaTime;
 			float movementY = (float) Math.sin(angle) * movementSpeed * deltaTime;
@@ -202,6 +206,11 @@ public class GameCharacter extends GameObject  {
 
 		currentDirection = angleToDirection(angle);
 		animationHandler.play(directionToWalking(currentDirection));
+	}
+	
+	public void stopMoving (int x, int y) {
+		state = IDLE;
+		onArrived();
 	}
 	
 	/**

@@ -76,6 +76,9 @@ public class PacketHandler {
 			case 0x16:
 				response = new LoginFailure();
 				break;
+			case 0x17:
+				response = new NotifyPositionUpdate();
+				break;
 				
 			case 0xA0:
 				response = new ChatMessageNotification();

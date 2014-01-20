@@ -88,6 +88,8 @@ public class GamePacketHandler implements IPacketHandler<GameClient>,
 					case 0x08:
 						response = new RequestBuyItem();
 						break;
+					case 0x09:
+						response = new PositionUpdate();
 				}
 				break;
 		}

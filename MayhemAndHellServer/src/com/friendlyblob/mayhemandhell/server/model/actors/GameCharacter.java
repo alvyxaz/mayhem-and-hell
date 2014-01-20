@@ -143,20 +143,38 @@ public class GameCharacter extends GameObject{
 		int movementSpeed = getMovementSpeed();
 		float distanceCovered = GameTimeController.DELTA_TIME*movementSpeed;
 		
-		getPosition().offsetByAngle(angle, distanceCovered);
-		
 		int dX = (int)(movement.destinationX - getPosition().getX());
 		int dY = (int)(movement.destinationY - getPosition().getY());
-
+		
+		if (movement.type == MovementType.DIRECTION) {
+			if (movement.direction == Direction.NONE) {
+				stopMoving(new ObjectPosition((int)movement.destinationX, (int)movement.destinationY));
+				return true;
+			}
+			getPosition().offsetByAngle(movement.direction.getAngle(), distanceCovered);
+			
+			// Revert position if it's collision
+			int tile = getZone().getTemplate().tileAtPosition(this.getPosition());
+			if (getZone().getTemplate().getTiles()[tile].isCollision()) {
+				getPosition().offsetByAngle(movement.direction.getAngle(), -distanceCovered);
+				stopMoving(getPosition());
+				return true;
+			}
+			
+			return false;
+		}
+		
+		// Moving a character 
+		getPosition().offsetByAngle(angle, distanceCovered);
+		
 		// Check if destination is reached
 		if (dX * dX + dY * dY <= distanceCovered * distanceCovered) {
 			
 			// Checking if moving on path
-			if (movement.onPath) {
+			if (movement.type == MovementType.PATH) {
 				// If we arrived at the last tile
 				if(movement.advanceOnPath()) {
-					getPosition().set(movement.destinationX, movement.destinationY);
-					movement = null;
+					stopMoving(new ObjectPosition((int)movement.destinationX, (int)movement.destinationY));
 					getAi().notifyEvent(Event.ARRIVED);
 					return true;
 				} else {
@@ -164,24 +182,21 @@ public class GameCharacter extends GameObject{
 					int nextTile = movement.getNextTile();
 					movement.destinationX = getZone().getTemplate().xPositionOfTile(nextTile);
 					movement.destinationY = getZone().getTemplate().yPositionOfTile(nextTile);
-					// Use "movement points" that are left after reaching
-					// one of the path nodes
 					
 					// Notify nearby characters about movement
 					getRegion().broadcastToCloseRegions(new NotifyCharacterMovement(this));
 				}
 				
 			} else {
-				getPosition().set(movement.destinationX, movement.destinationY);
-				movement = null;
+				stopMoving(new ObjectPosition((int)movement.destinationX, (int)movement.destinationY));
 				getAi().notifyEvent(Event.ARRIVED);
 				return true;
 			}
 		}
-		
 		return false;
 	}
 
+	
 	/**
 	 * Registers a new movement destination
 	 * Called only once when user requests to move a character.
@@ -196,16 +211,16 @@ public class GameCharacter extends GameObject{
 	 */
 	public boolean moveCharacterTo(int x, int y) {
 		// TODO check boundaries and collisions. If out of bounds - return false
-		
 		this.destinationTask = null;
 		stopActions();
 		
-		MovementData movementData = new MovementData();
+		MovementData movementData = new MovementData(MovementType.DESTINATION);
 		movementData.destinationX = x;
 		movementData.destinationY = y;
 		movementData.movementSpeed = getMovementSpeed();
 		movementData.timeStamp = GameTimeController.getInstance().getGameTicks();
 		
+		// Path finder related
 		if (this instanceof Player) {
 			int sourceTile = getZone().getTemplate().tileAtPosition(this.getPosition());
 			int destinationTile = getZone().getTemplate().tileAtPosition(new ObjectPosition(x, y));
@@ -213,7 +228,7 @@ public class GameCharacter extends GameObject{
 			if (path == null) {
 				return false;
 			}
-			movementData.enableTileMode(path);
+			movementData.pathMode(path);
 			movementData.destinationX = getZone().getTemplate().xPositionOfTile(path[0]);
 			movementData.destinationY = getZone().getTemplate().yPositionOfTile(path[0]);
 		}
@@ -223,28 +238,31 @@ public class GameCharacter extends GameObject{
 		return true;
 	}
 	
-	/**
-	 * Stop all current actions of the character (casting, auto attacking and etc)
-	 */
-	public void stopActions() {
-		getAi().stopAutoAttack();
-		abortCast();
-	}
-	
-	public void teleportTo(Zone zone, int x, int y) {
+	public boolean moveCharacterTo(Direction direction) {
+		if (direction == Direction.NONE) {
+			stopMoving(getPosition());
+			return true;
+		}
+		this.destinationTask = null;
 		stopActions();
 		
-		if (this.getZone() != zone) {
-			this.getZone().removeObject(this);
-			this.setPosition(x, y);
-			zone.addObject(this);
-			return;
-		}
+		int distanceInDirection = direction == Direction.NONE ? 0 : 10000; // Should be relatively big
 		
-		this.setPosition(x, y);
-		zone.updateRegion(this, true);
-		this.movement = new MovementData().fillWithCurrent(this);
-		getRegion().broadcastToCloseRegions(new NotifyCharacterMovement(this, true));
+		// Preparing current position
+		ObjectPosition position = new ObjectPosition();
+		position.set(getPosition().getX(), getPosition().getY());
+		position.offsetByAngle(direction.getAngle(), distanceInDirection);
+		
+		MovementData movementData = new MovementData(MovementType.DESTINATION);
+		movementData.destinationX = position.getX();
+		movementData.destinationY = position.getY();
+		movementData.movementSpeed = getMovementSpeed();
+		movementData.timeStamp = GameTimeController.getInstance().getGameTicks();
+		movementData.directionMode(direction);
+		
+		moveCharacterTo(movementData);
+		
+		return true;
 	}
 	
 	/**
@@ -302,6 +320,30 @@ public class GameCharacter extends GameObject{
 		return true;
 	}
 
+	/**
+	 * Stop all current actions of the character (casting, auto attacking and etc)
+	 */
+	public void stopActions() {
+		getAi().stopAutoAttack();
+		abortCast();
+	}
+	
+	public void teleportTo(Zone zone, int x, int y) {
+		stopActions();
+		
+		if (this.getZone() != zone) {
+			this.getZone().removeObject(this);
+			this.setPosition(x, y);
+			zone.addObject(this);
+			return;
+		}
+		
+		this.setPosition(x, y);
+		zone.updateRegion(this, true);
+		this.movement = new MovementData(MovementType.DESTINATION).fillWithCurrent(this);
+		getRegion().broadcastToCloseRegions(new NotifyCharacterMovement(this, true));
+	}
+	
 	
 	public int getTileXAt(int x) {
 		return x/16;
@@ -872,9 +914,18 @@ public class GameCharacter extends GameObject{
 		public int movementSpeed;
 		public int timeStamp;
 		
-		public boolean onPath = false;
+		public MovementType type;
+		
+		// Path mode data
 		public int[] tilePath;
 		private int nextTileIndex;
+		
+		// Direction mode data
+		private Direction direction;
+		
+		public MovementData(MovementType type) {
+			this.type = type;
+		}
 		
 		/**
 		 * Advances movement to another tile
@@ -896,10 +947,19 @@ public class GameCharacter extends GameObject{
 		 * Enables walking through a set of tiles
 		 * @param tilePath
 		 */
-		public void enableTileMode(int[] tilePath) {
-			onPath = true;
+		public void pathMode(int[] tilePath) {
+			type = MovementType.PATH;
 			this.tilePath = tilePath;
 			this.nextTileIndex = 0;
+		}
+		
+		/**
+		 * Enables direction
+		 * @param direction
+		 */
+		public void directionMode(Direction direction) {
+			type = MovementType.DIRECTION;
+			this.direction = direction;
 		}
 		
 		/**
@@ -914,6 +974,12 @@ public class GameCharacter extends GameObject{
 			timeStamp = 0;
 			return this;
 		}
+	}
+	
+	public enum MovementType {
+		DESTINATION,	// Moving to an exact destination
+		DIRECTION, 		// Moving in a certain direction
+		PATH,			// Following a path
 	}
 	
 	/**
@@ -934,6 +1000,28 @@ public class GameCharacter extends GameObject{
 			getAi().notifyEvent(event);
 		}
 		
+	}
+	
+	public static enum Direction {
+		NONE(0),
+		UP((float)Math.PI/2),
+		UP_RIGHT((float)Math.PI/4),
+		RIGHT(0),
+		DOWN_RIGHT(-(float)Math.PI/4),
+		DOWN(-(float)Math.PI/2),
+		DOWN_LEFT((-(float)Math.PI/4)*3),
+		LEFT(-(float)Math.PI),
+		UP_LEFT(((float)Math.PI/4)*3);
+		
+		Direction(float angle) {
+			this.angle = angle;
+		}
+		
+		public float getAngle() {
+			return angle;
+		}
+		
+		private float angle;
 	}
 	
 	public synchronized void cleanup() {

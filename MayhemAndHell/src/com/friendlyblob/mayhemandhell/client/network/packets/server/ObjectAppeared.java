@@ -8,6 +8,10 @@ import com.friendlyblob.mayhemandhell.client.network.packets.ReceivablePacket;
 
 public class ObjectAppeared extends ReceivablePacket {
 
+	/**
+	 * @WARNING Might cause trouble with PING emulation
+	 */
+	
 	int objectId;
 	int x;
 	int y;

@@ -23,6 +23,7 @@ import com.friendlyblob.mayhemandhell.client.entities.TargetMark;
 import com.friendlyblob.mayhemandhell.client.entities.TopicTv;
 import com.friendlyblob.mayhemandhell.client.entities.gui.ChatBubbleNotifications;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestAction;
+import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestDirectionChange;
 import com.friendlyblob.mayhemandhell.client.network.packets.client.RequestTarget;
 
 public class GameWorld {
@@ -213,9 +214,14 @@ public class GameWorld {
 //				}
 //			} else {
 				// Movement should be the last case
-				getPlayer().requestMovementDestination(toWorldX(Input.getX()), toWorldY(Input.getY()));
+//				getPlayer().requestMovementDestination(toWorldX(Input.getX()), toWorldY(Input.getY()));
 //			}
 		}
+		
+		if (Input.isDirectionChanged()) {
+			getPlayer().moveToDirection(Input.getDirection());
+		}
+		
 	}
 	
 	public void draw(SpriteBatch spriteBatch) {

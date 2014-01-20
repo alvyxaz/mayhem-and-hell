@@ -31,17 +31,7 @@ public class NotifyCharacterMovement extends ReceivablePacket {
 	@Override
 	public void run() {
 		Player player = GameWorld.getInstance().player;
-		
-		if (player.objectId == objectId) {
-			player.easeByOffset(
-					currentX - player.position.x, 
-					currentY - player.position.y, 0.5f);
-			if (teleport) {
-				player.teleportTo(currentX, currentY);
-			} else {
-				player.moveTo(destinationX, destinationY, movementSpeed);
-			}
-		} else {
+		if (player.objectId != objectId) {
 			GameCharacter character = GameWorld.getInstance().getCharacter(objectId);
 			if (character != null) {
 				if (teleport) {

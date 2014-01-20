@@ -16,6 +16,7 @@ public class Input {
 	private static KeyState[] keys;
 	
 	private static Direction direction;
+	private static Direction prevDirection;
 	
 	public static int getX(){
 		return touch[0].x;
@@ -41,7 +42,6 @@ public class Input {
 				touch[i].dx = Gdx.input.getDeltaX(i)*xRatio;
 				touch[i].dy = -Gdx.input.getDeltaY(i)*yRatio;
 				
-				
 			} else {
 				touch[i].touched = false;
 			}
@@ -63,8 +63,16 @@ public class Input {
 		updateDirectionInput(5);
 	}
 	
+	public static boolean isDirectionChanged() {
+		return prevDirection != direction;
+	}
+	
+	public static Direction getDirection() {
+		return direction;
+	}
+	
 	private static void updateDirectionInput(int key) {
-		Direction prevDirection = direction;
+		prevDirection = direction;
 		boolean cought = false;
 		
 		if (keys[Keys.W].pressed) {
@@ -186,6 +194,7 @@ public class Input {
 	// TODO cleanup tracked keys before publishing
 	public static void initialize(){
 		direction = Direction.NONE;
+		prevDirection = Direction.NONE;
 		touch = new Touch[2];
 		Gdx.input.setCatchBackKey(true);
 		
@@ -208,15 +217,25 @@ public class Input {
 	}
 	
 	public static enum Direction {
-		NONE,
-		UP,
-		UP_RIGHT,
-		RIGHT,
-		DOWN_RIGHT,
-		DOWN,
-		DOWN_LEFT,
-		LEFT,
-		UP_LEFT
+		NONE(0),
+		UP((float)Math.PI/2),
+		UP_RIGHT((float)Math.PI/4),
+		RIGHT(0),
+		DOWN_RIGHT(-(float)Math.PI/4),
+		DOWN(-(float)Math.PI/2),
+		DOWN_LEFT((-(float)Math.PI/4)*3),
+		LEFT(-(float)Math.PI),
+		UP_LEFT(((float)Math.PI/4)*3);
+		
+		Direction(float angle) {
+			this.angle = angle;
+		}
+		
+		public float getAngle() {
+			return angle;
+		}
+		
+		private float angle;
 	}
 
 	public static class KeyState {

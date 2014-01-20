@@ -116,6 +116,17 @@ public class Player extends GameCharacter {
 	}
 	
 	/**
+	 * Updates a player position. Different from setPosition because
+	 * checks collision and whether a player is cheating.
+	 * TODO Check if cheating
+	 * @param x
+	 * @param y
+	 */
+	public void updatePosition(int x, int y) {
+		this.setPosition(x, y);
+	}
+	
+	/**
 	 * Unequips an item that is currently equipped.
 	 * Loops through equippedItems, might need synchronization
 	 * @param itemId

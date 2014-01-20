@@ -12,6 +12,8 @@ import java.nio.ByteOrder;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javolution.util.FastList;
 
@@ -76,6 +78,9 @@ public class Connection extends Thread {
 	private boolean showCustomShutdownMessage = false;
 	private String customShutdownMessage = "";
 	private static final String SHUTDOWN_MESSAGE = "We are sorry. Server has been shut down (or restarted). Come back soon";
+	
+	private static final int PING = 2000;
+	private static final boolean ENABLE_PING_EMULATION = false;
 	
 	public Connection(final PacketHandler packetHandler, String host, int port) throws IOException{
 		super.setName("PacketHandlerThread-" + super.getId());
@@ -332,7 +337,11 @@ public class Connection extends Thread {
 	}
 	
 	public void execute(ReceivablePacket packet) {
-		packet.run();
+		if (ENABLE_PING_EMULATION) {
+			packet.run();
+		} else {
+			packet.run();
+		}
 	}
 	
 	public boolean decrypt(ByteBuffer buf, int size) {
